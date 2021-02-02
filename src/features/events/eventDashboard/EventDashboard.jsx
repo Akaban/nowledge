@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import EventList from './EventList';
 import {sampleData} from '../../../app/api/sampleData'
+import { useSelector } from 'react-redux';
 
-export default function EventDashboard(event) {
-    const [events, setEvents] = useState(sampleData)
+export default function EventDashboard() {
+    const {events} = useSelector(state => state.event)
     
     // function handleCreateEvent(event) {
     //     setEvents([...events, event]);
@@ -18,7 +19,7 @@ export default function EventDashboard(event) {
     // }
 
     function handleDeleteEvent(eventId) {
-        setEvents(events.filter(evt => evt.id !== eventId))
+        // setEvents(events.filter(evt => evt.id !== eventId))
     }
     
 
