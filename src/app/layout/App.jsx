@@ -7,6 +7,8 @@ import HomePage from "../../features/home/HomePage";
 import NavBar from "../../features/nav/NavBar";
 import Sandbox from "../../features/sandbox/Sandbox";
 import ModalManager from "../common/modals/ModalManager";
+import {ToastContainer} from 'react-toastify'
+import ErrorComponent from "../common/errors/ErrorComponent";
 
 function App() {
 
@@ -15,6 +17,7 @@ function App() {
   return (
     <>
       <ModalManager />
+      <ToastContainer position='bottom-right' hideProgressBar />
       <Route exact path='/' component={HomePage} />
       <Route
         path={'/(.+)'}
@@ -26,6 +29,7 @@ function App() {
         <Route exact path='/sandbox' component={Sandbox} />
         <Route path='/events/:id' component={EventDetailedPage} />
         <Route path={['/createEvent', '/manage/:id']} component={EventForm} key={key} />
+        <Route path='/error' component={ErrorComponent}   />
       </Container>
     </>
   )} /> </>
