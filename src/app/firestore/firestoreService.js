@@ -56,3 +56,10 @@ export function cancelEventToggle(event) {
     })
 }
 
+export function setUserProfileData(user) {
+    return db.collection('users').doc(user.uid).set({
+        displayName: user.displayName,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+}
+
