@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncReducer";
 import { dataFromSnapshot } from "../firestore/firestoreService";
 
-export default function useFirestoreDoc({query, data, deps, shouldExecute}) {
+export default function useFirestoreDoc({query, data, deps, shouldExecute = true}) {
     const dispatch = useDispatch();
 
     useEffect(() => {
