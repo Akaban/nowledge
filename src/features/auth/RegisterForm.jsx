@@ -34,7 +34,7 @@ export default function LoginForm() {
             <Form className='ui form'>
                <MyTextInput name='displayName' placeholder='Display Name' />
                <MyTextInput name='email' placeholder='Email' />
-               <MyTextInput name='password' placeholder='Password' />
+               <MyTextInput type='password' name='password' placeholder='Password' />
                {errors.auth && <Label basic color='red' style={{marginBottom: 10}} content={errors.auth} />}
                <Button
                    loading={isSubmitting}

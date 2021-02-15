@@ -10,6 +10,10 @@ export default function useFirestoreCollection ({query, data, deps}) {
         dispatch(asyncActionStart());
         const unsubscribe = query().onSnapshot(
             snapshot => {
+                console.log('snapshot = ' + snapshot)
+                console.log(snapshot)
+                console.log('snapshot empty = ' + snapshot.empty)
+                console.log(snapshot.docs)
                 const docs = snapshot.docs.map(dataFromSnapshot);
                 data(docs);
                 dispatch(asyncActionFinish());

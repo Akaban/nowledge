@@ -1,4 +1,4 @@
-import { LISTEN_TO_CURRENT_USER_PROFILE } from "./profileConstants";
+import { LISTEN_TO_CURRENT_USER_PROFILE} from "./profileConstants";
 
 const initialState = {
     currentUserProfile: null

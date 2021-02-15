@@ -5,13 +5,13 @@ import 'firebase/auth'
 import 'firebase/storage'
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDAHQ6svBZWNOXOio_OcVpcXRwZxQz7P8Q",
-    authDomain: "revents-407db.firebaseapp.com",
-    projectId: "revents-407db",
-    storageBucket: "revents-407db.appspot.com",
-    messagingSenderId: "384638105380",
-    appId: "1:384638105380:web:c016abbaf2ff618cec25b1",
-    measurementId: "G-T6K1BW5X2P" 
+    apiKey: "AIzaSyCD-v6jO5m8g6K120HZGV9uyq0PEOXhkx0",
+    authDomain: "nowledge-c01c4.firebaseapp.com",
+    projectId: "nowledge-c01c4",
+    storageBucket: "nowledge-c01c4.appspot.com",
+    messagingSenderId: "747575118986",
+    appId: "1:747575118986:web:5ed3697a3ecec3318bb173",
+    measurementId: "G-B64C33B62N"
 }
 
 firebase.initializeApp(firebaseConfig)

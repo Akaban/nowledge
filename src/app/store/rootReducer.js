@@ -5,14 +5,15 @@ import testReducer from '../../features/sandbox/testReducer'
 import modalReducer from '../common/modals/modalReducer';
 import asyncReducer from '../async/asyncReducer';
 import profileReducer from '../../features/profiles/profileReducer';
+import bookReducer from '../../features/books/bookReducer';
 
 const rootReducer = combineReducers({
     test: testReducer,
-    event: eventReducer,
     modals: modalReducer,
     auth: authReducer,
     async: asyncReducer,
-    profile: profileReducer
+    profile: profileReducer,
+    books: bookReducer
 })
 
 export default rootReducer;

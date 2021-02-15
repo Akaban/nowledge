@@ -26,20 +26,16 @@ export function getEventsFromFirestore() {
     return db.collection('events').orderBy('date');
 }
 
-export function listenToEventFromFirestore(eventId) {
-    return db.collection('events').doc(eventId);
+export function getBooksFromFirestore() {
+    const user = firebase.auth().currentUser
+    return (
+        db.collection('userBooks')
+        .doc(user.uid)
+    )
 }
 
-export function addEventFirestore(event) {
-    return db.collection('events').add({
-        ...event,
-        hostPhotoURL: 'https://randomuser.me/api/portraits/men/20.jpg',
-        attendees: firebase.firestore.FieldValue.arrayUnion({
-            id: cuid(),
-            displayName: 'Diana',
-            photoURL: 'https://randomuser.me/api/portraits/men/20.jpg'
-        })
-    });
+export function listenToEventFromFirestore(eventId) {
+    return db.collection('events').doc(eventId);
 }
 
 export function updateEventInFirestore(event) {
@@ -50,15 +46,16 @@ export function deleteEventInFirestore(eventId) {
     return db.collection('events').doc(eventId).delete()
 }
 
-export function cancelEventToggle(event) {
-    return db.collection('events').doc(event.id).update({
-        isCancelled: !event.isCancelled
-    })
-}
-
 export function setUserProfileData(user) {
     return db.collection('users').doc(user.uid).set({
         displayName: user.displayName,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+}
+
+export function setUserBooks(user) {
+    return db.collection('userBooks').doc(user.uid).set({
+        books: [],
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
     })
 }
@@ -77,6 +74,33 @@ export async function updateUserProfile(profile) {
             return await db.collection('users').doc(user.uid).update(profile)
         }
     } catch (error) {
+        throw error;
+    }
+}
+
+export async function addUserBook(book) {
+    const user = firebase.auth().currentUser;
+    async function setupHighlights() {
+        return await (db
+            .collection('userBooks')
+            .doc(user.uid)
+            .collection('highlights')
+            .doc(book.id)
+            .set({
+                highlights: [],
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }))
+    }
+    try {
+        console.log('about to update arrayUnion with book =')
+        console.log(book)
+        await (db
+        .collection('userBooks').doc(user.uid).update({
+            books: firebase.firestore.FieldValue.arrayUnion(book)
+        }))
+        await setupHighlights()
+        }
+    catch (error) {
         throw error;
     }
 }
