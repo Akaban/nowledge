@@ -32,11 +32,6 @@ export function updateUserPassword(creds) {
 
 export function uploadBookDataToFirebaseStore(bookId, bookPdfFile, bookPhotoFile) {
 
-    console.log({
-        bookPdfFile,
-        bookPhotoFile
-    })
-
     const filename_pdf = bookId + '.pdf'
     const filename_picture = bookId + '.' + getFileExtension(bookPhotoFile.name)
 

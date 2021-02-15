@@ -53,7 +53,6 @@ export default function BookForm({match, history}) {
     //     deps: [match.params.id, dispatch]
     // })
 
-    console.log(`loading = ${loading}`)
 
     if (loading) return <LoadingComponent content='Loading...'/>
 
@@ -66,7 +65,6 @@ export default function BookForm({match, history}) {
                 initialValues={initialValues}
                 onSubmit={async (values, {setSubmitting}) => {
                 try {
-                    console.log(values)
                     const bookId = cuid()
                     const {bookPhoto,
                         bookPdf,
@@ -76,8 +74,6 @@ export default function BookForm({match, history}) {
                         pdfUrl,
                         photoUrl
                     } = await handleUploadFiles(bookId, bookPdf[0], bookPhoto[0]);
-                    console.log("KRRKKK")
-                    console.log(values)
                     await addUserBook({
                         bookPhotoUrl: photoUrl,
                         bookPdfUrl: pdfUrl,

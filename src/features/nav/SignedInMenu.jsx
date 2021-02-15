@@ -19,8 +19,6 @@ export default function SignedInMenu() {
             toast.error(error.message)
         }
     }
-
-    console.log(`Current User Profile: ${currentUserProfile}`)
     return (
 <Menu.Item position='right'>
     {/* <Image avatar spaced='right' src={currentUserProfile.photoURL || '/assets/user.png'} /> */}

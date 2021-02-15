@@ -21,9 +21,6 @@ setPdfWorker(PdfWorkerCdn)
 
 export default function BookReader({ match }) {
 
-  console.log(match)
-  console.log('should not execute ta mere')
-
   const book = useSelector(state => state.books.books).find(e => e.id === match.params.id)
 
   const initial_values = {

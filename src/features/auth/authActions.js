@@ -14,9 +14,7 @@ export function signInUser(user) {
 export function verifyAuth() {
     return function (dispatch) {
         return firebase.auth().onAuthStateChanged(user => {
-            console.log('In verifyAuth')
             if (user) {
-                console.log('login')
                 dispatch(signInUser(user))
                 const profileRef = getUserProfile(user.uid)
                 profileRef.onSnapshot(snapshot => {
@@ -24,7 +22,6 @@ export function verifyAuth() {
                     dispatch({type: APP_LOADED})
                 })
             } else {
-                console.log('logout')
                 dispatch(signOutUser())
                 dispatch({type: APP_LOADED})
             }
