@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
+import Autocomplete from '../../app/common/autocomplete/Autocomplete';
 import { openModal } from '../../app/common/modals/modalReducer';
 import { decrement, increment} from './testReducer';
 
@@ -30,6 +31,10 @@ export default function Sandbox() {
                 } }
                 content='Decrement' color='orange'/>
             <Button onClick={() => dispatch(openModal({modalType: 'TestModal', modalProps: {data}}))} content='Open Modal' color='teal'/>
+
+            <Autocomplete suggestions={[{id: 1, text: 'bonjour'}, {id:2, text:'hello'}]}
+                renderSuggestion={(s) => s.text}
+                />
             
         </>
     )

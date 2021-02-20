@@ -1,22 +1,24 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncReducer";
+import { asyncActionError, asyncActionFinish, asyncActionStart, asyncGetUniqueId } from "../async/asyncReducer";
 import { dataFromSnapshot } from "../firestore/firestoreService";
 
-export default function useFirestoreDoc({query, data, deps, shouldExecute = true}) {
+export default function useFirestoreDoc({query, data, deps, name='noname', shouldExecute = true}) {
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (!shouldExecute) return;
-        dispatch(asyncActionStart());
+        console.log(`runEffect with useFirestoreDoc: ${name}`)
+        const async_unique_id = asyncGetUniqueId();
+        dispatch(asyncActionStart(async_unique_id));
         const unsubscribe = query().onSnapshot(
             snapshot => {
                 if (!snapshot.exists) {
-                    dispatch(asyncActionError({code: 'not-found', message:'Could not find document'}))
+                    dispatch(asyncActionError({error: {code: 'not-found', message:'Could not find document'}, unique_id: async_unique_id}))
                     return;
                 }
                 data(dataFromSnapshot(snapshot));
-                dispatch(asyncActionFinish());
+                dispatch(asyncActionFinish(async_unique_id));
             },
             error => dispatch(asyncActionError())
 

@@ -1,12 +1,11 @@
-import {React, useEffect} from 'react';
+import {React} from 'react';
 import { Grid } from 'semantic-ui-react';
 import BookList from './BookList';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import BookListItemPlaceholder from './BookListItemPlaceholder';
-import { getBooksFromFirestore, getEventsFromFirestore } from '../../../app/firestore/firestoreService'
-import { listenToBooks, listenToEvents, loadBooks } from '../bookActions';
-import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection';
+import { getBooksFromFirestore } from '../../../app/firestore/firestoreService'
+import { listenToBooks } from '../bookActions';
 import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
 import LoadingComponent from '../../../app/layout/LoadingComponents';
 

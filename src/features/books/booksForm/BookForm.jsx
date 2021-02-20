@@ -11,7 +11,9 @@ import { toast } from 'react-toastify';
 import WidgetDropzone from '../../../app/common/dropzone/WidgetDropzone';
 import { addUserBook } from '../../../app/firestore/firestoreService';
 import { getFileExtension } from '../../../app/common/util/util';
+import { searchBookApi } from '../../../app/common/openlibrary/api';
 import { uploadBookDataToFirebaseStore } from '../../../app/firestore/firebaseService';
+import BookSearchWidget from './BookSearchWidget';
 
 
 export default function BookForm({match, history}) {
@@ -35,6 +37,7 @@ export default function BookForm({match, history}) {
             photoUrl
         }
     }
+
 
     const validationSchema = Yup.object({
         title: Yup.string().required('You must provide a title'),
@@ -65,6 +68,8 @@ export default function BookForm({match, history}) {
                 initialValues={initialValues}
                 onSubmit={async (values, {setSubmitting}) => {
                 try {
+                    console.log(values)
+                    return;
                     const bookId = cuid()
                     const {bookPhoto,
                         bookPdf,
@@ -89,13 +94,10 @@ export default function BookForm({match, history}) {
                 }
                 }}
             >
-            {({isSubmitting, dirty, isValid, setFieldValue}) => (
+            {({isSubmitting, dirty, isValid, setFieldValue, values}) => (
             <Form className='ui form'>
                 <Header content='Book Data' sub color='teal'/>
-                <MyTextInput name='title' placeholder='Book title'/>
-                <MyTextInput name='author' placeholder='Author'/>
-                <Header content='Book Picture' sub color='teal'/>
-                <WidgetDropzone setFieldValue={setFieldValue} name='bookPhoto' />
+                <BookSearchWidget setFieldValue={setFieldValue} />
                 <Header content='Book File' sub color='teal'/>
                 <WidgetDropzone setFieldValue={setFieldValue} name='bookPdf' />
                 {/* <MySelectInput name='category' placeholder='Event category' options={categoryData}/> */}

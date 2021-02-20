@@ -3,6 +3,7 @@
 import React from "react";
 
 import type { T_Highlight } from "react-pdf-highlighter/src/types";
+import { Button } from "semantic-ui-react";
 type T_ManuscriptHighlight = T_Highlight;
 
 type Props = {
@@ -15,7 +16,7 @@ const updateHash = highlight => {
   document.location.hash = `highlight-${highlight.id}`;
 };
 
-function Sidebar({ highlights, toggleDocument, resetHighlights }: Props) {
+function Sidebar({ highlights, resetHighlights, setWatcher, watcher }: Props) {
   return (
     <div className="sidebar" style={{ width: "25vw" }}>
       <div className="description" style={{ padding: "1rem" }}>
@@ -28,7 +29,6 @@ function Sidebar({ highlights, toggleDocument, resetHighlights }: Props) {
           </small>
         </p>
       </div>
-
       <ul className="sidebar__highlights">
         {highlights.map((highlight, index) => (
           <li

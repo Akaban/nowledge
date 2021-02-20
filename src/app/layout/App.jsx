@@ -10,9 +10,10 @@ import AccountPage from "../../features/auth/AccountPage";
 import { useSelector } from "react-redux";
 import LoadingComponent from "./LoadingComponents";
 import ProfilePage from "../../features/profiles/ProfilePage/ProfilePage";
-import PdfApp from "../../third/pdfhighlighter/App"
 import BookReader from "../../features/books/booksReader/bookReader";
 import BookForm from "../../features/books/booksForm/BookForm";
+import BookSearchWidget from "../../features/books/booksForm/BookSearchWidget";
+import Sandbox from "../../features/sandbox/Sandbox";
 
 
 function App() {
@@ -36,12 +37,8 @@ function App() {
         <Route exact path='/books' component={BooksDashboard} />
         <Route exact path='/books/:id' component={BookReader} />
         <Route exact path='/addBook' component={BookForm} key={key} />
-        {/* <Route exact path='/sandbox' component={Sandbox} />
-        <Route exact path='/sandbox/pdf' component={PdfApp} /> */}
-        {/* <Route path='/events/:id' component={EventDetailedPage} />
-        <Route path='/account' component={AccountPage}   />
-        <Route path='/profile/:id' component={ProfilePage}   />
-        <Route path='/error' component={ErrorComponent}   /> */}
+        <Route exact path='/sandbox/searchBook' component={BookSearchWidget}/>
+        <Route exact path='/sandbox' component={Sandbox}/>
       </Container>
     </>
   )} /> </>

@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from './app/store/configureStore';
 import ScrollToTop from './app/layout/ScrollToTop';
 
-const store = configureStore()
+export const store = configureStore()
 
 console.log(store.getState())
 

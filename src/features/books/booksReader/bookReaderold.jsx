@@ -2,7 +2,6 @@
 /* eslint import/no-webpack-loader-syntax: 0 */
 
 import React, { Component } from "react";
-import PDFWorker from "worker-loader!pdfjs-dist/lib/pdf.worker";
 
 import {
   PdfLoader,
@@ -11,28 +10,28 @@ import {
   Highlight,
   Popup,
   AreaHighlight,
-  setPdfWorker
+  setPdfWorker,
 } from "react-pdf-highlighter";
-
-import testHighlights from "./test-highlights";
 
 import Spinner from "./Spinner";
 import Sidebar from "./Sidebar";
 
 import type {
   T_Highlight,
-  T_NewHighlight
+  T_NewHighlight,
 } from "react-pdf-highlighter/src/types";
 
 import "./style/App.css";
 
-setPdfWorker(PDFWorker);
+setPdfWorker(
+  "//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js"
+);
 
 type Props = {};
 
 type State = {
   url: string,
-  highlights: Array<T_Highlight>
+  highlights: Array<T_Highlight>,
 };
 
 const getNextId = () => String(Math.random()).slice(2);
@@ -51,26 +50,19 @@ const HighlightPopup = ({ comment }) =>
     </div>
   ) : null;
 
-const PRIMARY_PDF_URL = "https://arxiv.org/pdf/1708.08021.pdf";
-const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480.pdf";
-
 const searchParams = new URLSearchParams(document.location.search);
 
-const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
-
-class App extends Component<Props, State> {
+class PdfApp extends Component<Props, State> {
   state = {
-    url: initialUrl,
-    highlights: testHighlights[initialUrl]
-      ? [...testHighlights[initialUrl]]
-      : []
+    url: null,
+    highlights: [],
   };
 
   state: State;
 
   resetHighlights = () => {
     this.setState({
-      highlights: []
+      highlights: [],
     });
   };
 
@@ -80,13 +72,16 @@ class App extends Component<Props, State> {
 
     this.setState({
       url: newUrl,
-      highlights: testHighlights[newUrl] ? [...testHighlights[newUrl]] : []
+      highlights: testHighlights[newUrl] ? [...testHighlights[newUrl]] : [],
     });
   };
 
-  scrollViewerTo = (highlight: any) => {};
+  scrollViewerTo = (highlight: any) => {
+    console.log('scrollViewerTo')
+  };
 
   scrollToHighlightFromHash = () => {
+    console.log("in scrollToHighlightFromHash");
     const highlight = this.getHighlightById(parseIdFromHash());
 
     if (highlight) {
@@ -105,7 +100,7 @@ class App extends Component<Props, State> {
   getHighlightById(id: string) {
     const { highlights } = this.state;
 
-    return highlights.find(highlight => highlight.id === id);
+    return highlights.find((highlight) => highlight.id === id);
   }
 
   addHighlight(highlight: T_NewHighlight) {
@@ -114,7 +109,7 @@ class App extends Component<Props, State> {
     console.log("Saving highlight", highlight);
 
     this.setState({
-      highlights: [{ ...highlight, id: getNextId() }, ...highlights]
+      highlights: [{ ...highlight, id: getNextId() }, ...highlights],
     });
   }
 
@@ -122,7 +117,7 @@ class App extends Component<Props, State> {
     console.log("Updating highlight", highlightId, position, content);
 
     this.setState({
-      highlights: this.state.highlights.map(h => {
+      highlights: this.state.highlights.map((h) => {
         const {
           id,
           position: originalPosition,
@@ -134,10 +129,10 @@ class App extends Component<Props, State> {
               id,
               position: { ...originalPosition, ...position },
               content: { ...originalContent, ...content },
-              ...rest
+              ...rest,
             }
           : h;
-      })
+      }),
     });
   }
 
@@ -155,17 +150,17 @@ class App extends Component<Props, State> {
           style={{
             height: "100vh",
             width: "75vw",
-            position: "relative"
+            position: "relative",
           }}
         >
           <PdfLoader url={url} beforeLoad={<Spinner />}>
-            {pdfDocument => (
+            {(pdfDocument) => (
               <PdfHighlighter
                 pdfDocument={pdfDocument}
-                enableAreaSelection={event => event.altKey}
+                enableAreaSelection={(event) => event.altKey}
                 onScrollChange={resetHash}
                 // pdfScaleValue="page-width"
-                scrollRef={scrollTo => {
+                scrollRef={(scrollTo) => {
                   this.scrollViewerTo = scrollTo;
 
                   this.scrollToHighlightFromHash();
@@ -178,7 +173,7 @@ class App extends Component<Props, State> {
                 ) => (
                   <Tip
                     onOpen={transformSelection}
-                    onConfirm={comment => {
+                    onConfirm={(comment) => {
                       this.addHighlight({ content, position, comment });
 
                       hideTipAndSelection();
@@ -207,7 +202,7 @@ class App extends Component<Props, State> {
                   ) : (
                     <AreaHighlight
                       highlight={highlight}
-                      onChange={boundingRect => {
+                      onChange={(boundingRect) => {
                         this.updateHighlight(
                           highlight.id,
                           { boundingRect: viewportToScaled(boundingRect) },
@@ -220,8 +215,8 @@ class App extends Component<Props, State> {
                   return (
                     <Popup
                       popupContent={<HighlightPopup {...highlight} />}
-                      onMouseOver={popupContent =>
-                        setTip(highlight, highlight => popupContent)
+                      onMouseOver={(popupContent) =>
+                        setTip(highlight, (highlight) => popupContent)
                       }
                       onMouseOut={hideTip}
                       key={index}
@@ -239,4 +234,4 @@ class App extends Component<Props, State> {
   }
 }
 
-export default App;
+export default PdfApp;

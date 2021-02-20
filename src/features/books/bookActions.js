@@ -1,5 +1,6 @@
 import { fetchSampleData } from "../../app/api/mockApi";
 import { asyncActionError, asyncActionFinish, asyncActionStart } from "../../app/async/asyncReducer";
+import { getBooksFromFirestore } from "../../app/firestore/firestoreService";
 import { CREATE_BOOK, DELETE_BOOK, FETCH_BOOK, UPDATE_BOOK } from "./bookConstants";
 
 export function loadBooks() {
@@ -7,6 +8,20 @@ export function loadBooks() {
         dispatch(asyncActionStart())
         try {
             const books = await fetchSampleData();
+            dispatch({type: FETCH_BOOK, payload: books});
+            dispatch(asyncActionFinish())
+        } catch (error) {
+            dispatch(asyncActionError(error))
+        }
+    }
+}
+
+
+export function loadBooksFirestore() {
+    return async function(dispatch) {
+        dispatch(asyncActionStart())
+        try {
+            const books = await getBooksFromFirestore();
             dispatch({type: FETCH_BOOK, payload: books});
             dispatch(asyncActionFinish())
         } catch (error) {
