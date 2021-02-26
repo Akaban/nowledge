@@ -30,7 +30,7 @@ export default function SignedInMenu() {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item href="/account">My account</Dropdown.Item>
+          {/* <Dropdown.Item href="/account">My account</Dropdown.Item> */}
           <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

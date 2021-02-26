@@ -43,3 +43,11 @@ export function uploadBookDataToFirebaseStore(bookId, bookPdfFile) {
         pdfUploadTask,
     }
 }
+
+export function deleteFileFromFirebaseStore(url) {
+    const url_ = url.split("?")[0]
+    const storage = firebase.storage()
+    const reference = storage.refFromURL(url_)
+
+    reference.delete().then(() => {}).catch((error) => {throw error;})
+}

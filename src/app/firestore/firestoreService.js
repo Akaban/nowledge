@@ -1,4 +1,5 @@
 import firebase from "../config/firebase";
+import { deleteFileFromFirebaseStore } from "./firebaseService";
 
 const db = firebase.firestore();
 
@@ -107,6 +108,27 @@ export function updateInitPageNumberInFirestore(bookId, pageNumber) {
     .update({
       initPageNumber: pageNumber,
     });
+}
+
+export async function removeUserBook(book) {
+  const user = firebase.auth().currentUser
+  try {
+  await deleteFileFromFirebaseStore(book.bookPdfUrl)
+  await db
+    .collection("userBooks")
+    .doc(user.uid)
+    .collection("highlights")
+    .doc(book.id)
+    .delete()
+  await db
+    .collection("userBooks")
+    .doc(user.uid)
+    .update({
+      books: firebase.firestore.FieldValue.arrayRemove(book)
+    })
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function addUserBook(book) {
