@@ -21,7 +21,6 @@ export default function BookSearchWidget({setFieldValue}) {
             return;
         }
         const res = await searchBookApi({title, author})
-        console.log(res)
         setBookApiReturn(res)
     }
 

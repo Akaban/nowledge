@@ -123,8 +123,6 @@ export async function addUserBook(book) {
       });
   }
   try {
-    console.log("about to update arrayUnion with book =");
-    console.log(book);
     await db
       .collection("userBooks")
       .doc(user.uid)

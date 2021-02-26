@@ -15,7 +15,6 @@ export default function WidgetDropzone({ setFieldValue, name }) {
         border: 'dashed 3px green',
     }
   const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles)
     const files = acceptedFiles.map(file => Object.assign(file, {
         preview: URL.createObjectURL(file)}))
 

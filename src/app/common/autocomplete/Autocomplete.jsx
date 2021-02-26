@@ -22,8 +22,6 @@ export default function Autocomplete({
     setAutocompleteState({
       choice: id,
     });
-    console.log('setting bookObject in form = ')
-    console.log(suggestions[id])
     setFieldValue("bookObject", suggestions[id])
     setShowInput(false)
   }
