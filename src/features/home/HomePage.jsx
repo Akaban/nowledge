@@ -4,7 +4,6 @@ import { openModal } from '../../app/common/modals/modalReducer';
 import {
   Button,
   Container,
-  Icon,
   Image,
   Segment,
   Header,

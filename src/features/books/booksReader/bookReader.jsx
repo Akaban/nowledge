@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,9 +24,8 @@ import {
   updateInitPageNumberInFirestore,
 } from "../../../app/firestore/firestoreService";
 import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
-import { listenToBooks, loadBooksFirestore } from "../bookActions";
+import { listenToBooks } from "../bookActions";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
-import cuid from "cuid";
 
 setPdfWorker(PdfWorkerCdn);
 
@@ -104,7 +103,7 @@ export default function BookReader({ match }) {
       </div>
     ) : null;
 
-  const searchParams = new URLSearchParams(document.location.search);
+  // const searchParams = new URLSearchParams(document.location.search);
 
   const resetHighlights = () => {
     setBookHighlightState([]);

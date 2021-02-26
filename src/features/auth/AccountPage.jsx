@@ -1,6 +1,5 @@
 import { Form, Formik } from 'formik'
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { Button, Header, Label, Segment } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import MyTextInput from '../../app/common/form/MyTextInput'

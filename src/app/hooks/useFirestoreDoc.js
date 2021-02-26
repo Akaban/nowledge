@@ -8,7 +8,6 @@ export default function useFirestoreDoc({query, data, deps, name='noname', shoul
 
     useEffect(() => {
         if (!shouldExecute) return;
-        console.log(`runEffect with useFirestoreDoc: ${name}`)
         const async_unique_id = asyncGetUniqueId();
         dispatch(asyncActionStart(async_unique_id, name));
         const unsubscribe = query().onSnapshot(

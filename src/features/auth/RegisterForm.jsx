@@ -4,11 +4,10 @@ import ModalWrapper from '../../app/common/modals/ModalWrapper'
 import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 import MyTextInput from '../../app/common/form/MyTextInput'
-import { Button, Divider, Label } from 'semantic-ui-react'
+import { Button, Label } from 'semantic-ui-react'
 import { useDispatch } from 'react-redux'
 import { closeModal } from '../../app/common/modals/modalReducer'
 import { registerInFirebase} from '../../app/firestore/firebaseService'
-import SocialLogin from './SocialLogin'
 
 export default function RegisterForm() {
     const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { Button, ButtonContent, Card, Image } from "semantic-ui-react";
+import { Button, Card} from "semantic-ui-react";
 
 export default function Autocomplete({
   suggestions,

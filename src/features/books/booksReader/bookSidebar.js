@@ -2,9 +2,7 @@
 
 import { React, useState } from "react";
 
-import type { T_Highlight } from "react-pdf-highlighter/src/types";
 import { Button, Icon } from "semantic-ui-react";
-type T_ManuscriptHighlight = T_Highlight;
 
 const updateHash = (highlight) => {
   document.location.hash = `highlight-${highlight.id}`;

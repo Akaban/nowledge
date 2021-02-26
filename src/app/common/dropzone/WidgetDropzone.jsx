@@ -21,7 +21,7 @@ export default function WidgetDropzone({ setFieldValue, name }) {
 
     setFieldValue(name, files)
 
-  }, [name]);
+  }, [name, setFieldValue]);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (

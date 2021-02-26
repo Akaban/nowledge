@@ -3,8 +3,6 @@ import { Card } from 'semantic-ui-react';
 import BookListItem from './BookListItem';
 
 export default function BookList({books}) {
-    console.log('in booklist')
-    console.log(books)
     return (
         <Card.Group itemsPerRow={5}>
         {books.map(book => (

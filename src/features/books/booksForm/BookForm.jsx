@@ -1,18 +1,13 @@
 import cuid from 'cuid';
 import { Formik, Form} from 'formik';
 import React from 'react';
-import {useState} from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { Button, Confirm, Header, Segment} from 'semantic-ui-react';
-import * as Yup from "yup"
+import { Button, Header, Segment} from 'semantic-ui-react';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import LoadingComponent from '../../../app/layout/LoadingComponents';
-import { toast } from 'react-toastify';
 import WidgetDropzone from '../../../app/common/dropzone/WidgetDropzone';
 import { addUserBook } from '../../../app/firestore/firestoreService';
-import { getFileExtension } from '../../../app/common/util/util';
-import { searchBookApi } from '../../../app/common/openlibrary/api';
 import { uploadBookDataToFirebaseStore } from '../../../app/firestore/firebaseService';
 import BookSearchWidget from './BookSearchWidget';
 import { transformToFirestoreFormat } from '../../../app/common/openlibrary/transform';
@@ -20,18 +15,11 @@ import { transformToFirestoreFormat } from '../../../app/common/openlibrary/tran
 
 export default function BookForm({match, history}) {
 
-    const dispatch = useDispatch();
-    const [loadingCancel, setLoadingCancel] = useState(false)
-    const [confirmOpen, setConfirmOpen] = useState(false)
-    const [files, setFiles] = useState([])
     const {loading, error} = useSelector(state => state.async)
-    const [loadingFile, setLoadingFile] = useState(false)
 
     async function handleUploadFiles(bookId, pdf) {
-        setLoadingFile(true)
         const {pdfUploadTask} = uploadBookDataToFirebaseStore(bookId, pdf)
         const pdfUrl = await pdfUploadTask.then(snapshot => snapshot.ref.getDownloadURL())
-        setLoadingFile(false)
         return {
             pdfUrl,
         }

@@ -1,4 +1,3 @@
-import cuid from "cuid";
 import firebase from "../config/firebase";
 
 const db = firebase.firestore();
@@ -100,7 +99,6 @@ export function updateInitPageNumberInFirestore(bookId, pageNumber) {
   if (pageNumber < 0)
     pageNumber = 0;
   const user = firebase.auth().currentUser;
-  console.log(`saving initPageNumber=${pageNumber} for bookId=${bookId}`);
   return db
     .collection("userBooks")
     .doc(user.uid)

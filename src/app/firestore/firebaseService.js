@@ -1,4 +1,3 @@
-import { getFileExtension } from '../common/util/util'
 import firebase from '../config/firebase'
 import { setUserBooks, setUserProfileData } from './firestoreService'
 

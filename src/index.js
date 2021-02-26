@@ -37,7 +37,6 @@ import './app/layout/bootstrap.css';
 import './app/layout/styles.css';
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import {ConnectedRouter} from 'connected-react-router'
 import { configureStore, history } from './app/store/configureStore';

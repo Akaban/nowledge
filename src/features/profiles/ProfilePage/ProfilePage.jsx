@@ -1,17 +1,11 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Grid } from "semantic-ui-react";
-import { getUserProfile } from "../../../app/firestore/firestoreService";
-import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
-import {
-  listentoSelectedUserProfile,
-} from "../profileActions";
 import ProfileContent from "./ProfileContent";
 import ProfileHeader from "./ProfileHeader";
 
 export default function ProfilePage({ match }) {
-  const dispatch = useDispatch();
   const { selectedUserProfile } = useSelector((state) => state.profile);
   const { currentUser } = useSelector((state) => state.auth);
   const { loading, error } = useSelector((state) => state.async);

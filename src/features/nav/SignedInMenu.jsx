@@ -1,13 +1,13 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Image, Menu } from "semantic-ui-react";
+import { Menu } from "semantic-ui-react";
 import { Dropdown } from "react-bootstrap";
 import { signOutFirebase } from "../../app/firestore/firebaseService";
 
 export default function SignedInMenu() {
-  const { currentUserProfile } = useSelector((state) => state.profile);
+  // const { currentUserProfile } = useSelector((state) => state.profile);
   const history = useHistory();
   const dispatch = useDispatch();
 

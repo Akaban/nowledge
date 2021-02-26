@@ -5,10 +5,9 @@ import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import MyTextInput from '../../app/common/form/MyTextInput'
-import { Button, Divider, Label } from 'semantic-ui-react'
+import { Button, Label } from 'semantic-ui-react'
 import { closeModal } from '../../app/common/modals/modalReducer'
 import { signInWithEmail } from '../../app/firestore/firebaseService'
-import SocialLogin from './SocialLogin'
 
 export default function LoginForm() {
     const dispatch = useDispatch();

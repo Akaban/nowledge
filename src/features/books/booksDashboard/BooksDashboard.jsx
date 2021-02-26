@@ -1,5 +1,4 @@
 import React from 'react';
-import { Grid } from 'semantic-ui-react';
 import BookList from './BookList';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';

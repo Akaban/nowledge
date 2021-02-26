@@ -10,7 +10,6 @@ export default function BookSearchWidget({setFieldValue}) {
 
   const [values, setValues] = useState(initial_values);
   const [bookApiReturn, setBookApiReturn] = useState(null)
-  const [typingTimeout, setTypingTimeout] = useState(null)
   const [showInput, setShowInput] = useState(true)
 
   function resetBookApiReturn(){
@@ -42,11 +41,6 @@ export default function BookSearchWidget({setFieldValue}) {
 
     return () => clearTimeout(delayDebounceFn)
   }, [values])
-
-  const inputStyle = {
-    width: "5em",
-    height: "1em"
-  }
 
   return (
       <>
