@@ -1,13 +1,16 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin);
+
 body {
   background-color: #eaeaea;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-size: 13px;
 }
 
 .ui.fixed.menu {
   background-image: linear-gradient(
     135deg,
-    rgb(24, 42, 115) 0%,
-    rgb(33, 138, 174) 69%,
-    rgb(32, 167, 172) 89%
+    rgb(29, 117, 218) 0%,
+    rgb(42, 122, 241) 69%
     );
 }
 
@@ -39,5 +42,24 @@ body {
   width: 100%;
   border: None;
   box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
-
 }
+
+/* .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+} */

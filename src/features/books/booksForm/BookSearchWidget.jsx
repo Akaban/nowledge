@@ -37,12 +37,16 @@ export default function BookSearchWidget({setFieldValue}) {
     useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       const {title, author} = values
-      console.log({title, author})
       handleBookApiOnChange(title, author)
     }, 1500)
 
     return () => clearTimeout(delayDebounceFn)
   }, [values])
+
+  const inputStyle = {
+    width: "5em",
+    height: "1em"
+  }
 
   return (
       <>
@@ -51,19 +55,24 @@ export default function BookSearchWidget({setFieldValue}) {
       <label>
         Author :
         <input
+          size="10"
           type="text"
           name="author"
           value={values.author || ''}
           onChange={handleChange}
+          style={{width: "10em", height: "1em", marginLeft: ".5em"}}
         />
       </label>
+      <br/>
       <label>
         Title :
         <input
+          size="10"
           type="text"
           name="title"
           value={values.title || ''}
           onChange={handleChange}
+          style={{width: "10em", height: "1em", marginLeft: "1.5em"}}
         />
       </label>
 

@@ -11,17 +11,20 @@ export default function NavBar({setFormOpen}) {
     return (
         <Menu inverted fixed='top'>
             <Container>
-                <Menu.Item as={NavLink} exact to='/' header>
+                <Menu.Item header>
                     <img src="/assets/logo.png" alt="logo" style={{marginRight: 15}}/>
                     NowLedge
                 </Menu.Item>
-                    <Menu.Item as={NavLink} exact to='/books' name='Books' />
-                    <Menu.Item as={NavLink} exact to='/sandbox' name='Sandbox' />
+                    {/* <Menu.Item as={NavLink} exact to='/sandbox' name='Sandbox' /> */}
                 { authenticated && 
+                    <>
+                    <Menu.Item as={NavLink} exact to='/books' name='Books' />
                     <Menu.Item as={NavLink} to='/addBook'>
-                    <Button positive inverted content='Upload a book' />
-                    </Menu.Item>}
-                   { authenticated ? <SignedInMenu/> : <SignedOutMenu/> }
+                    <Button content='Upload a book' />
+                    </Menu.Item>
+                    </>
+                    }
+                   { authenticated ? <SignedInMenu/> : null }
             </Container>
         </Menu>
     )

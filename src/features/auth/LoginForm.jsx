@@ -1,17 +1,20 @@
 import { Form, Formik} from 'formik'
 import React from 'react'
 import ModalWrapper from '../../app/common/modals/ModalWrapper'
+import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import MyTextInput from '../../app/common/form/MyTextInput'
 import { Button, Divider, Label } from 'semantic-ui-react'
-import { useDispatch } from 'react-redux'
 import { closeModal } from '../../app/common/modals/modalReducer'
 import { signInWithEmail } from '../../app/firestore/firebaseService'
 import SocialLogin from './SocialLogin'
 
 export default function LoginForm() {
     const dispatch = useDispatch();
-    return (<ModalWrapper size='mini' header='Sign in to Re-vents'>
+    let history = useHistory();
+
+    return (<ModalWrapper size='mini' header='Sign in to NowLedge'>
     <Formik
         initialValues ={{email: '', password: ''}}
         validationSchema={Yup.object({
@@ -23,6 +26,7 @@ export default function LoginForm() {
                 await signInWithEmail(values)
                 setSubmitting(false)
                 dispatch(closeModal());
+                history.push("/books")
             } catch (error) {
                setErrors({auth: 'Problem with username or password'})
                setSubmitting(false)
@@ -44,10 +48,6 @@ export default function LoginForm() {
                    color='teal'
                    content='login'
                  />
-                 <Divider horizontal>
-                     Or
-                 </Divider>
-                 <SocialLogin/>
             </Form>
             )}
 

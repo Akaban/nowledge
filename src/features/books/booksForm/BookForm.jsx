@@ -1,6 +1,7 @@
 import cuid from 'cuid';
 import { Formik, Form} from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
+import {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Button, Confirm, Header, Segment} from 'semantic-ui-react';
@@ -14,6 +15,7 @@ import { getFileExtension } from '../../../app/common/util/util';
 import { searchBookApi } from '../../../app/common/openlibrary/api';
 import { uploadBookDataToFirebaseStore } from '../../../app/firestore/firebaseService';
 import BookSearchWidget from './BookSearchWidget';
+import { transformToFirestoreFormat } from '../../../app/common/openlibrary/transform';
 
 
 export default function BookForm({match, history}) {
@@ -25,28 +27,14 @@ export default function BookForm({match, history}) {
     const {loading, error} = useSelector(state => state.async)
     const [loadingFile, setLoadingFile] = useState(false)
 
-    async function handleUploadFiles(bookId, pdf, photo) {
+    async function handleUploadFiles(bookId, pdf) {
         setLoadingFile(true)
-        const bookcuid = cuid()
-        const {pdfUploadTask, pictureUploadTask} = uploadBookDataToFirebaseStore(bookcuid, pdf, photo)
+        const {pdfUploadTask} = uploadBookDataToFirebaseStore(bookId, pdf)
         const pdfUrl = await pdfUploadTask.then(snapshot => snapshot.ref.getDownloadURL())
-        const photoUrl = await pictureUploadTask.then(snapshot => snapshot.ref.getDownloadURL())
         setLoadingFile(false)
         return {
             pdfUrl,
-            photoUrl
         }
-    }
-
-
-    const validationSchema = Yup.object({
-        title: Yup.string().required('You must provide a title'),
-        author: Yup.string().required('You must provide a author'),
-    })
-
-    const initialValues = {
-        title: '',
-        author: ''
     }
 
     // useFirestoreDoc({
@@ -64,26 +52,21 @@ export default function BookForm({match, history}) {
     return (
         <Segment clearing>
             <Formik
-                validationSchema={validationSchema}
-                initialValues={initialValues}
+                initialValues={{hiddenfield: 'hiddenvalue'}}
                 onSubmit={async (values, {setSubmitting}) => {
                 try {
-                    console.log(values)
-                    return;
                     const bookId = cuid()
-                    const {bookPhoto,
+                    const {
                         bookPdf,
-                        ...rest
+                        bookObject
                     } = values;
                     const {
                         pdfUrl,
-                        photoUrl
-                    } = await handleUploadFiles(bookId, bookPdf[0], bookPhoto[0]);
+                    } = await handleUploadFiles(bookId, bookPdf[0]);
                     await addUserBook({
-                        bookPhotoUrl: photoUrl,
                         bookPdfUrl: pdfUrl,
                         id: bookId,
-                        ...rest
+                        ...transformToFirestoreFormat(bookObject)
                     })
                     history.push('/books');
                 } catch(error) {
@@ -94,13 +77,14 @@ export default function BookForm({match, history}) {
                 }
                 }}
             >
-            {({isSubmitting, dirty, isValid, setFieldValue, values}) => (
+            {({isSubmitting, dirty, isValid, setFieldValue}) => (
             <Form className='ui form'>
                 <Header content='Book Data' sub color='teal'/>
                 <BookSearchWidget setFieldValue={setFieldValue} />
                 <Header content='Book File' sub color='teal'/>
                 <WidgetDropzone setFieldValue={setFieldValue} name='bookPdf' />
                 {/* <MySelectInput name='category' placeholder='Event category' options={categoryData}/> */}
+                <MyTextInput type='hidden' name='hiddenfield' />
                 <Button
                     loading={isSubmitting}
                     disabled={!isValid || !dirty || isSubmitting}

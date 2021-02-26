@@ -1,6 +1,7 @@
 import { Form, Formik} from 'formik'
 import React from 'react'
 import ModalWrapper from '../../app/common/modals/ModalWrapper'
+import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 import MyTextInput from '../../app/common/form/MyTextInput'
 import { Button, Divider, Label } from 'semantic-ui-react'
@@ -9,9 +10,10 @@ import { closeModal } from '../../app/common/modals/modalReducer'
 import { registerInFirebase} from '../../app/firestore/firebaseService'
 import SocialLogin from './SocialLogin'
 
-export default function LoginForm() {
+export default function RegisterForm() {
     const dispatch = useDispatch();
-    return (<ModalWrapper size='mini' header='Register to Re-vents'>
+    let history = useHistory();
+    return (<ModalWrapper size='mini' header='Register to NowLedge'>
     <Formik
         initialValues ={{displayName: '', email: '', password: ''}}
         validationSchema={Yup.object({
@@ -23,6 +25,7 @@ export default function LoginForm() {
                 await registerInFirebase(values)
                 setSubmitting(false)
                 dispatch(closeModal());
+                history.push("/books")
             } catch (error) {
                 setErrors({auth: error.message})
                 setSubmitting(false)
@@ -32,7 +35,6 @@ export default function LoginForm() {
     >
         {({isSubmitting, isValid, dirty, errors}) => (
             <Form className='ui form'>
-               <MyTextInput name='displayName' placeholder='Display Name' />
                <MyTextInput name='email' placeholder='Email' />
                <MyTextInput type='password' name='password' placeholder='Password' />
                {errors.auth && <Label basic color='red' style={{marginBottom: 10}} content={errors.auth} />}
@@ -45,8 +47,8 @@ export default function LoginForm() {
                    color='teal'
                    content='login'
                  />
-                 <Divider horizontal>Or</Divider>
-                 <SocialLogin />
+                 {/* <Divider horizontal>Or</Divider>
+                 <SocialLogin /> */}
             </Form>
             )}
 

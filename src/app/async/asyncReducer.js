@@ -9,10 +9,10 @@ export function asyncGetUniqueId() {
     return uuidv4()
 }
 
-export function asyncActionStart(unique_id) {
+export function asyncActionStart(unique_id, name=null) {
     return {
         type: ASYNC_ACTION_START,
-        payload: unique_id
+        payload: {unique_id, name}
    }
 }
 
@@ -60,12 +60,13 @@ export default function asyncReducer(state = initialState, {type, payload}) {
         }
 
     }
-    function startTask(state, unique_id) {
+    function startTask(state, payload) {
+        const {unique_id, name} = payload
         if (state.tasks.filter(t => t.id === unique_id).length > 0)
             throw new Error();
         return {
             ...state,
-            tasks: [...state.tasks, { id: unique_id, state: ASYNC_ACTION_START } ]
+            tasks: [...state.tasks, { id: unique_id, state: ASYNC_ACTION_START, name } ]
         }
     }
     function updateTask(state, unique_id, updated_task) {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Grid, Header, Tab } from 'semantic-ui-react'
-import { format } from 'date-fns'
+// import { format } from 'date-fns'
 import ProfileForm from './ProfileForm.oldjsx'
 
 export default function AboutTab({profile}) {
@@ -16,7 +16,7 @@ export default function AboutTab({profile}) {
                 {editMode ? <ProfileForm profile={profile}/> : 
                     <>
                         <div style={{marginBottom: 10}}>
-                            <strong>Member since: {format(profile.createdAt, 'dd MMM yyyy')}</strong>
+                            <strong>Member since: </strong>
                             <div>
                                 {profile.description || null}
                             </div>

@@ -1,42 +1,71 @@
 // @flow
 
-import React from "react";
+import { React, useState } from "react";
 
 import type { T_Highlight } from "react-pdf-highlighter/src/types";
-import { Button } from "semantic-ui-react";
+import { Button, Icon } from "semantic-ui-react";
 type T_ManuscriptHighlight = T_Highlight;
 
-type Props = {
-  highlights: Array<T_ManuscriptHighlight>,
-  resetHighlights: () => void,
-  toggleDocument: () => void
-};
-
-const updateHash = highlight => {
+const updateHash = (highlight) => {
   document.location.hash = `highlight-${highlight.id}`;
 };
 
-function Sidebar({ highlights, resetHighlights, setWatcher, watcher }: Props) {
+function Sidebar({
+  highlights,
+  resetHighlights,
+  sortHighlights,
+  deleteHighlight,
+  book,
+}) {
+  const [editMode, setEditMode] = useState(false);
+
+  if (!book) return null;
   return (
-    <div className="sidebar" style={{ width: "25vw" }}>
+    <div
+      className="sidebar"
+      style={{width: "25vw"}}
+    >
       <div className="description" style={{ padding: "1rem" }}>
-        <h2 style={{ marginBottom: "1rem" }}>react-pdf-highlighter</h2>
+        <h2 style={{ marginBottom: "1rem" }}>{book.title}</h2>
 
         <p>
           <small>
-            To create area highlight hold ⌥ Option key (Alt), then click and
-            drag.
+            Highlight any part of the document to create a new annotation.
           </small>
         </p>
       </div>
+      <center>
+        { highlights.length > 0 && 
+        <Button
+          onClick={() =>
+            setEditMode(!editMode)
+         }
+          color="red"
+          content={editMode ? "Reading mode" : "Edit highlights"}
+          style={{ marginBottom: "2em" }}
+        /> }
+        {/* {editMode && (
+          <Button.Group>
+            <Button
+              onClick={() => sortHighlights(book.id)}
+              color="teal"
+              content="Sort highlights"
+            />
+          </Button.Group>
+        )} */}
+      </center>
       <ul className="sidebar__highlights">
         {highlights.map((highlight, index) => (
           <li
             key={index}
             className="sidebar__highlight"
-            onClick={() => {
-              updateHash(highlight);
-            }}
+            onClick={
+              editMode
+                ? () => {}
+                : () => {
+                    updateHash(highlight);
+                  }
+            }
           >
             <div>
               <strong>{highlight.comment.text}</strong>
@@ -56,15 +85,24 @@ function Sidebar({ highlights, resetHighlights, setWatcher, watcher }: Props) {
             </div>
             <div className="highlight__location">
               Page {highlight.position.pageNumber}
+              <br />
+              {editMode && (
+                <Icon
+                  name="delete"
+                  color="red"
+                  link
+                  onClick={() => {
+                    if (highlights.length === 1) {
+                      setEditMode(false)
+                    }
+                    deleteHighlight(highlight.id)
+                  }}
+                />
+              )}
             </div>
           </li>
         ))}
       </ul>
-      {highlights.length > 0 ? (
-        <div style={{ padding: "1rem" }}>
-          <button onClick={resetHighlights}>Reset highlights</button>
-        </div>
-      ) : null}
     </div>
   );
 }

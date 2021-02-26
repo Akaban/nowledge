@@ -18,17 +18,14 @@ export default function Autocomplete({
 
   if (suggestions) suggestions = accessSuggestions(suggestions);
 
-  console.log("rendering Autocomplete suggestions = ");
-  console.log(suggestions);
-
   function onClick(e, id) {
-    console.log(id);
     setAutocompleteState({
       choice: id,
     });
-    setFieldValue("bookObject", suggestions[choice])
+    console.log('setting bookObject in form = ')
+    console.log(suggestions[id])
+    setFieldValue("bookObject", suggestions[id])
     setShowInput(false)
-    console.log(autocompleteState);
   }
 
   function getOnClick(id) {
@@ -81,8 +78,6 @@ export default function Autocomplete({
             return <></>
     }
   } else {
-      console.log("selected")
-      console.log(suggestions)
     return (
       <div>
         Selected: {renderSuggestion(suggestions[choice])}

@@ -53,7 +53,6 @@ export function deleteEventInFirestore(eventId) {
 
 export function setUserProfileData(user) {
   return db.collection("users").doc(user.uid).set({
-    displayName: user.displayName,
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   });
 }
@@ -94,6 +93,21 @@ export function updateHighlightsInFirestore(bookId, highlights) {
     .doc(bookId)
     .update({
       highlights,
+    });
+}
+
+export function updateInitPageNumberInFirestore(bookId, pageNumber) {
+  if (pageNumber < 0)
+    pageNumber = 0;
+  const user = firebase.auth().currentUser;
+  console.log(`saving initPageNumber=${pageNumber} for bookId=${bookId}`);
+  return db
+    .collection("userBooks")
+    .doc(user.uid)
+    .collection("highlights")
+    .doc(bookId)
+    .update({
+      initPageNumber: pageNumber,
     });
 }
 

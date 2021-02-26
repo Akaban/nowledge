@@ -9,7 +9,7 @@ export default function ErrorComponent() {
     return (
         <Segment placeholder>
             <Header textAlign='center' content={error?.message || 'Ooops we have an error'} />
-            <Button as={Link} to='/events' primary style={{marginTop:20}} content='Return to events page' />
+            <Button as={Link} to='/' primary style={{marginTop:20}} content='Return to home' />
         </Segment>
     )
 
