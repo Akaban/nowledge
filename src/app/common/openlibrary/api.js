@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_ENDPOINT = "http://openlibrary.org";
+const API_ENDPOINT = "https://openlibrary.org";
 
 export function getBookApi(isbns) {
   const url_get = `${API_ENDPOINT}/api/books?bibkeys=${isbns
