@@ -63,7 +63,7 @@ export default function asyncReducer(state = initialState, {type, payload}) {
     function startTask(state, payload) {
         const {unique_id, name} = payload
         if (state.tasks.filter(t => t.id === unique_id).length > 0)
-            throw new Error();
+            throw new Error("A task with this unique id already exists.");
         return {
             ...state,
             tasks: [...state.tasks, { id: unique_id, state: ASYNC_ACTION_START, name } ]
@@ -71,7 +71,7 @@ export default function asyncReducer(state = initialState, {type, payload}) {
     }
     function updateTask(state, unique_id, updated_task) {
         if (state.tasks.filter(t => t.id === unique_id).length === 0)
-            throw new Error();
+            throw new Error("Cannot update a non-existing task.");
 
         return {
             ...state,

@@ -221,9 +221,6 @@ export default function BookReader({ match }) {
                 <Tip
                   onOpen={transformSelection}
                   onConfirm={(comment) => {
-                    console.log("onConfirm")
-                    console.log("highlights =")
-                    console.log(bookHighlightState)
                     addHighlight({ content, position, comment }, book.id);
 
                     hideTipAndSelection();

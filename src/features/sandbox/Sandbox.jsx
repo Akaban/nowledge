@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
-import Autocomplete from '../../app/common/autocomplete/Autocomplete';
 import { openModal } from '../../app/common/modals/modalReducer';
 import { deleteFileFromFirebaseStore } from '../../app/firestore/firebaseService';
 import { decrement, increment} from './testReducer';

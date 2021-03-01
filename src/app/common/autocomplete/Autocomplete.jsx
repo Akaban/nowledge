@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { Button, Card} from "semantic-ui-react";
+import { Button, Card, Header } from "semantic-ui-react";
 
 export default function Autocomplete({
   suggestions,
@@ -7,6 +7,7 @@ export default function Autocomplete({
   accessSuggestions,
   setFieldValue,
   setShowInput,
+  setShowHelp,
   resetInput,
   isEmptyInput,
   resetBookApiReturn,
@@ -22,8 +23,8 @@ export default function Autocomplete({
     setAutocompleteState({
       choice: id,
     });
-    setFieldValue("bookObject", suggestions[id])
-    setShowInput(false)
+    setFieldValue("bookObject", suggestions[id]);
+    setShowInput(false);
   }
 
   function getOnClick(id) {
@@ -34,9 +35,10 @@ export default function Autocomplete({
     setAutocompleteState({
       choice: null,
     });
-    resetBookApiReturn()
-    resetInput()
-    setShowInput(true)
+    resetBookApiReturn();
+    resetInput();
+    setShowInput(true);
+    setShowHelp(true)
   }
 
   const { choice } = autocompleteState;
@@ -45,43 +47,55 @@ export default function Autocomplete({
 
   if (choice == null) {
     if (suggestions !== null) {
-        if (suggestions.length > 0)
-        {
-      return (
-        <Card.Group>
-          {suggestions.slice(0, maxSuggestions).map((suggestion, index) => {
-            return (
-              <Card
-                key={index}
-                image={suggestion.thumbnail_url}
-                header={suggestion.title}
-                meta={suggestion.author}
-                extra={
-                  <Button
-                    content="Select"
-                    color="teal"
-                    onClick={getOnClick(index)}
-                  />
-                }
-              />
-            );
-          })}
-        </Card.Group>
-      );}
-      else {
-      return <em>No book were found. Try to change the title or the author.</em>;
-
+      if (suggestions.length > 0) {
+        return (
+          <Card.Group>
+            {suggestions.slice(0, maxSuggestions).map((suggestion, index) => {
+              return (
+                <Card
+                  key={index}
+                  image={suggestion.thumbnail_url}
+                  header={suggestion.title}
+                  meta={suggestion.author}
+                  extra={
+                    <center>
+                      <Button
+                        content="Select"
+                        color="teal"
+                        onClick={getOnClick(index)}
+                      />
+                    </center>
+                  }
+                />
+              );
+            })}
+          </Card.Group>
+        );
+      } else {
+        return (
+          <Header content="No books were found. Try to change the title or the author." />
+        );
       }
     } else {
-            return <></>
+      return <></>;
     }
   } else {
+    const suggestion = suggestions[choice];
     return (
-      <div>
-        Selected: {renderSuggestion(suggestions[choice])}
-        <br />
-        <Button content="Reset" onClick={handleReset} color="teal" />
-      </div>
+      <center>
+        <Card
+          className="selected-book-thumbnail"
+          image={suggestion.thumbnail_url}
+          header={suggestion.title}
+          meta={suggestion.author}
+          extra={
+            <center>
+              <Button content="Reset" color="red" onClick={handleReset} />
+            </center>
+          }
+        />
+        </center>
+
     );
   }
 }
