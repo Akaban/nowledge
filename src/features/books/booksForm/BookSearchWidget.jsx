@@ -44,8 +44,10 @@ export default function BookSearchWidget({ setFieldValue }) {
 
   useEffect(() => {
     const handleSearchReset = () => resetBookApiReturn()
+    const {title, author} = values
     const delayDebounceFn = setTimeout(() => {
-      handleSearchReset();
+      if (!title && !author)
+        handleSearchReset();
     }, 100);
 
     return () => clearTimeout(delayDebounceFn);
