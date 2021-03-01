@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { Button, Card, Grid } from "semantic-ui-react";
+import { Button, Grid } from "semantic-ui-react";
 import Autocomplete from "../../../app/common/autocomplete/Autocomplete";
 import { searchBookApi } from "../../../app/common/openlibrary/api";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
@@ -27,10 +27,6 @@ export default function BookSearchWidget({ setFieldValue }) {
     setApiLoading(false);
   }
 
-  function handleSearchReset() {
-    const { title, author } = values;
-    resetBookApiReturn();
-  }
 
   function handleSearch() {
     const { title, author } = values;
@@ -47,6 +43,7 @@ export default function BookSearchWidget({ setFieldValue }) {
   }
 
   useEffect(() => {
+    const handleSearchReset = () => resetBookApiReturn()
     const delayDebounceFn = setTimeout(() => {
       handleSearchReset();
     }, 100);

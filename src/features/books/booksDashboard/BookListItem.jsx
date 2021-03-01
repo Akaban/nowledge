@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Button, Card, Image } from "semantic-ui-react";
+import { Button, Card } from "semantic-ui-react";
 import { removeUserBook } from "../../../app/firestore/firestoreService";
 
 export default function BookListItem({ book, editMode }) {
@@ -11,13 +10,6 @@ export default function BookListItem({ book, editMode }) {
     removeUserBook(book);
   }
   return (
-    // <Card>
-    //   <Image src={book.bookPhotoUrl} as={Link} to={`/books/${book.id}`}/>
-    //   { editMode &&
-    //   <Card.Content extra>
-    //     <Button color='red' content='Delete book' onClick={() => console.log(book)} />
-    //   </Card.Content>}
-    // </Card>
     <Card
       {...cardPropsLink}
       image={book.bookPhotoUrl}
@@ -26,7 +18,7 @@ export default function BookListItem({ book, editMode }) {
           <Button
             basic
             color="red"
-            content="Delete book"
+            content="Delete"
             onClick={() => handleDeleteBook(book)}
           />
         )

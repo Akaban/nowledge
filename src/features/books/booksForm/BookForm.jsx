@@ -36,17 +36,13 @@ export default function BookForm({match, history}) {
                 initialValues={{hiddenfield: 'hiddenvalue'}}
                 onSubmit={async (values, {setSubmitting}) => {
                 try {
-
-                    console.log("I'm submitting book form")
-                    console.log(values)
-                    
                     const {
                         bookPdf,
                         bookObject
                     } = values;
 
                     if (!bookObject)
-                        throw new Error("You did not select book data.");
+                        throw new Error("You did not provide book data.");
                     if (!bookPdf)
                         throw new Error("You did not provide a book file.")
 

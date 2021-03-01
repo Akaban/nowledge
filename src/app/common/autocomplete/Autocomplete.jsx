@@ -82,7 +82,7 @@ export default function Autocomplete({
   } else {
     const suggestion = suggestions[choice];
     return (
-      <>
+      <center>
         <Card
           className="selected-book-thumbnail"
           image={suggestion.thumbnail_url}
@@ -94,9 +94,8 @@ export default function Autocomplete({
             </center>
           }
         />
+        </center>
 
-        {/* <Button content="Reset" onClick={handleReset} color="teal" /> */}
-      </>
     );
   }
 }
