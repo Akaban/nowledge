@@ -42,9 +42,13 @@ export default function BooksDashboard() {
       {!loading && (
         <>
           <Button
+            basic
             content={editMode ? "Disable edit mode" : "Edit mode"}
             color={editMode ? "green" : "red"}
             onClick={() => setEditMode(!editMode)}
+            style={{
+              marginBottom:"3em"
+            }}
           />
 
           <BookList books={books} editMode={editMode} />

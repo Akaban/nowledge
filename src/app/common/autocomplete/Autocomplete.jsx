@@ -73,7 +73,7 @@ export default function Autocomplete({
         );
       } else {
         return (
-          <Header content="No book were found. Try to change the title or the author." />
+          <Header content="No books were found. Try to change the title or the author." />
         );
       }
     } else {

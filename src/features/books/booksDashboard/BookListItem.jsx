@@ -15,12 +15,13 @@ export default function BookListItem({ book, editMode }) {
       image={book.bookPhotoUrl}
       extra={
         editMode && (
+          <center>
           <Button
             basic
             color="red"
             content="Delete"
             onClick={() => handleDeleteBook(book)}
-          />
+          /></center>
         )
       }
     />

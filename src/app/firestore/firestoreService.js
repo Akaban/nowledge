@@ -21,10 +21,6 @@ export function dataFromSnapshot(snapshot) {
   };
 }
 
-export function getEventsFromFirestore() {
-  return db.collection("events").orderBy("date");
-}
-
 export function getBooksFromFirestore() {
   const user = firebase.auth().currentUser;
   return db.collection("userBooks").doc(user.uid);
@@ -37,18 +33,6 @@ export function getHighlightsFromFirestore(bookId) {
       .doc(user.uid)
       .collection("highlights")
       .doc(bookId);
-}
-
-export function listenToEventFromFirestore(eventId) {
-  return db.collection("events").doc(eventId);
-}
-
-export function updateEventInFirestore(event) {
-  return db.collection("events").doc(event.id).update(event);
-}
-
-export function deleteEventInFirestore(eventId) {
-  return db.collection("events").doc(eventId).delete();
 }
 
 export function setUserProfileData(user) {

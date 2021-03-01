@@ -56,7 +56,7 @@ export default function BookSearchWidget({ setFieldValue }) {
       {showInput && (
         <>
           <Grid>
-            <Grid.Column width={6}>
+            <Grid.Column computer={4} mobile={8}>
           <label>
             Author :
             <input
