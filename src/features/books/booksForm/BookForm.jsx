@@ -11,6 +11,7 @@ import { addUserBook } from '../../../app/firestore/firestoreService';
 import { uploadBookDataToFirebaseStore } from '../../../app/firestore/firebaseService';
 import BookSearchWidget from './BookSearchWidget';
 import { transformToFirestoreFormat } from '../../../app/common/openlibrary/transform';
+import { toast } from 'react-toastify';
 
 
 export default function BookForm({match, history}) {
@@ -25,14 +26,6 @@ export default function BookForm({match, history}) {
         }
     }
 
-    // useFirestoreDoc({
-    //     shouldExecute: !!match.params.id,
-    //     query: () => listenToEventFromFirestore(match.params.id),
-    //     data: event => dispatch(listenToEvents([event])),
-    //     deps: [match.params.id, dispatch]
-    // })
-
-
     if (loading) return <LoadingComponent content='Loading...'/>
 
     if (error) return <Redirect to='/error' />
@@ -43,14 +36,24 @@ export default function BookForm({match, history}) {
                 initialValues={{hiddenfield: 'hiddenvalue'}}
                 onSubmit={async (values, {setSubmitting}) => {
                 try {
-                    const bookId = cuid()
+
+                    console.log("I'm submitting book form")
+                    console.log(values)
+                    
                     const {
                         bookPdf,
                         bookObject
                     } = values;
+
+                    if (!bookObject)
+                        throw new Error("You did not select book data.");
+                    if (!bookPdf)
+                        throw new Error("You did not provide a book file.")
+
+                    const bookId = cuid()
                     const {
                         pdfUrl,
-                    } = await handleUploadFiles(bookId, bookPdf[0]);
+                    } = await handleUploadFiles(bookId, bookPdf);
                     await addUserBook({
                         bookPdfUrl: pdfUrl,
                         id: bookId,
@@ -58,8 +61,7 @@ export default function BookForm({match, history}) {
                     })
                     history.push('/books');
                 } catch(error) {
-                    throw error
-                    // toast.error(error.message)
+                    toast.error(error.message)
                 } finally {
                     setSubmitting(false)
                 }

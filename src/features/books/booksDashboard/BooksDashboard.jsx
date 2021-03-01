@@ -7,7 +7,7 @@ import { getBooksFromFirestore } from "../../../app/firestore/firestoreService";
 import { listenToBooks } from "../bookActions";
 import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
-import { Button } from "semantic-ui-react";
+import { Button, Header } from "semantic-ui-react";
 
 export default function BooksDashboard() {
   const { books } = useSelector((state) => state.books);
@@ -29,7 +29,7 @@ export default function BooksDashboard() {
   if (error) return <Redirect to="/error" />;
 
   if (books.length === 0)
-    return <h1>No books could be found. Add one with upload book form.</h1>;
+    return <Header content="No books could be found. Add one with upload book form." />;
 
   return (
     <>

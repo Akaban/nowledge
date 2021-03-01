@@ -10,7 +10,6 @@ export function getBookApi(isbns) {
 }
 
 export async function searchBookApi({ title = null, author = null }) {
-  console.log(`title=${title} & author=${author}`);
   if (!title & !author) return;
   let url_get = `${API_ENDPOINT}/search.json?`;
   if (title) url_get = url_get + `title=${title}`;
@@ -40,7 +39,6 @@ export async function searchBookApi({ title = null, author = null }) {
 
     for (const [index, element] of docs.entries()) {
       const isbn_el = res_isbn[`ISBN:${element.isbn[0]}`];
-      console.log(isbn_el);
       if (!isbn_el["thumbnail_url"]) {
         docs[index] = null;
       } else {
