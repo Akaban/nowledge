@@ -16,8 +16,13 @@ export default function useFirestoreDoc({query, data, deps, name='noname', shoul
                     dispatch(asyncActionError({error: {code: 'not-found', message:'Could not find document'}, unique_id: async_unique_id}))
                     return;
                 }
+                try {
                 data(dataFromSnapshot(snapshot));
                 dispatch(asyncActionFinish(async_unique_id));
+                }
+                catch (error) {
+                    dispatch(asyncActionError({error: {code: 'error', message:'Unknown error'}, unique_id: async_unique_id}))
+                }
             },
             error => dispatch(asyncActionError())
 
