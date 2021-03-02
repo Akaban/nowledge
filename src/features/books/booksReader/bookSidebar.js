@@ -14,15 +14,13 @@ function Sidebar({
   sortHighlights,
   deleteHighlight,
   book,
+  openConfirm,
 }) {
   const [editMode, setEditMode] = useState(false);
 
   if (!book) return null;
   return (
-    <div
-      className="sidebar"
-      style={{width: "25vw"}}
-    >
+    <div className="sidebar" style={{ width: "25vw" }}>
       <div className="description" style={{ padding: "1rem" }}>
         <h2 style={{ marginBottom: "1rem" }}>{book.title}</h2>
 
@@ -33,15 +31,22 @@ function Sidebar({
         </p>
       </div>
       <center>
-        { highlights.length > 0 && 
-        <Button
-          onClick={() =>
-            setEditMode(!editMode)
-         }
-          color="red"
-          content={editMode ? "Reading mode" : "Edit highlights"}
-          style={{ marginBottom: "2em" }}
-        /> }
+        {highlights.length > 0 && (
+          <>
+              <a
+                style={{display: "table-cell"}}
+                href={`/books/highlights/${book.id}`}
+              >
+                Manage my highlights
+              </a>
+          <Button
+            onClick={() => setEditMode(!editMode)}
+            color={editMode ? "green" : "red"}
+            content={editMode ? "Reading mode" : "Edit highlights"}
+            style={{ marginBottom: "2em" }}
+          />
+          </>
+        )}
         {/* {editMode && (
           <Button.Group>
             <Button
@@ -90,10 +95,16 @@ function Sidebar({
                   color="red"
                   link
                   onClick={() => {
-                    if (highlights.length === 1) {
-                      setEditMode(false)
-                    }
-                    deleteHighlight(highlight.id)
+                    openConfirm({
+                      content:
+                        "Are you sure that you want to delete this highlight?",
+                      onConfirm: () => {
+                        if (highlights.length === 1) {
+                          setEditMode(false);
+                        }
+                        deleteHighlight(highlight.id);
+                      },
+                    });
                   }}
                 />
               )}

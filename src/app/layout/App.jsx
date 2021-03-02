@@ -14,6 +14,7 @@ import BookForm from "../../features/books/booksForm/BookForm";
 import BookSearchWidget from "../../features/books/booksForm/BookSearchWidget";
 import Sandbox from "../../features/sandbox/Sandbox";
 import PrivateRoute from "./PrivateRoute";
+import BookHighlights from "../../features/books/booksHighlights/bookHighlights";
 
 function App() {
   const { key } = useLocation();
@@ -35,6 +36,7 @@ function App() {
               <Switch>
                 <Route exact path="/books" component={BooksDashboard} />
                 <PrivateRoute exact path="/books/:id" component={BookReader} />
+                <PrivateRoute exact path="/books/highlights/:id" component={BookHighlights} />
                 <PrivateRoute
                   exact
                   path="/addBook"

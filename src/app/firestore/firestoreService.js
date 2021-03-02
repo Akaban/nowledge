@@ -23,25 +23,29 @@ export function dataFromSnapshot(snapshot) {
 
 export function getBooksFromFirestore() {
   const user = firebase.auth().currentUser;
+  if (!user) throw new Error("User not logged in.");
   return db.collection("userBooks").doc(user.uid);
 }
 
 export function getHighlightsFromFirestore(bookId) {
-    const user = firebase.auth().currentUser;
-    return db
-      .collection("userBooks")
-      .doc(user.uid)
-      .collection("highlights")
-      .doc(bookId);
+  const user = firebase.auth().currentUser;
+  if (!user) throw new Error("User not logged in.");
+  return db
+    .collection("userBooks")
+    .doc(user.uid)
+    .collection("highlights")
+    .doc(bookId);
 }
 
 export function setUserProfileData(user) {
+  if (!user) throw new Error("User not logged in.");
   return db.collection("users").doc(user.uid).set({
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   });
 }
 
 export function setUserBooks(user) {
+  if (!user) throw new Error("User not logged in.");
   return db.collection("userBooks").doc(user.uid).set({
     books: [],
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -54,6 +58,7 @@ export function getUserProfile(userId) {
 
 export async function updateUserProfile(profile) {
   const user = firebase.auth().currentUser;
+  if (!user) throw new Error("User not logged in.");
   try {
     if (user.displayName !== profile.displayName) {
       await user.updateProfile({
@@ -68,8 +73,7 @@ export async function updateUserProfile(profile) {
 
 export function updateHighlightsInFirestore(bookId, highlights) {
   const user = firebase.auth().currentUser;
-  console.log(`saving highlight for bookId=${bookId}`);
-  console.log(highlights);
+  if (!user) throw new Error("User not logged in.");
   return db
     .collection("userBooks")
     .doc(user.uid)
@@ -81,9 +85,9 @@ export function updateHighlightsInFirestore(bookId, highlights) {
 }
 
 export function updateInitPageNumberInFirestore(bookId, pageNumber) {
-  if (pageNumber < 0)
-    pageNumber = 0;
+  if (pageNumber < 0) pageNumber = 0;
   const user = firebase.auth().currentUser;
+  if (!user) throw new Error("User not logged in.");
   return db
     .collection("userBooks")
     .doc(user.uid)
@@ -95,21 +99,22 @@ export function updateInitPageNumberInFirestore(bookId, pageNumber) {
 }
 
 export async function removeUserBook(book) {
-  const user = firebase.auth().currentUser
+  const user = firebase.auth().currentUser;
+  if (!user) throw new Error("User not logged in.");
   try {
-  await deleteFileFromFirebaseStore(book.bookPdfUrl)
-  await db
-    .collection("userBooks")
-    .doc(user.uid)
-    .collection("highlights")
-    .doc(book.id)
-    .delete()
-  await db
-    .collection("userBooks")
-    .doc(user.uid)
-    .update({
-      books: firebase.firestore.FieldValue.arrayRemove(book)
-    })
+    await deleteFileFromFirebaseStore(book.bookPdfUrl);
+    await db
+      .collection("userBooks")
+      .doc(user.uid)
+      .collection("highlights")
+      .doc(book.id)
+      .delete();
+    await db
+      .collection("userBooks")
+      .doc(user.uid)
+      .update({
+        books: firebase.firestore.FieldValue.arrayRemove(book),
+      });
   } catch (error) {
     throw error;
   }
@@ -117,6 +122,7 @@ export async function removeUserBook(book) {
 
 export async function addUserBook(book) {
   const user = firebase.auth().currentUser;
+  if (!user) throw new Error("User not logged in.");
   async function setupHighlights() {
     return await db
       .collection("userBooks")

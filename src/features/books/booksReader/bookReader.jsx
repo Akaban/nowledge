@@ -26,6 +26,9 @@ import {
 import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
 import { listenToBooks } from "../bookActions";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
+import { getHighlightsFunctionsFromState } from "../../../app/common/highlights/highlights";
+import { getOpenConfirm } from "../../../app/common/confirm/confirm";
+import { Confirm } from "semantic-ui-react";
 
 setPdfWorker(PdfWorkerCdn);
 
@@ -37,6 +40,8 @@ export default function BookReader({ match }) {
   const [bookUrlState, setBookUrlState] = useState(null);
   const [bookHighlightState, setBookHighlightState] = useState([]);
   const [bookMiscState, setBookMiscState] = useState({})
+
+  const [confirm, setConfirm] = useState({})
 
   const [scrollToFunRef, setScrollToFunRef] = useState({
     fn: (x) => x,
@@ -85,12 +90,12 @@ export default function BookReader({ match }) {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false)
   );
 
-  if (loading) return <LoadingComponent content="Loading..." />;
+  const book = books.find((b) => b.id === match.params.id);
+
+  if (loading || !bookHighlightState || !book ) return <LoadingComponent content="Loading..." />;
   if (error) return <Redirect to="/error" />;
 
-  const book = books.filter((b) => b.id === match.params.id)[0];
-
-  const getNextId = () => String(Math.random()).slice(2);
+  const openConfirm = getOpenConfirm(confirm, setConfirm)
 
   const resetHash = () => {
     document.location.hash = "";
@@ -103,71 +108,16 @@ export default function BookReader({ match }) {
       </div>
     ) : null;
 
-  // const searchParams = new URLSearchParams(document.location.search);
-
   const resetHighlights = () => {
     setBookHighlightState([]);
   };
 
-  async function deleteHighlight(bookId, highlightId){
-    const highlights = bookHighlightState.filter(e => e.id !== highlightId)
-    await updateHighlightsInFirestore(bookId, highlights);
-    setBookHighlightState(highlights)
-  }
-
-  async function addHighlight(highlight, bookId) {
-    // console.log(`booksHighlightStateId = ${bookHighlightStateDebug.id}`)
-    const highlights = bookHighlightState;
-
-    // console.log("Saving highlight", highlight);
-    // console.log("old highlights = ")
-    // console.log(highlights)
-
-    const new_highlights = [{ ...highlight, id: getNextId() }, ...highlights];
-    // console.log("new highlights = ")
-    // console.log(new_highlights)
-
-    setBookHighlightState(new_highlights);
-    await updateHighlightsInFirestore(bookId, new_highlights);
-  }
-
-  async function sortHighlights(bookId) {
-    function sortByPageNumberAscending(h1, h2) {
-      return h2.position.pageNumber - h1.position.pageNumber;
-    }
-    const highlights = bookHighlightState;
-
-    console.log("Sorting highlights by page number");
-
-    const new_highlights = highlights.sort(sortByPageNumberAscending);
-
-    console.log(new_highlights.map(e => e.position.pageNumber))
-
-    setBookHighlightState(new_highlights);
-    await updateHighlightsInFirestore(bookId, new_highlights)
-  }
-
-  async function updateHighlight(highlightId, position, content, bookId) {
-    console.log("Updating highlight", highlightId, position, content);
-
-    const highlights = 
-      bookHighlightState.map((h) => {
-        const { id, originalPosition, originalContent, ...rest } = h;
-        return id === highlightId
-          ? {
-              id,
-              position: { ...originalPosition, ...position },
-              content: { ...originalContent, ...content },
-              ...rest,
-            }
-          : h;
-      });
-
-    console.log(highlights)
-
-    await updateHighlightsInFirestore(bookId, highlights);
-    setBookHighlightState(highlights);
-  }
+  const {
+    sortHighlights,
+    updateHighlight,
+    addHighlight,
+    deleteHighlight
+  } = getHighlightsFunctionsFromState(bookHighlightState)
 
   const url = bookUrlState;
   const highlights = bookHighlightState;
@@ -175,9 +125,6 @@ export default function BookReader({ match }) {
   const {
     initPageNumber
   } = bookMiscState
-
-  // console.log("book=")
-  // console.log(book)
 
   return (
     <div className="bookReader" style={{ display: "flex", height: "100vh" }}>
@@ -187,6 +134,7 @@ export default function BookReader({ match }) {
         sortHighlights={sortHighlights}
         deleteHighlight={(highlightId) => deleteHighlight(book.id, highlightId)}
         book={book}
+        openConfirm={openConfirm}
       />
       <div
         style={{
@@ -200,11 +148,13 @@ export default function BookReader({ match }) {
             <PdfHighlighter
               pdfDocument={pdfDocument}
               enableAreaSelection={(event) => null}
+              initHighlightId={parseIdFromHash()}
               onScrollChange={resetHash}
               initPageNumber={initPageNumber}
               updateInitPositionOnScrollChange={
                 (pageNumber) => {
-                  updateInitPageNumberInFirestore(book.id, pageNumber - 1)
+                  if (pageNumber - 1 > initPageNumber)
+                    updateInitPageNumberInFirestore(book.id, pageNumber - 1);
                 }
               }
               // pdfScaleValue="page-width"
@@ -222,7 +172,6 @@ export default function BookReader({ match }) {
                   onOpen={transformSelection}
                   onConfirm={(comment) => {
                     addHighlight({ content, position, comment }, book.id);
-
                     hideTipAndSelection();
                   }}
                 />
@@ -277,6 +226,12 @@ export default function BookReader({ match }) {
           )}
         </PdfLoader>
       </div>
+      <Confirm
+        content={confirm.content}
+        open={confirm.open}
+        onCancel={confirm.onCancel}
+        onConfirm={confirm.onConfirm}
+      />
     </div>
   );
 }
