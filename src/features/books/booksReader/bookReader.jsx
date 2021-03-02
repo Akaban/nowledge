@@ -153,7 +153,8 @@ export default function BookReader({ match }) {
               initPageNumber={initPageNumber}
               updateInitPositionOnScrollChange={
                 (pageNumber) => {
-                  updateInitPageNumberInFirestore(book.id, pageNumber - 1)
+                  if (pageNumber - 1 > initPageNumber)
+                    updateInitPageNumberInFirestore(book.id, pageNumber - 1);
                 }
               }
               // pdfScaleValue="page-width"
