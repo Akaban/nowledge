@@ -148,6 +148,7 @@ export default function BookReader({ match }) {
             <PdfHighlighter
               pdfDocument={pdfDocument}
               enableAreaSelection={(event) => null}
+              initHighlightId={parseIdFromHash()}
               onScrollChange={resetHash}
               initPageNumber={initPageNumber}
               updateInitPositionOnScrollChange={
