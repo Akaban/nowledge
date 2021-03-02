@@ -30,8 +30,6 @@ import 'semantic-ui-css/components/embed.min.css'
 import 'semantic-ui-css/components/dimmer.min.css'
 import 'semantic-ui-css/components/dropdown.min.css'
 
-// import 'semantic-ui-css/semantic.min.css'
-
 import 'react-toastify/dist/ReactToastify.css'
 import './app/layout/bootstrap.css';
 import './app/layout/styles.css';
