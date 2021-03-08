@@ -102,7 +102,7 @@ export async function removeUserBook(book) {
   const user = firebase.auth().currentUser;
   if (!user) throw new Error("User not logged in.");
   try {
-    await deleteFileFromFirebaseStore(book.bookPdfUrl);
+    await deleteFileFromFirebaseStore(book.id);
     await db
       .collection("userBooks")
       .doc(user.uid)

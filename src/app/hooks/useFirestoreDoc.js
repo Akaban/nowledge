@@ -13,7 +13,7 @@ export default function useFirestoreDoc({query, data, deps, name='noname', shoul
         const unsubscribe = query().onSnapshot(
             snapshot => {
                 if (!snapshot.exists) {
-                    dispatch(asyncActionError({error: {code: 'not-found', message:'Could not find document'}, unique_id: async_unique_id}))
+                    dispatch(asyncActionError(async_unique_id, {code: 'not-found', message:'Could not find document'}))
                     return;
                 }
                 try {
@@ -21,10 +21,10 @@ export default function useFirestoreDoc({query, data, deps, name='noname', shoul
                 dispatch(asyncActionFinish(async_unique_id));
                 }
                 catch (error) {
-                    dispatch(asyncActionError({error: {code: 'error', message:'Unknown error'}, unique_id: async_unique_id}))
+                    dispatch(asyncActionError(async_unique_id, {code: 'error', message:'Unknown error'}))
                 }
             },
-            error => dispatch(asyncActionError())
+            error => dispatch(asyncActionError(async_unique_id, {code: 'error', message:'Unknown error'}))
 
         );
         return () => {

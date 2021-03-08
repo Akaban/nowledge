@@ -12,6 +12,7 @@ import { uploadBookDataToFirebaseStore } from '../../../app/firestore/firebaseSe
 import BookSearchWidget from './BookSearchWidget';
 import { transformToFirestoreFormat } from '../../../app/common/openlibrary/transform';
 import { toast } from 'react-toastify';
+import { uploadBook } from '../../../app/backend/book';
 
 
 export default function BookForm({match, history}) {
@@ -37,24 +38,25 @@ export default function BookForm({match, history}) {
                 onSubmit={async (values, {setSubmitting}) => {
                 try {
                     const {
-                        bookPdf,
-                        bookObject
+                        bookPdf
                     } = values;
 
-                    if (!bookObject)
-                        throw new Error("You did not provide book data.");
+                    // if (!bookObject)
+                    //     throw new Error("You did not provide book data.");
                     if (!bookPdf)
                         throw new Error("You did not provide a book file.")
 
                     const bookId = cuid()
                     const {
-                        pdfUrl,
-                    } = await handleUploadFiles(bookId, bookPdf);
+                        thumbnail_url,
+                        remaining_books,
+                    } = await uploadBook(bookId, bookPdf);
                     await addUserBook({
-                        bookPdfUrl: pdfUrl,
                         id: bookId,
-                        ...transformToFirestoreFormat(bookObject)
+                        // ...transformToFirestoreFormat(bookObject),
+                        bookPhotoUrl: thumbnail_url
                     })
+                    console.log(`You have ${remaining_books} left`)
                     history.push('/books');
                 } catch(error) {
                     toast.error(error.message)
@@ -65,8 +67,8 @@ export default function BookForm({match, history}) {
             >
             {({isSubmitting, dirty, isValid, setFieldValue}) => (
             <Form className='ui form'>
-                <Header content='Book Data' sub color='teal'/>
-                <BookSearchWidget setFieldValue={setFieldValue} />
+                {/* <Header content='Book Data' sub color='teal'/>
+                <BookSearchWidget setFieldValue={setFieldValue} /> */}
                 <Header content='Book File' sub color='teal'/>
                 <WidgetDropzone setFieldValue={setFieldValue} name='bookPdf' />
                 {/* <MySelectInput name='category' placeholder='Event category' options={categoryData}/> */}
