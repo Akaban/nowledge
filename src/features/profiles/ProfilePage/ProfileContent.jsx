@@ -1,14 +1,12 @@
 import React from 'react'
 import { Tab } from 'semantic-ui-react'
 import AboutTab from './AboutTab'
+import PasswordForm from './PasswordForm'
 
 export default function ProfileContent({profile}) {
     const panes = [
         {menuItem: 'About', render: () => <AboutTab profile={profile} />},
-        {menuItem: 'Photos', render: () => <Tab.Pane>Photos</Tab.Pane>},
-        {menuItem: 'Events', render: () => <Tab.Pane>Events</Tab.Pane>},
-        {menuItem: 'Followers', render: () => <Tab.Pane>Followers</Tab.Pane>},
-        {menuItem: 'Following', render: () => <Tab.Pane>Following</Tab.Pane>},
+        {menuItem: 'Change my password', render: () => <PasswordForm />},
     ]
     return (
         <Tab
