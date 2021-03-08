@@ -48,6 +48,7 @@ export const store = configureStore(history);
 
 if (!isReactDevMode()) {
   ReactGA.initialize("G-LP3M8CEG4C", {
+    debug: true,
     gaOptions: {
       siteSpeedSampleRate: 100,
     },
