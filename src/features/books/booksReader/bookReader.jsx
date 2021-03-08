@@ -29,6 +29,9 @@ import LoadingComponent from "../../../app/layout/LoadingComponents";
 import { getHighlightsFunctionsFromState } from "../../../app/common/highlights/highlights";
 import { getOpenConfirm } from "../../../app/common/confirm/confirm";
 import { Confirm } from "semantic-ui-react";
+import { retrieveBookDataUrl } from "../../../app/firestore/firebaseService";
+import { getBookDownloadURL } from "../../../app/backend/book";
+import useAsyncEffect from "../../../app/hooks/useAsyncEffect";
 
 setPdfWorker(PdfWorkerCdn);
 
@@ -52,8 +55,6 @@ export default function BookReader({ match }) {
     query: () => getBooksFromFirestore(),
     data: (books) => {
       dispatch(listenToBooks(books));
-      const book = books.books.filter((b) => b.id === match.params.id)[0];
-      setBookUrlState(book.bookPdfUrl);
     },
     deps: [match.params.id],
     name: "getBooksFromFirestore",
@@ -69,6 +70,14 @@ export default function BookReader({ match }) {
     deps: [match.params.id],
     name: "getHighlightsFromFirestore",
   });
+  
+  useAsyncEffect({
+    fetch: () => getBookDownloadURL(match.params.id),
+    after: setBookUrlState,
+    deps: [match.params.id],
+    name: "getBookDownloadURL"
+  })
+  
 
   const parseIdFromHash = () =>
     document.location.hash.slice("#highlight-".length);
@@ -92,7 +101,7 @@ export default function BookReader({ match }) {
 
   const book = books.find((b) => b.id === match.params.id);
 
-  if (loading || !bookHighlightState || !book ) return <LoadingComponent content="Loading..." />;
+  if ((!bookHighlightState || !book || !bookUrlState) && !error ) return <LoadingComponent content="Loading..." />;
   if (error) return <Redirect to="/error" />;
 
   const openConfirm = getOpenConfirm(confirm, setConfirm)

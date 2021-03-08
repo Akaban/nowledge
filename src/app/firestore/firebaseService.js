@@ -1,3 +1,4 @@
+import { getBookBucketPath } from '../common/storage/storageHelper';
 import firebase from '../config/firebase'
 import { setUserBooks, setUserProfileData } from './firestoreService'
 
@@ -56,10 +57,16 @@ export function uploadBookDataToFirebaseStore(bookId, bookPdfFile) {
     }
 }
 
-export function deleteFileFromFirebaseStore(url) {
-    const url_ = url.split("?")[0]
+export function deleteFileFromFirebaseStore(bookId) {
     const storage = firebase.storage()
-    const reference = storage.refFromURL(url_)
+    const {
+        pictureFile: picturePath,
+        pdfFile: pdfPath
+    } = getBookBucketPath(bookId)
+    console.log({picturePath, pdfPath})
+    const pictureReference = storage.ref().child(picturePath)
+    const pdfReference = storage.ref().child(pdfPath)
 
-    reference.delete().then(() => {}).catch((error) => {throw error;})
+    pictureReference.delete()
+    pdfReference.delete()
 }

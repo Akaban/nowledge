@@ -71,6 +71,22 @@ export async function updateUserProfile(profile) {
   }
 }
 
+export function updatePassword(password, passwordConfirmation) {
+  const user = firebase.auth().currentUser;
+
+  if (password !== passwordConfirmation)
+    throw new Error("Cannot update password, password confirmation mismatch.");
+
+  user
+    .updatePassword(password)
+    .then(function () {
+      console.log("Successfully updated password.");
+    })
+    .catch(function (error) {
+      throw error;
+    });
+}
+
 export function updateHighlightsInFirestore(bookId, highlights) {
   const user = firebase.auth().currentUser;
   if (!user) throw new Error("User not logged in.");
@@ -102,7 +118,7 @@ export async function removeUserBook(book) {
   const user = firebase.auth().currentUser;
   if (!user) throw new Error("User not logged in.");
   try {
-    await deleteFileFromFirebaseStore(book.bookPdfUrl);
+    await deleteFileFromFirebaseStore(book.id);
     await db
       .collection("userBooks")
       .doc(user.uid)

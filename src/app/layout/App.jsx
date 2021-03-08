@@ -15,12 +15,13 @@ import BookSearchWidget from "../../features/books/booksForm/BookSearchWidget";
 import Sandbox from "../../features/sandbox/Sandbox";
 import PrivateRoute from "./PrivateRoute";
 import BookHighlights from "../../features/books/booksHighlights/bookHighlights";
+import ProfilePage from "../../features/profiles/ProfilePage/ProfilePage";
 
 function App() {
   const { key } = useLocation();
   const { initialized } = useSelector((state) => state.async);
 
-  if (!initialized) return <LoadingComponent content="Loading app..." />;
+  if (!initialized) return <LoadingComponent content="Loading..." />;
 
   return (
     <>
@@ -43,6 +44,7 @@ function App() {
                   component={BookForm}
                   key={key}
                 />
+                <PrivateRoute exact path="/profile" component={ProfilePage} />
                 <Route
                   exact
                   path="/sandbox/searchBook"

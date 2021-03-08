@@ -1,6 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Grid } from "semantic-ui-react";
+import { getUserProfile } from "../../../app/firestore/firestoreService";
+import { listentoSelectedUserProfile } from "../profileActions"
+import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
 import ProfileContent from "./ProfileContent";
 import ProfileHeader from "./ProfileHeader";
@@ -10,11 +13,15 @@ export default function ProfilePage({ match }) {
   const { currentUser } = useSelector((state) => state.auth);
   const { loading, error } = useSelector((state) => state.async);
 
-  // useFirestoreDoc({
-  //   query: () => getUserProfile(match.params.id),
-  //   data: (profile) => dispatch(listentoSelectedUserProfile(profile)),
-  //   deps: [dispatch, match.params.id],
-  // });
+  const dispatch = useDispatch();
+  const user_profile_id = currentUser.uid
+
+  useFirestoreDoc({
+    query: () => getUserProfile(user_profile_id),
+    data: (profile) => dispatch(listentoSelectedUserProfile(profile)),
+    deps: [dispatch, user_profile_id],
+    name: "getUserProfile"
+  });
 
   if ((loading && !selectedUserProfile) || (!selectedUserProfile && !error))
     return <LoadingComponent content="Loading profile..." />;
@@ -22,10 +29,6 @@ export default function ProfilePage({ match }) {
   return (
     <Grid>
       <Grid.Column width={16}>
-        <ProfileHeader
-          profile={selectedUserProfile}
-          isCurrentUser={currentUser.uid === selectedUserProfile}
-        />
         <ProfileContent profile={selectedUserProfile} />
       </Grid.Column>
     </Grid>
