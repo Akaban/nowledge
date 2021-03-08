@@ -30,7 +30,7 @@ export default function SignedInMenu() {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item href="/profile"><Icon name="user"/>My profile</Dropdown.Item>
+          <Dropdown.Item onClick={() => history.push("/profile")}><Icon name="user"/>My profile</Dropdown.Item>
           <Dropdown.Item onClick={handleSignOut}><Icon name="power off"/>Sign out</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
