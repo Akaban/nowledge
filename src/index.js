@@ -55,8 +55,6 @@ if (!isReactDevMode()) {
   history.listen((location, action) => {
     ReactGA.set({ page: location.pathname });
     ReactGA.pageview(location.pathname);
-    console.log("GA DEBUG pathname: " + location.pathname);
-    console.log("GA DEBUG: search" + location.search);
   });
 }
 

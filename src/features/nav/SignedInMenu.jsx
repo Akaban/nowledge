@@ -11,11 +11,11 @@ export default function SignedInMenu() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  async function handleSignOut() {
+  function handleSignOut() {
     try {
       history.push("/");
       dispatch({type: 'USER_LOGOUT_RESET_STORE'})
-      await signOutFirebase();
+      signOutFirebase();
     } catch (error) {
       toast.error(error.message);
     }

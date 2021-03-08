@@ -6,7 +6,6 @@ import { listentoSelectedUserProfile } from "../profileActions"
 import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
 import ProfileContent from "./ProfileContent";
-import ProfileHeader from "./ProfileHeader";
 
 export default function ProfilePage({ match }) {
   const { selectedUserProfile } = useSelector((state) => state.profile);

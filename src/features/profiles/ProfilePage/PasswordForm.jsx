@@ -2,11 +2,10 @@ import React from 'react';
 import { Formik, Form } from 'formik';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import { Tab } from 'semantic-ui-react'
-import MyTextArea from '../../../app/common/form/MyTextArea';
 import { Button } from 'semantic-ui-react';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { updatePassword, updateUserProfile } from '../../../app/firestore/firestoreService';
+import { updatePassword } from '../../../app/firestore/firestoreService';
 
 require('yup-password')(Yup) 
 

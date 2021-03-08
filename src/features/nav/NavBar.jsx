@@ -18,7 +18,7 @@ export default function NavBar({setFormOpen}) {
                 { authenticated && 
                     <>
                     <Menu.Item as={NavLink} exact to='/books' name='Books' />
-                    <Menu.Item as={NavLink} to='/addBook'>
+                    <Menu.Item as={NavLink} to='/add-book'>
                     <Button content='Upload a book' />
                     </Menu.Item>
                     </>

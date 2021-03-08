@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Divider, Grid, Header, Item, Reveal, Segment, Statistic } from 'semantic-ui-react'
+import { Grid, Header, Item, Segment } from 'semantic-ui-react'
 
 export default function ProfileHeader({profile, isCurrentUser}) {
     return (
@@ -10,7 +10,6 @@ export default function ProfileHeader({profile, isCurrentUser}) {
                     <Item>
                         <Item.Content verticalAlign='middle'>
                             <Header as='h1' style={{display:'block', marginBottom: 10}} content={profile.displayName}/>
-
                         </Item.Content>
                     </Item>
                 </Item.Group>

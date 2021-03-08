@@ -19,7 +19,6 @@ import "./style/App.css";
 import { PdfWorkerCdn } from "../../../app/config/react-pdf-highlighter";
 import {
   getBooksFromFirestore,
-  updateHighlightsInFirestore,
   getHighlightsFromFirestore,
   updateInitPageNumberInFirestore,
 } from "../../../app/firestore/firestoreService";
@@ -29,7 +28,6 @@ import LoadingComponent from "../../../app/layout/LoadingComponents";
 import { getHighlightsFunctionsFromState } from "../../../app/common/highlights/highlights";
 import { getOpenConfirm } from "../../../app/common/confirm/confirm";
 import { Confirm } from "semantic-ui-react";
-import { retrieveBookDataUrl } from "../../../app/firestore/firebaseService";
 import { getBookDownloadURL } from "../../../app/backend/book";
 import useAsyncEffect from "../../../app/hooks/useAsyncEffect";
 
@@ -37,7 +35,7 @@ setPdfWorker(PdfWorkerCdn);
 
 export default function BookReader({ match }) {
   const { books } = useSelector((state) => state.books);
-  const { loading, error } = useSelector((state) => state.async);
+  const { error, loading } = useSelector((state) => state.async);
   const dispatch = useDispatch();
 
   const [bookUrlState, setBookUrlState] = useState(null);
@@ -101,7 +99,7 @@ export default function BookReader({ match }) {
 
   const book = books.find((b) => b.id === match.params.id);
 
-  if ((!bookHighlightState || !book || !bookUrlState) && !error ) return <LoadingComponent content="Loading..." />;
+  if ((loading && (!bookHighlightState || !book || !bookUrlState)) && !error ) return <LoadingComponent content="Loading..." />;
   if (error) return <Redirect to="/error" />;
 
   const openConfirm = getOpenConfirm(confirm, setConfirm)

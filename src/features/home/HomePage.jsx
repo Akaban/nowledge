@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux'
 
 export default function HomePage({ history }) {
     const dispatch = useDispatch();
-    const {authenticated} = useSelector(state => state.auth)
+    const { authenticated } = useSelector(state => state.auth)
       if (authenticated)
         return <Redirect to="/books" />
   return (

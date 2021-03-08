@@ -1,5 +1,4 @@
 import firebase from "../../app/config/firebase";
-import axios from "axios";
 
 export function callBackendTest() {
   firebase

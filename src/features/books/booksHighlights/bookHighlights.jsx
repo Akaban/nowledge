@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
   getBooksFromFirestore,
-  updateHighlightsInFirestore,
   getHighlightsFromFirestore,
-  updateInitPageNumberInFirestore,
 } from "../../../app/firestore/firestoreService";
 import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
 import { listenToBooks } from "../bookActions";
@@ -54,9 +52,9 @@ export default function BookHighlights({ match }) {
   const openConfirm = getOpenConfirm(confirm, setConfirm)
 
   const {
-    sortHighlights,
-    updateHighlight,
-    addHighlight,
+    // sortHighlights,
+    // updateHighlight,
+    // addHighlight,
     deleteHighlight,
   } = getHighlightsFunctionsFromState(bookHighlightState);
 

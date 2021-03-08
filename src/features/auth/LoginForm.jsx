@@ -1,7 +1,6 @@
 import { Form, Formik} from 'formik'
 import React from 'react'
 import ModalWrapper from '../../app/common/modals/ModalWrapper'
-import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import MyTextInput from '../../app/common/form/MyTextInput'
@@ -11,7 +10,6 @@ import { signInWithEmail } from '../../app/firestore/firebaseService'
 
 export default function LoginForm() {
     const dispatch = useDispatch();
-    let history = useHistory();
 
     return (<ModalWrapper size='mini' header='Sign in to NowLedge'>
     <Formik
@@ -23,9 +21,9 @@ export default function LoginForm() {
         onSubmit={async (values, {setSubmitting, setErrors}) => {
             try {
                 await signInWithEmail(values)
-                setSubmitting(false)
+                // history.push("/books") // diabled because of redirect in HomePage
                 dispatch(closeModal());
-                history.push("/books")
+                setSubmitting(false)
             } catch (error) {
                setErrors({auth: 'Problem with username or password'})
                setSubmitting(false)
