@@ -40,14 +40,14 @@ function App() {
                 <PrivateRoute exact path="/books/highlights/:id" component={BookHighlights} />
                 <PrivateRoute
                   exact
-                  path="/addBook"
+                  path="/add-book"
                   component={BookForm}
                   key={key}
                 />
                 <PrivateRoute exact path="/profile" component={ProfilePage} />
                 <Route
                   exact
-                  path="/sandbox/searchBook"
+                  path="/sandbox/search-book"
                   component={BookSearchWidget}
                 />
                 <Route exact path="/sandbox" component={Sandbox} />

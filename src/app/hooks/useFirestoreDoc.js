@@ -5,7 +5,6 @@ import { dataFromSnapshot } from "../firestore/firestoreService";
 
 export default function useFirestoreDoc({query, data, deps, name='noname', shouldExecute = true}) {
     const dispatch = useDispatch();
-
     useEffect(() => {
         if (!shouldExecute) return;
         const async_unique_id = asyncGetUniqueId();
@@ -24,12 +23,9 @@ export default function useFirestoreDoc({query, data, deps, name='noname', shoul
                     dispatch(asyncActionError(async_unique_id, {code: 'error', message:'Unknown error'}))
                 }
             },
-            error => dispatch(asyncActionError(async_unique_id, {code: 'error', message:'Unknown error'}))
-
-        );
-        return () => {
-            unsubscribe()
-        }
+            error => {}
+        )
+        return () => {console.log("unsubscribe");unsubscribe()}
     }, deps) // eslint-disable-line react-hooks/exhaustive-deps
 
 }

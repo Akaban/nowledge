@@ -53,8 +53,8 @@ if (!isReactDevMode()) {
     },
   });
   history.listen((location, action) => {
-    ReactGA.pageview(location.pathname + location.search);
-    console.log(location.pathname);
+    ReactGA.set({ page: location.pathname });
+    ReactGA.pageview(location.pathname);
   });
 }
 

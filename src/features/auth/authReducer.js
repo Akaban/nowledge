@@ -5,6 +5,7 @@ const initialState = {
     authenticated: false,
     currentUser: null,
     prevLocation: null,
+    currentLocation: null
 }
 
 export default function authReducer(state = initialState, {type, payload}) {

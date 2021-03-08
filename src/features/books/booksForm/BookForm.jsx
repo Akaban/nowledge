@@ -8,9 +8,6 @@ import MyTextInput from '../../../app/common/form/MyTextInput';
 import LoadingComponent from '../../../app/layout/LoadingComponents';
 import WidgetDropzone from '../../../app/common/dropzone/WidgetDropzone';
 import { addUserBook } from '../../../app/firestore/firestoreService';
-import { uploadBookDataToFirebaseStore } from '../../../app/firestore/firebaseService';
-import BookSearchWidget from './BookSearchWidget';
-import { transformToFirestoreFormat } from '../../../app/common/openlibrary/transform';
 import { toast } from 'react-toastify';
 import { uploadBook } from '../../../app/backend/book';
 
@@ -18,14 +15,6 @@ import { uploadBook } from '../../../app/backend/book';
 export default function BookForm({match, history}) {
 
     const {loading, error} = useSelector(state => state.async)
-
-    async function handleUploadFiles(bookId, pdf) {
-        const {pdfUploadTask} = uploadBookDataToFirebaseStore(bookId, pdf)
-        const pdfUrl = await pdfUploadTask.then(snapshot => snapshot.ref.getDownloadURL())
-        return {
-            pdfUrl,
-        }
-    }
 
     if (loading) return <LoadingComponent content='Loading...'/>
 

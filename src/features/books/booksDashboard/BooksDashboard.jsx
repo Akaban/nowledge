@@ -23,6 +23,7 @@ export default function BooksDashboard() {
     data: (books) => dispatch(listenToBooks(books)),
     deps: [dispatch],
     shouldExecute: authenticated,
+    name: "getBooksFromFirestore_BookDashboard"
   });
   if (!authenticated) return <Redirect to="/" />;
   if (loading) return <LoadingComponent content="Loading..." />;

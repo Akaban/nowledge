@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { openModal } from '../../app/common/modals/modalReducer';
-import { getToken } from '../../app/firestore/firebaseService';
 import { callBackendTest } from './backend';
 import { decrement, increment} from './testReducer';
 

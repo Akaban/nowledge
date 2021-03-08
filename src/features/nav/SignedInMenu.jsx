@@ -11,11 +11,11 @@ export default function SignedInMenu() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  async function handleSignOut() {
+  function handleSignOut() {
     try {
       history.push("/");
       dispatch({type: 'USER_LOGOUT_RESET_STORE'})
-      await signOutFirebase();
+      signOutFirebase();
     } catch (error) {
       toast.error(error.message);
     }
@@ -30,7 +30,7 @@ export default function SignedInMenu() {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item href="/profile"><Icon name="user"/>My profile</Dropdown.Item>
+          <Dropdown.Item onClick={() => history.push("/profile")}><Icon name="user"/>My profile</Dropdown.Item>
           <Dropdown.Item onClick={handleSignOut}><Icon name="power off"/>Sign out</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
