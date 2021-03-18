@@ -21,7 +21,7 @@
     "react-bootstrap": "^1.5.0",
     "react-dom": "^16.14.0",
     "react-dropzone": "^11.3.1",
-    "react-feedback-popup": "file:../../sources/react-feedback-popup/react-feedback-popup-1.3.0.tgz",
+    "react-feedback-popup": "file:tgz_dependencies/react-feedback-popup-1.3.0.tgz",
     "react-ga": "^3.3.0",
     "react-mixpanel": "^1.0.5",
     "react-overlays": "^4.1.1",
