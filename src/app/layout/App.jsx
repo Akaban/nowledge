@@ -1,8 +1,9 @@
 import React from "react";
-import { Route, useLocation, Switch } from "react-router-dom";
+import { Route, useLocation, Switch, Redirect } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import BooksDashboard from "../../features/books/booksDashboard/BooksDashboard";
 import HomePage from "../../features/home/HomePage";
+import LandingPage from "../../features/home/LandingPage";
 import NavBar from "../../features/nav/NavBar";
 import ModalManager from "../common/modals/ModalManager";
 import { ToastContainer } from "react-toastify";
