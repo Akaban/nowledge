@@ -1,5 +1,6 @@
+import { deleteBook } from "../backend/book";
 import firebase from "../config/firebase";
-import { deleteFileFromFirebaseStore } from "./firebaseService";
+import { deleteBookFromFirebaseStore } from "./firebaseService";
 
 const db = firebase.firestore();
 
@@ -118,19 +119,19 @@ export async function removeUserBook(book) {
   const user = firebase.auth().currentUser;
   if (!user) throw new Error("User not logged in.");
   try {
-    await deleteFileFromFirebaseStore(book.id);
-    await db
+    db
       .collection("userBooks")
       .doc(user.uid)
       .collection("highlights")
       .doc(book.id)
       .delete();
-    await db
+    db
       .collection("userBooks")
       .doc(user.uid)
       .update({
         books: firebase.firestore.FieldValue.arrayRemove(book),
       });
+    deleteBook(book.id);
   } catch (error) {
     throw error;
   }

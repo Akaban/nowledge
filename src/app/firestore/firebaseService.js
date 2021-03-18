@@ -1,8 +1,9 @@
-import { getBookBucketPath } from '../common/storage/storageHelper';
+import { deleteBook } from '../backend/book';
+import { getBookBucketPath, getBookPictureBucketPath } from '../common/storage/storageHelper';
 import firebase from '../config/firebase'
 import { setUserBooks, setUserProfileData } from './firestoreService'
 
-export function signInWithEmail(creds) {
+export function signInWithEmail(creds, mixpanel) {
     return firebase
         .auth()
         .signInWithEmailAndPassword(creds.email, creds.password)
@@ -23,9 +24,6 @@ export async function getToken() {
 export async function registerInFirebase(creds) {
     try {
         const result = await firebase.auth().createUserWithEmailAndPassword(creds.email, creds.password)
-        // await result.user.updateProfile({
-        //     uselessfield: 1
-        // })
         await setUserProfileData(result.user)
         await setUserBooks(result.user)
     } catch (error) {
@@ -55,18 +53,4 @@ export function uploadBookDataToFirebaseStore(bookId, bookPdfFile) {
     return {
         pdfUploadTask,
     }
-}
-
-export function deleteFileFromFirebaseStore(bookId) {
-    const storage = firebase.storage()
-    const {
-        pictureFile: picturePath,
-        pdfFile: pdfPath
-    } = getBookBucketPath(bookId)
-    console.log({picturePath, pdfPath})
-    const pictureReference = storage.ref().child(picturePath)
-    const pdfReference = storage.ref().child(pdfPath)
-
-    pictureReference.delete()
-    pdfReference.delete()
 }
