@@ -8,7 +8,7 @@ import { Button, Label } from 'semantic-ui-react'
 import { closeModal } from '../../app/common/modals/modalReducer'
 import { signInWithEmail } from '../../app/firestore/firebaseService'
 
-export default function LoginForm() {
+export default function LoginForm({ mixpanel }) {
     const dispatch = useDispatch();
 
     return (<ModalWrapper size='mini' header='Sign in to NowLedge'>
@@ -20,14 +20,15 @@ export default function LoginForm() {
         })}
         onSubmit={async (values, {setSubmitting, setErrors}) => {
             try {
-                await signInWithEmail(values)
+                await signInWithEmail(values, mixpanel)
                 // history.push("/books") // diabled because of redirect in HomePage
-                dispatch(closeModal());
                 setSubmitting(false)
+                dispatch(closeModal())
             } catch (error) {
                setErrors({auth: 'Problem with username or password'})
                setSubmitting(false)
-               console.log(error) 
+            //    console.log(error) 
+            } finally {
             }
         }}
     >

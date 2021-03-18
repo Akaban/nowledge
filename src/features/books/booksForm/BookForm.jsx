@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import { uploadBook } from '../../../app/backend/book';
 
 
-export default function BookForm({match, history}) {
+export default function BookForm({match, history, mixpanel}) {
 
     const {loading, error} = useSelector(state => state.async)
 
@@ -38,14 +38,13 @@ export default function BookForm({match, history}) {
                     const bookId = cuid()
                     const {
                         thumbnail_url,
-                        remaining_books,
+                        book_checksum
                     } = await uploadBook(bookId, bookPdf);
                     await addUserBook({
                         id: bookId,
-                        // ...transformToFirestoreFormat(bookObject),
                         bookPhotoUrl: thumbnail_url
                     })
-                    console.log(`You have ${remaining_books} left`)
+                    mixpanel.track("Book Added")
                     history.push('/books');
                 } catch(error) {
                     toast.error(error.message)

@@ -5,6 +5,7 @@ import UnauthModal from "../../features/auth/UnauthModal";
 
 export default function PrivateRoute({
   component: Component,
+  componentProps,
   prevLocation,
   ...rest
 }) {
@@ -13,7 +14,7 @@ export default function PrivateRoute({
     <Route
       {...rest}
       render={(props) =>
-        authenticated ? <Component {...props} /> : <UnauthModal {...props} />
+        authenticated ? <Component {...props} {...componentProps} /> : <UnauthModal {...props} />
       }
     />
   );

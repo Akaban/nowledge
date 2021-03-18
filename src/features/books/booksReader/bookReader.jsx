@@ -22,7 +22,7 @@ import {
   getHighlightsFromFirestore,
   updateInitPageNumberInFirestore,
 } from "../../../app/firestore/firestoreService";
-import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
+import useFirestoreDoc, { useFirestoreDocOnce } from "../../../app/hooks/useFirestoreDoc";
 import { listenToBooks } from "../bookActions";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
 import { getHighlightsFunctionsFromState } from "../../../app/common/highlights/highlights";
@@ -33,7 +33,7 @@ import useAsyncEffect from "../../../app/hooks/useAsyncEffect";
 
 setPdfWorker(PdfWorkerCdn);
 
-export default function BookReader({ match }) {
+export default function BookReader({ match, mixpanel }) {
   const { books } = useSelector((state) => state.books);
   const { error, loading } = useSelector((state) => state.async);
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ export default function BookReader({ match }) {
     initialized: false,
   });
 
-  useFirestoreDoc({
+  useFirestoreDocOnce({
     query: () => getBooksFromFirestore(),
     data: (books) => {
       dispatch(listenToBooks(books));
@@ -142,6 +142,7 @@ export default function BookReader({ match }) {
         deleteHighlight={(highlightId) => deleteHighlight(book.id, highlightId)}
         book={book}
         openConfirm={openConfirm}
+        mixpanel={mixpanel}
       />
       <div
         style={{
@@ -158,6 +159,7 @@ export default function BookReader({ match }) {
               initHighlightId={parseIdFromHash()}
               onScrollChange={resetHash}
               initPageNumber={initPageNumber}
+              tracker={(eventName) => mixpanel.track(eventName)}
               updateInitPositionOnScrollChange={
                 (pageNumber) => {
                   if (pageNumber - 1 > initPageNumber)
@@ -179,6 +181,7 @@ export default function BookReader({ match }) {
                   onOpen={transformSelection}
                   onConfirm={(comment) => {
                     addHighlight({ content, position, comment }, book.id);
+                    mixpanel.track("Book Reader: Add Book Highlight")
                     hideTipAndSelection();
                   }}
                 />
@@ -219,9 +222,9 @@ export default function BookReader({ match }) {
                 return (
                   <Popup
                     popupContent={<HighlightPopup {...highlight} />}
-                    onMouseOver={(popupContent) =>
+                    onMouseOver={(popupContent) =>{
                       setTip(highlight, (highlight) => popupContent)
-                    }
+                    }}
                     onMouseOut={hideTip}
                     key={index}
                     children={component}

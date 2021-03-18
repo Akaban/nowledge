@@ -16,48 +16,81 @@ import Sandbox from "../../features/sandbox/Sandbox";
 import PrivateRoute from "./PrivateRoute";
 import BookHighlights from "../../features/books/booksHighlights/bookHighlights";
 import ProfilePage from "../../features/profiles/ProfilePage/ProfilePage";
+import Feedback from "../common/feedback/Feedback";
 
-function App() {
+function App({ mixpanel }) {
   const { key } = useLocation();
   const { initialized } = useSelector((state) => state.async);
 
-  if (!initialized) return <LoadingComponent content="Loading..." />;
+  if (!initialized) return <LoadingComponent content="Loading app..." />;
 
   return (
     <>
       <ModalManager />
       <ToastContainer position="bottom-right" hideProgressBar />
-      <Route exact path="/" component={HomePage} />
+      <Route
+        exact
+        path="/"
+        render={(props) => <HomePage {...props} mixpanel={mixpanel} />}
+      />
       <Route
         path={"/(.+)"}
         render={() => (
           <>
-            <NavBar />
+            <NavBar mixpanel={mixpanel} />
             <Container className="main">
               <Switch>
                 <Route exact path="/books" component={BooksDashboard} />
-                <PrivateRoute exact path="/books/:id" component={BookReader} />
-                <PrivateRoute exact path="/books/highlights/:id" component={BookHighlights} />
+                <PrivateRoute
+                  exact
+                  path="/books/:id"
+                  component={BookReader}
+                  componentProps={{ mixpanel }}
+                />
+                <PrivateRoute
+                  exact
+                  path="/books/highlights/:id"
+                  component={BookHighlights}
+                  componentProps={{ mixpanel }}
+                />
                 <PrivateRoute
                   exact
                   path="/add-book"
                   component={BookForm}
+                  componentProps={{ mixpanel }}
                   key={key}
                 />
-                <PrivateRoute exact path="/profile" component={ProfilePage} />
+                <PrivateRoute
+                  exact
+                  path="/profile"
+                  component={ProfilePage}
+                  componentProps={{ mixpanel }}
+                />
                 <Route
                   exact
                   path="/sandbox/search-book"
                   component={BookSearchWidget}
                 />
+                <Route
+                  exact
+                  path="/sandbox/landingpage"
+                  component={LandingPage}
+                />
                 <Route exact path="/sandbox" component={Sandbox} />
-                <Route exact path="/error" component={ErrorComponent} />
-                <Route component={ErrorComponent} />
+                <Route
+                  exact
+                  path="/error"
+                  render={(props) => (
+                    <ErrorComponent {...props} mixpanel={mixpanel} />
+                  )}
+                />
+                <Route render={(props) => <Redirect to="/error" />} />
               </Switch>
             </Container>
+            <Feedback />
           </>
         )}
-      />{" "}
+      />
     </>
   );
 }

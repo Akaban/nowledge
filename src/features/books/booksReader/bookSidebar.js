@@ -1,7 +1,7 @@
 // @flow
 
 import { React, useState } from "react";
-
+import {useHistory} from "react-router-dom"
 import { Button, Icon } from "semantic-ui-react";
 
 const updateHash = (highlight) => {
@@ -15,7 +15,9 @@ function Sidebar({
   deleteHighlight,
   book,
   openConfirm,
+  mixpanel
 }) {
+  const history = useHistory();
   const [editMode, setEditMode] = useState(false);
 
   if (!book) return null;
@@ -33,12 +35,11 @@ function Sidebar({
       <center>
         {highlights.length > 0 && (
           <>
-              <a
-                style={{display: "table-cell"}}
-                href={`/books/highlights/${book.id}`}
-              >
-                Manage my highlights
-              </a>
+              <Button
+                onClick={() => {mixpanel.track("Book Reader: Click Manage Highlights") ; history.push(`/books/highlights/${book.id}`)}}
+                color="teal"
+                content="Manage my highlights"
+              />
           <Button
             onClick={() => setEditMode(!editMode)}
             color={editMode ? "green" : "red"}
