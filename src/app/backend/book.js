@@ -3,7 +3,7 @@ import { API_URL } from "./config";
 import firebase from "../config/firebase";
 
 export async function getBookDownloadURL(bookId) {
-  const API_ENDPOINT = `${API_URL}/get_book_url/${bookId}`;
+  const API_ENDPOINT = `${API_URL}/get_book_url_new/${bookId}`;
   const user = firebase.auth().currentUser;
   if (!user) throw new Error("Unauthenticated user.");
   return user.getIdToken(true).then(async function (idToken) {
@@ -50,6 +50,31 @@ export async function uploadBook(bookId, pdfFile) {
       .catch((error) => {
         const { message } = error.response.data
         throw new Error("Cannot upload book: " + message)
+      }));
+  });
+}
+
+export async function deleteBook(bookId) {
+  const API_ENDPOINT = `${API_URL}/delete_book`;
+  const user = firebase.auth().currentUser;
+  if (!user) throw new Error("Unauthenticated user.");
+
+  return user.getIdToken(true).then(async function (idToken) {
+
+  const config = {
+    method: "post",
+    url: API_ENDPOINT,
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+      "Content-Type": "application/json"
+    },
+  data: {book_id: bookId}};
+
+    return (axios(config)
+      .then(r => console.log(r))
+      .catch((error) => {
+        const { message } = error.response.data
+        throw new Error("Cannot delete book: " + message)
       }));
   });
 }

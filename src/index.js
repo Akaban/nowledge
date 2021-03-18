@@ -40,34 +40,30 @@ import { ConnectedRouter } from "connected-react-router";
 import { configureStore } from "./app/store/configureStore";
 import ScrollToTop from "./app/layout/ScrollToTop";
 import { createBrowserHistory } from "history";
-import ReactGA from "react-ga";
 import { isReactDevMode } from "./app/common/util/util";
+import mixpanel from 'mixpanel-browser';
+import { MixpanelProvider } from 'react-mixpanel';
+
+
+const MIXPANEL_DEV_TOKEN = "5b6675e2c4987ab7a8b010acab0a34ed"
+const MIXPANEL_PROD_TOKEN = "a91637d7e894d98bd586823883ac17ca"
+
+mixpanel.init(isReactDevMode() ? MIXPANEL_DEV_TOKEN : MIXPANEL_PROD_TOKEN, { "api_host": "https://api-eu.mixpanel.com" }, "");
 
 export const history = createBrowserHistory();
-export const store = configureStore(history);
-
-if (!isReactDevMode()) {
-  ReactGA.initialize("G-LP3M8CEG4C", {
-    debug: true,
-    gaOptions: {
-      siteSpeedSampleRate: 100,
-    },
-  });
-  history.listen((location, action) => {
-    ReactGA.set({ page: location.pathname });
-    ReactGA.pageview(location.pathname);
-  });
-}
+export const store = configureStore(history, mixpanel);
 
 const rootEl = document.getElementById("root");
 
 function render() {
   ReactDOM.render(
     <Provider store={store}>
+      <MixpanelProvider mixpanel={mixpanel}>
       <ConnectedRouter history={history}>
         <ScrollToTop />
-        <App />
+        <App mixpanel={mixpanel} />
       </ConnectedRouter>
+      </MixpanelProvider>
     </Provider>,
     rootEl
   );

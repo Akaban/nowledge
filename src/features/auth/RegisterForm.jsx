@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { closeModal } from '../../app/common/modals/modalReducer'
 import { registerInFirebase} from '../../app/firestore/firebaseService'
 
-export default function RegisterForm() {
+export default function RegisterForm({ mixpanel }) {
     const dispatch = useDispatch();
     let history = useHistory();
     return (<ModalWrapper size='mini' header='Register to NowLedge'>
@@ -22,6 +22,7 @@ export default function RegisterForm() {
         onSubmit={async (values, {setSubmitting, setErrors}) => {
             try {
                 await registerInFirebase(values)
+                mixpanel.track("Registered")
                 setSubmitting(false)
                 dispatch(closeModal());
                 history.push("/books")
