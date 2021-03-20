@@ -162,7 +162,7 @@ export default function BookReader({ match, mixpanel }) {
               tracker={(eventName) => mixpanel.track(eventName)}
               updateInitPositionOnScrollChange={
                 (pageNumber) => {
-                  if (pageNumber - 1 > initPageNumber)
+                  if (!initPageNumber || (pageNumber - 1 > initPageNumber))
                     updateInitPageNumberInFirestore(book.id, pageNumber - 1);
                 }
               }
