@@ -3,7 +3,7 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
 import { Header, Icon } from "semantic-ui-react";
 
-const MAX_SIZE = 10000000;
+const MAX_SIZE = 20000000;
 
 export default function WidgetDropzone({ setFieldValue, name }) {
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -31,7 +31,7 @@ export default function WidgetDropzone({ setFieldValue, name }) {
       }
 
       if (file.size >= MAX_SIZE) {
-        toast.error("Sorry but we cannot accept pdf files larger than 10MB")
+        toast.error("Sorry but we cannot accept pdf files larger than 20MB")
         return;
       }
 
