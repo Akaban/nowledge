@@ -129,9 +129,7 @@ export default function BookReader({ match, mixpanel }) {
   const url = bookUrlState;
   const highlights = bookHighlightState;
 
-  const {
-    initPageNumber
-  } = bookMiscState
+  const initPageNumber = highlights.length ? Math.max(...highlights.map(h => h.position.pageNumber)) : null
 
   return (
     <div className="bookReader" style={{ display: "flex", height: "100vh" }}>
@@ -160,12 +158,12 @@ export default function BookReader({ match, mixpanel }) {
               onScrollChange={resetHash}
               initPageNumber={initPageNumber}
               tracker={(eventName) => mixpanel.track(eventName)}
-              updateInitPositionOnScrollChange={
-                (pageNumber) => {
-                  if (!initPageNumber || (pageNumber - 1 > initPageNumber))
-                    updateInitPageNumberInFirestore(book.id, pageNumber - 1);
-                }
-              }
+              // updateInitPositionOnScrollChange={
+              //   (pageNumber) => {
+              //     if (!initPageNumber || (pageNumber - 1 > initPageNumber))
+              //       updateInitPageNumberInFirestore(book.id, pageNumber - 1);
+              //   }
+              // }
               // pdfScaleValue="page-width"
               scrollRef={(scrollTo) => {
                 setScrollToFunRef({ fn: () => scrollTo, initialized: true });
@@ -237,10 +235,7 @@ export default function BookReader({ match, mixpanel }) {
         </PdfLoader>
       </div>
       <Confirm
-        content={confirm.content}
-        open={confirm.open}
-        onCancel={confirm.onCancel}
-        onConfirm={confirm.onConfirm}
+        {...confirm}
       />
     </div>
   );
