@@ -19,10 +19,13 @@ import "./style/App.css";
 import { PdfWorkerCdn } from "../../../app/config/react-pdf-highlighter";
 import {
   getBooksFromFirestore,
+  getBooksMetadataFromFirestore,
   getHighlightsFromFirestore,
   updateInitPageNumberInFirestore,
 } from "../../../app/firestore/firestoreService";
-import useFirestoreDoc, { useFirestoreDocOnce } from "../../../app/hooks/useFirestoreDoc";
+import useFirestoreDoc, {
+  useFirestoreDocOnce,
+} from "../../../app/hooks/useFirestoreDoc";
 import { listenToBooks } from "../bookActions";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
 import { getHighlightsFunctionsFromState } from "../../../app/common/highlights/highlights";

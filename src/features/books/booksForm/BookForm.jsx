@@ -11,6 +11,26 @@ import { addUserBook } from '../../../app/firestore/firestoreService';
 import { toast } from 'react-toastify';
 import { uploadBook } from '../../../app/backend/book';
 
+export async function submitBook(bookPdf) {
+
+                try {
+                    console.log("submitBook")
+                    const bookId = cuid()
+                    const {
+                        thumbnail_url,
+                        book_metadata
+                    } = await uploadBook(bookId, bookPdf);
+                    await addUserBook({
+                        id: bookId,
+                        bookPhotoUrl: thumbnail_url,
+                        ...book_metadata
+                    })
+                    toast.success("Book successfully added !")
+                } catch(error) {
+                    toast.error(error.message)
+                    throw error;
+                }
+}
 
 export default function BookForm({match, history, mixpanel}) {
 
