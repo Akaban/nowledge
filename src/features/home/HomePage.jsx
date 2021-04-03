@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../app/common/modals/modalReducer";
-import { Button, Container, Image, Segment, Header } from "semantic-ui-react";
+import { Button, Container, Image, Segment, Header, Divider } from "semantic-ui-react";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import * as qs from 'query-string';
+import SocialLogin from "../auth/SocialLogin";
+import { socialLogin } from "../../app/firestore/firebaseService";
+import {isMobile} from 'react-device-detect';
 
 export default function HomePage({ history, location, mixpanel }) {
   const dispatch = useDispatch();
@@ -27,6 +30,10 @@ export default function HomePage({ history, location, mixpanel }) {
           />
           NowLedge
         </Header>
+        <div className={isMobile ? "noclass" : "homepage-button"}>
+            <Button onClick={socialLogin} icon='google' fluid color='google plus' style={{marginBottom: 10}}
+            content='Sign in with Google' />
+            <hr className="divider"/>
         <Button
           onClick={() => {
             mixpanel.track("Click Login");
@@ -50,6 +57,7 @@ export default function HomePage({ history, location, mixpanel }) {
           content="Register"
           style={{ marginLeft: "0.5em" }}
         />
+        </div>
         {/* <Button onClick={() => history.push("/books")} size="huge" inverted>
           Get started
           <Icon name="right arrow" inverted />
