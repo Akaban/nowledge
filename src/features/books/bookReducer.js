@@ -1,7 +1,7 @@
 import { CREATE_BOOK, DELETE_BOOK, FETCH_BOOK, UPDATE_BOOK } from "./bookConstants";
 
 const initialState = {
-    books: [],
+    books: null,
 }
 
 export default function bookReducer(state = initialState, {type, payload}) {
