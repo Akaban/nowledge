@@ -1,0 +1,66 @@
+.Tip__compact {
+  cursor: pointer;
+  background-color: #3d464d;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+  transform: scale(1.5)
+}
+
+.Tip {
+  margin: auto;
+  width: 100%;
+  padding: 10px;
+}
+
+.tip-container {
+  padding: 10px;
+  background: rgb(255, 255, 255);
+  background-clip: padding-box;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(37, 40, 43, 0.2);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 60vh;
+}
+
+/* .tip-text {
+  width: 50%;
+} */
+
+.Tip__card textarea {
+  font-size: 16px;
+  width: 200px;
+  height: 70px;
+}
+
+.Tip__card input[type="submit"] {
+  margin-top: 5px;
+  font-size: large;
+}
+
+blockquote.tip-quote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  /* margin: 1.5em 10px; */
+  padding: 0.5em 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+blockquote.tip-quote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote.tip-quote p {
+  display: inline;
+}
