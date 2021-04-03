@@ -1,29 +1,24 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
-import { Header, Icon } from "semantic-ui-react";
+import { Header, Icon, Loader } from "semantic-ui-react";
 
-const MAX_SIZE = 20000000;
+const MAX_SIZE = 100000000;
 
-export default function WidgetDropzone({ setFieldValue, name }) {
+export default function WidgetDropzone({ onSuccessfulLoad, children }) {
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dropzoneStyles = {
-    border: "dashed 3px #eee",
-    borderRadius: "5%",
-    paddingTop: "30px",
-    textAlign: "center",
   };
 
   const dropzoneActive = {
     border: "dashed 3px green",
   };
   const onDrop = useCallback(
-    (acceptedFiles) => {
+    async (acceptedFiles) => {
       setUploadedFile(null);
       const file = acceptedFiles[0];
-
-      console.log(file.size)
 
       if (file.type !== "application/pdf") {
         toast.error("Sorry but we only support PDF files for uploading.");
@@ -31,15 +26,16 @@ export default function WidgetDropzone({ setFieldValue, name }) {
       }
 
       if (file.size >= MAX_SIZE) {
-        toast.error("Sorry but we cannot accept pdf files larger than 20MB")
+        toast.error("Sorry but we cannot accept pdf files larger than 100MB")
         return;
       }
 
+      setIsLoading(true)
       setUploadedFile(file);
-      console.log(file);
-      setFieldValue(name, file);
+      await onSuccessfulLoad(file)
+      setIsLoading(false)
     },
-    [name, setFieldValue]
+    [onSuccessfulLoad]
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -51,13 +47,10 @@ export default function WidgetDropzone({ setFieldValue, name }) {
       }
     >
       <input {...getInputProps()} />
-      {uploadedFile ? (
-        <Header content={uploadedFile.name} />
+      {isLoading ? (
+        React.cloneElement(children, { loading: true})
       ) : (
-        <>
-          <Icon name="upload" size="large" />
-          <Header content="Drop the pdf file of your book here." />
-        </>
+        {...children}
       )}
     </div>
   );
