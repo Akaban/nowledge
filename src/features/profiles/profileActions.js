@@ -1,4 +1,4 @@
-import { LISTEN_TO_CURRENT_USER_PROFILE, LISTEN_TO_SELECTED_USER_PROFILE} from "./profileConstants";
+import { LISTEN_TO_CURRENT_USER_PLAN, LISTEN_TO_CURRENT_USER_PROFILE, LISTEN_TO_SELECTED_USER_PROFILE} from "./profileConstants";
 
 export function listentoCurrentUserProfile(profile) {
     return {
@@ -11,5 +11,12 @@ export function listentoSelectedUserProfile(profile) {
     return {
         type: LISTEN_TO_SELECTED_USER_PROFILE,
         payload: profile
+    }
+}
+
+export function listentoCurrentUserPlan(plan) {
+    return {
+        type: LISTEN_TO_CURRENT_USER_PLAN,
+        payload: plan
     }
 }

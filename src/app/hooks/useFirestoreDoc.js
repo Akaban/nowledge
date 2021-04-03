@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { asyncActionError, asyncActionFinish, asyncActionStart, asyncGetUniqueId } from "../async/asyncReducer";
 import { dataFromSnapshot } from "../firestore/firestoreService";
 
-export default function useFirestoreDoc({query, data, deps, name='noname', shouldExecute = true}) {
+export default function useFirestoreDoc({query, data, deps, name='noname', silent=false, shouldExecute = true}) {
     const dispatch = useDispatch();
     useEffect(() => {
         if (!shouldExecute) return;
@@ -12,6 +12,7 @@ export default function useFirestoreDoc({query, data, deps, name='noname', shoul
         const unsubscribe = query().onSnapshot(
             snapshot => {
                 if (!snapshot.exists) {
+                    if (silent) return;
                     dispatch(asyncActionError(async_unique_id, {code: 'not-found', message:'Could not find document'}))
                     return;
                 }
@@ -20,7 +21,7 @@ export default function useFirestoreDoc({query, data, deps, name='noname', shoul
                 dispatch(asyncActionFinish(async_unique_id));
                 }
                 catch (error) {
-                    dispatch(asyncActionError(async_unique_id, {code: 'error', message:'Unknown error'}))
+                    dispatch(asyncActionError(async_unique_id, {code: 'error', message:'Unknown error', error}))
                 }
             },
             error => {}
@@ -30,7 +31,7 @@ export default function useFirestoreDoc({query, data, deps, name='noname', shoul
 }
 
 
-export function useFirestoreDocOnce({query, data, deps, name='noname', shouldExecute = true}) {
+export function useFirestoreDocOnce({query, data, deps, name='noname', silent=false, shouldExecute = true}) {
     const dispatch = useDispatch();
     useEffect(() => {
         if (!shouldExecute) return;
@@ -39,6 +40,7 @@ export function useFirestoreDocOnce({query, data, deps, name='noname', shouldExe
         query().get().then(
             snapshot => {
                 if (!snapshot.exists) {
+                    if (silent) return;
                     dispatch(asyncActionError(async_unique_id, {code: 'not-found', message:'Could not find document'}))
                     return;
                 }
@@ -47,7 +49,7 @@ export function useFirestoreDocOnce({query, data, deps, name='noname', shouldExe
                 dispatch(asyncActionFinish(async_unique_id));
                 }
                 catch (error) {
-                    dispatch(asyncActionError(async_unique_id, {code: 'error', message:'Unknown error'}))
+                    dispatch(asyncActionError(async_unique_id, {code: 'error', message:'Unknown error', error}))
                 }
             },
             error => {}

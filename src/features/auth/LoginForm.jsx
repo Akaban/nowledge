@@ -15,7 +15,7 @@ export default function LoginForm({ mixpanel }) {
     <Formik
         initialValues ={{email: '', password: ''}}
         validationSchema={Yup.object({
-            email: Yup.string().required().email(),
+            name: Yup.string().required().email(),
             password: Yup.string().required()
         })}
         onSubmit={async (values, {setSubmitting, setErrors}) => {
@@ -44,7 +44,7 @@ export default function LoginForm({ mixpanel }) {
                    fluid
                    size='large'
                    color='teal'
-                   content='login'
+                   content='Sign in'
                  />
             </Form>
             )}

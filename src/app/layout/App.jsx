@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, useLocation, Switch, Redirect } from "react-router-dom";
-import { Container } from "semantic-ui-react";
+import { Container, Header } from "semantic-ui-react";
 import BooksDashboard from "../../features/books/booksDashboard/BooksDashboard";
 import HomePage from "../../features/home/HomePage";
 import LandingPage from "../../features/home/LandingPage";
@@ -15,15 +15,17 @@ import BookForm from "../../features/books/booksForm/BookForm";
 import BookSearchWidget from "../../features/books/booksForm/BookSearchWidget";
 import Sandbox from "../../features/sandbox/Sandbox";
 import PrivateRoute from "./PrivateRoute";
-import BookHighlights from "../../features/books/booksHighlights/bookHighlights";
+import BookHighlights from "../../features/books/booksHighlights/bookHighlights_new";
 import ProfilePage from "../../features/profiles/ProfilePage/ProfilePage";
 import Feedback from "../common/feedback/Feedback";
+import {isMobile} from 'react-device-detect';
+import MobileNotImplemented from "../../features/home/MobileNotImplemented";
 
 function App({ mixpanel }) {
   const { key } = useLocation();
   const { initialized } = useSelector((state) => state.async);
 
-  if (!initialized) return <LoadingComponent content="Loading app..." />;
+  if (!isMobile && !initialized) return <LoadingComponent content="Loading app..." />;
 
   return (
     <>
@@ -36,10 +38,15 @@ function App({ mixpanel }) {
       />
       <Route
         path={"/(.+)"}
-        render={() => (
+        render={() => {
+
+          if (isMobile) return <MobileNotImplemented/>
+          else {
+          return (
           <>
             <NavBar mixpanel={mixpanel} />
-            <Container className="main">
+            <div style={{marginTop: "100px"}}/>
+            <div>
               <Switch>
                 <Route exact path="/books" component={BooksDashboard} />
                 <PrivateRoute
@@ -87,10 +94,10 @@ function App({ mixpanel }) {
                 />
                 <Route render={(props) => <Redirect to="/error" />} />
               </Switch>
-            </Container>
             <Feedback />
+            </div>
           </>
-        )}
+        )}}}
       />
     </>
   );

@@ -13,7 +13,7 @@ export default function useAsyncEffect({fetch, after, deps, name='noname', shoul
             after(result);
             dispatch(asyncActionFinish(unique_id))
             } catch(error) {
-                dispatch(asyncActionError(unique_id, {code: 'error', message: 'Unknown error'}))
+                dispatch(asyncActionError(unique_id, {code: 'error', message: 'Unknown error', error:JSON.stringify(error)}))
             }
         }
         if (!shouldExecute) return;

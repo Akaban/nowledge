@@ -10,27 +10,102 @@ import WidgetDropzone from '../../../app/common/dropzone/WidgetDropzone';
 import { addUserBook } from '../../../app/firestore/firestoreService';
 import { toast } from 'react-toastify';
 import { uploadBook } from '../../../app/backend/book';
+import formModel from './bookFormModel/model'
+import UploadBookForm from './subForms/UploadBookForm';
 
-export async function submitBook(bookPdf) {
 
-                try {
-                    console.log("submitBook")
-                    const bookId = cuid()
-                    const {
-                        thumbnail_url,
-                        book_metadata
-                    } = await uploadBook(bookId, bookPdf);
-                    await addUserBook({
-                        id: bookId,
-                        bookPhotoUrl: thumbnail_url,
-                        ...book_metadata
-                    })
-                    toast.success("Book successfully added !")
-                } catch(error) {
-                    toast.error(error.message)
-                    throw error;
-                }
+const { formId, formField, formSteps } = formModel;
+
+
+function _renderStepContent(step) {
+  switch (step) {
+    case 0:
+      return <h1>Step 0</h1>
+    case 1:
+      return <h1>Step 1</h1>
+    default:
+      return <div>Not Found</div>;
+  }
 }
+
+function _getStepSubmitFunction(step, props) {
+    switch(step) {
+        case 0:
+            const { onSubmit } = UploadBookForm
+            return () => onSubmit(props)
+        case 1:
+            return () => {}
+        default:
+            throw new Error("Step not found")
+    }
+}
+
+
+export default function BookForm() {
+  const [activeStep, setActiveStep] = useState(0);
+  const [stepData, setStepData] = useState({})
+  function getJailedSetStepData(step) {
+      return (data) => setStepData({...stepData, step: data})
+  }
+//   const currentValidationSchema = validationSchema[activeStep];
+  const isLastStep = activeStep === steps.length - 1;
+
+  function _sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function _submitFormFinal(values, actions) {
+    console.log("final form submit")
+    actions.setSubmitting(false);
+
+    setActiveStep(activeStep + 1);
+  }
+
+
+  function _handleSubmit(values, actions) {
+    if (isLastStep) {
+      _submitFormFinal(values, actions);
+    } else {
+      _getStepSubmitFunction(activeStep, {values, actions, activeStep, setData: getJailedSetStepData(activeStep), stepData})
+      setActiveStep(activeStep + 1);
+      actions.setTouched({});
+      actions.setSubmitting(false);
+    }
+  }
+
+  function _handleBack() {
+    setActiveStep(activeStep - 1);
+  }
+
+  return (
+      <>
+      <Formik
+        initialValues={{"hiddenfield": ""}}
+        onSubmit={_handleSubmit}
+        >
+            {({ isSubmitting }) => (
+              <Form id={formId}>
+                {_renderStepContent(activeStep)}
+
+                  {activeStep !== 0 && (
+                    <Button onClick={_handleBack} >
+                      Back
+                    </Button>
+                  )}
+                    <Button
+                      disabled={isSubmitting}
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                    >
+                      {isLastStep ? 'Submit book' : 'Next'}
+                    </Button>
+              </Form>
+            )}
+          </Formik>
+      </>
+  )
+
 
 export default function BookForm({match, history, mixpanel}) {
 
