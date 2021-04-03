@@ -33,52 +33,71 @@ import { getOpenConfirm } from "../../../app/common/confirm/confirm";
 import { Confirm } from "semantic-ui-react";
 import { getBookDownloadURL } from "../../../app/backend/book";
 import useAsyncEffect from "../../../app/hooks/useAsyncEffect";
+import BookTip from "./BookTip";
+import { openModal } from "../../../app/common/modals/modalReducer";
+import { getFirestoreCollection } from "../../../app/hooks/useFirestoreCollection";
+import { mergeBooksMetadata } from "../../../app/common/data/book";
 
 setPdfWorker(PdfWorkerCdn);
 
 export default function BookReader({ match, mixpanel }) {
   const { books } = useSelector((state) => state.books);
   const { error, loading } = useSelector((state) => state.async);
+  const { authenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const [bookUrlState, setBookUrlState] = useState(null);
   const [bookHighlightState, setBookHighlightState] = useState([]);
-  const [bookMiscState, setBookMiscState] = useState({})
+  const [bookMiscState, setBookMiscState] = useState({});
 
-  const [confirm, setConfirm] = useState({})
+  const [confirm, setConfirm] = useState({});
+
+  const [fullScreenMode, setFullScreenMode] = useState(false);
 
   const [scrollToFunRef, setScrollToFunRef] = useState({
     fn: (x) => x,
     initialized: false,
   });
 
-  useFirestoreDocOnce({
+  const [pdfHighlighterInternalFun, setPdfHighlighterInternalFun] = useState({
+    funs: {},
+    initialized: false,
+  });
+  
+  useFirestoreDoc({
     query: () => getBooksFromFirestore(),
     data: (books) => {
-      dispatch(listenToBooks(books));
+      getFirestoreCollection({
+        query: () => getBooksMetadataFromFirestore(),
+        data: (metadata) => {
+          const mergedBooks = mergeBooksMetadata(books.books, metadata)
+          dispatch(listenToBooks({books:mergedBooks}))
+        }}
+      )
     },
-    deps: [match.params.id],
-    name: "getBooksFromFirestore",
+    deps: [dispatch],
+    shouldExecute: authenticated,
+    name: "getBooksFromFirestore_BookDashboard"
   });
 
   useFirestoreDoc({
     query: () => getHighlightsFromFirestore(match.params.id),
     data: (data) => {
-      const {highlights, ...rest} = data
+      const { highlights, ...rest } = data;
       setBookHighlightState(highlights);
-      setBookMiscState(rest)
+      setBookMiscState(rest);
     },
     deps: [match.params.id],
+    shouldExecute: authenticated,
     name: "getHighlightsFromFirestore",
   });
-  
+
   useAsyncEffect({
     fetch: () => getBookDownloadURL(match.params.id),
     after: setBookUrlState,
     deps: [match.params.id],
-    name: "getBookDownloadURL"
-  })
-  
+    name: "getBookDownloadURL",
+  });
 
   const parseIdFromHash = () =>
     document.location.hash.slice("#highlight-".length);
@@ -100,23 +119,33 @@ export default function BookReader({ match, mixpanel }) {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false)
   );
 
-  const book = books.find((b) => b.id === match.params.id);
+  const book = books ? books.find((b) => b.id === match.params.id) : null;
 
-  if ((loading && (!bookHighlightState || !book || !bookUrlState)) && !error ) return <LoadingComponent content="Loading..." />;
+  if (loading && (!bookHighlightState || !book || !bookUrlState) && !error)
+    return <LoadingComponent content="Loading..." />;
   if (error) return <Redirect to="/error" />;
 
-  const openConfirm = getOpenConfirm(confirm, setConfirm)
+  const openConfirm = getOpenConfirm(confirm, setConfirm);
 
   const resetHash = () => {
     document.location.hash = "";
   };
 
   const HighlightPopup = ({ comment }) =>
-    comment.text ? (
+    (
       <div className="Highlight__popup">
-        {comment.emoji} {comment.text}
+
+        {(comment.text || (comment.notes && comment.notes.length > 0)) && 
+        comment.text
+          ? comment.text
+          : comment.notes.length === 1 ? <strong>{comment.notes[0].name}</strong> :<ul className="sidebar__notes">{comment.notes.map((n, k) => (
+              <li key={k}>
+                <strong>{n.name}</strong>
+              </li>
+            ))}</ul>
+            }
       </div>
-    ) : null;
+    ) ;
 
   const resetHighlights = () => {
     setBookHighlightState([]);
@@ -126,24 +155,28 @@ export default function BookReader({ match, mixpanel }) {
     sortHighlights,
     updateHighlight,
     addHighlight,
-    deleteHighlight
-  } = getHighlightsFunctionsFromState(bookHighlightState)
+    deleteHighlight,
+  } = getHighlightsFunctionsFromState(bookHighlightState);
+
+  const { scrollToPageNumber } = pdfHighlighterInternalFun.funs;
 
   const url = bookUrlState;
   const highlights = bookHighlightState;
 
-  const initPageNumber = highlights.length ? Math.max(...highlights.map(h => h.position.pageNumber)) : null
+  const initPageNumber = highlights.length ? Math.max(...highlights.map(h => h.position.pageNumber)) - 1 : null
 
   return (
-    <div className="bookReader" style={{ display: "flex", height: "100vh" }}>
+    <div className="bookReader" style={{ display: "flex", height: "100vh", width: "100vw" }}>
       <Sidebar
         highlights={highlights}
         resetHighlights={resetHighlights}
         sortHighlights={sortHighlights}
         deleteHighlight={(highlightId) => deleteHighlight(book.id, highlightId)}
+        updateHighlight={updateHighlight}
         book={book}
         openConfirm={openConfirm}
         mixpanel={mixpanel}
+        scrollToPageNumber={scrollToPageNumber}
       />
       <div
         style={{
@@ -167,10 +200,16 @@ export default function BookReader({ match, mixpanel }) {
               //       updateInitPageNumberInFirestore(book.id, pageNumber - 1);
               //   }
               // }
-              // pdfScaleValue="page-width"
+              pdfScaleValue={"page-width"}
               scrollRef={(scrollTo) => {
                 setScrollToFunRef({ fn: () => scrollTo, initialized: true });
                 scrollToHighlightFromHash();
+              }}
+              internalFunsRef={(funs) => {
+                setPdfHighlighterInternalFun({
+                  funs,
+                  initialized: true,
+                });
               }}
               onSelectionFinished={(
                 position,
@@ -178,13 +217,34 @@ export default function BookReader({ match, mixpanel }) {
                 hideTipAndSelection,
                 transformSelection
               ) => (
-                <Tip
-                  onOpen={transformSelection}
-                  onConfirm={(comment) => {
-                    addHighlight({ content, position, comment }, book.id);
-                    mixpanel.track("Book Reader: Add Book Highlight")
-                    hideTipAndSelection();
+                <BookTip
+                  onOpen={() => {
+                    transformSelection();
+
+                    dispatch(
+                      openModal({
+                        modalType: "BookTipModal",
+                        modalProps: {
+                          position,
+                          content,
+                          onConfirm: (comment) => {
+                            addHighlight(
+                              {
+                                content,
+                                position,
+                                comment,
+                                createdAt: new Date(),
+                              },
+                              book.id
+                            );
+                            mixpanel.track("Book Reader: Add Book Highlight");
+                            hideTipAndSelection();
+                          },
+                        },
+                      })
+                    );
                   }}
+                  content={content}
                 />
               )}
               highlightTransform={(
@@ -205,6 +265,20 @@ export default function BookReader({ match, mixpanel }) {
                     isScrolledTo={isScrolledTo}
                     position={highlight.position}
                     comment={highlight.comment}
+                    onClick={() => {
+                      dispatch(
+                        openModal({
+                          modalType: "BookTipModal",
+                          modalProps: {
+                            highlight,
+                            onConfirm: (comment) =>
+                              updateHighlight(highlight.id, book.id, {
+                                comment,
+                              }),
+                          },
+                        })
+                      );
+                    }}
                   />
                 ) : (
                   <AreaHighlight
@@ -223,8 +297,8 @@ export default function BookReader({ match, mixpanel }) {
                 return (
                   <Popup
                     popupContent={<HighlightPopup {...highlight} />}
-                    onMouseOver={(popupContent) =>{
-                      setTip(highlight, (highlight) => popupContent)
+                    onMouseOver={(popupContent) => {
+                      setTip(highlight, (highlight) => popupContent);
                     }}
                     onMouseOut={hideTip}
                     key={index}
@@ -237,9 +311,7 @@ export default function BookReader({ match, mixpanel }) {
           )}
         </PdfLoader>
       </div>
-      <Confirm
-        {...confirm}
-      />
+      <Confirm {...confirm} />
     </div>
   );
 }
