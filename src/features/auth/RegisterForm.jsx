@@ -17,15 +17,16 @@ export default function RegisterForm({ mixpanel }) {
         initialValues ={{displayName: '', email: '', password: ''}}
         validationSchema={Yup.object({
             email: Yup.string().required().email(),
+            name: Yup.string().required(),
             password: Yup.string().required()
         })}
         onSubmit={async (values, {setSubmitting, setErrors}) => {
             try {
+                console.log("registering in firebase...")
                 await registerInFirebase(values)
                 mixpanel.track("Registered")
                 setSubmitting(false)
                 dispatch(closeModal());
-                history.push("/books")
             } catch (error) {
                 setErrors({auth: error.message})
                 setSubmitting(false)
@@ -36,6 +37,7 @@ export default function RegisterForm({ mixpanel }) {
         {({isSubmitting, isValid, dirty, errors}) => (
             <Form className='ui form'>
                <MyTextInput name='email' placeholder='Email' />
+               <MyTextInput name='name' placeholder='Your name' />
                <MyTextInput type='password' name='password' placeholder='Password' />
                {errors.auth && <Label basic color='red' style={{marginBottom: 10}} content={errors.auth} />}
                <Button
