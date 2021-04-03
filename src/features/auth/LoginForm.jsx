@@ -15,7 +15,7 @@ export default function LoginForm({ mixpanel }) {
     <Formik
         initialValues ={{email: '', password: ''}}
         validationSchema={Yup.object({
-            name: Yup.string().required().email(),
+            email: Yup.string().required().email(),
             password: Yup.string().required()
         })}
         onSubmit={async (values, {setSubmitting, setErrors}) => {
