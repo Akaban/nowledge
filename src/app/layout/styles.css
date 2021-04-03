@@ -2,7 +2,7 @@
 
 body {
   background-color: #eaeaea;
-  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-size: 13px;
 }
 
@@ -11,7 +11,7 @@ body {
     135deg,
     rgb(29, 117, 218) 0%,
     rgb(42, 122, 241) 69%
-    );
+  );
 }
 
 .ui.main.container {
@@ -21,13 +21,34 @@ body {
 .masthead {
   display: flex;
   align-items: center;
-  background-image: linear-gradient(
-    135deg,
-    rgb(24, 42, 115) 0%,
-    rgb(33, 138, 174) 69%,
-    rgb(32, 167, 172) 89%
-    ) !important;
   height: 100vh;
+}
+
+.upload-button-empty {
+  position: relative;
+  left: 25%;
+}
+
+.divider {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 1);
+}
+
+.homepage-button {
+  width: 50%;
+  margin: 0 auto;
+  /* position: absolute; */
+  /* right: 50vw; */
+}
+
+.nobook {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
 }
 
 .masthead h1.ui.header {
@@ -41,7 +62,7 @@ body {
 .react-calendar {
   width: 100%;
   border: None;
-  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
+  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15);
 }
 
 .bookHighlights__highlights {
@@ -72,4 +93,3 @@ body {
   transition: background 140ms ease-in;
   border-bottom: 1px solid rgb(119, 119, 119);
 }
-
