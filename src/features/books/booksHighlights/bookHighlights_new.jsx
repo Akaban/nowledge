@@ -172,7 +172,7 @@ export default function BookHighlights({ match }) {
   });
   const openConfirm = getOpenConfirm(confirm, setConfirm);
 
-  if (loading || !books) return <LoadingComponent content="Loading..." />;
+  if ((loading || !books || !bookHighlightState) && (!error)) return <LoadingComponent content="Loading..." />;
   if (error) return <Redirect to="/error" />;
   const book = books.filter((b) => b.id === match.params.id)[0];
   if (bookHighlightState.length === 0) return <Redirect to={`/books/${book.id}`}/>
