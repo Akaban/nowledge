@@ -38,6 +38,12 @@ export function getHighlightsFromFirestore(bookId) {
     .doc(bookId);
 }
 
+export function getHighlightsCollectionFromFirestore() {
+  const user = firebase.auth().currentUser;
+  if (!user) throw new Error("User not logged in.");
+  return db.collection("userBooks").doc(user.uid).collection("highlights");
+}
+
 export function setUserProfileData(user) {
   if (!user) throw new Error("User not logged in.");
   return db.collection("users").doc(user.uid).set({
@@ -55,6 +61,10 @@ export function setUserBooks(user) {
 
 export function getUserProfile(userId) {
   return db.collection("users").doc(userId);
+}
+
+export function getUserPlan(userId) {
+  return db.collection("userPlans").doc(userId);
 }
 
 export async function updateUserProfile(profile) {
@@ -101,6 +111,33 @@ export function updateHighlightsInFirestore(bookId, highlights) {
     });
 }
 
+export async function updateHighlightsMetadataInFirestore(bookId, highlights) {
+  const user = firebase.auth().currentUser;
+  if (!user) throw new Error("User not logged in.");
+
+  const updateFields = {
+    last_highlight_page_number: highlights.length > 0 ? Math.max(...highlights.map(h => h.position.pageNumber)) : null,
+    last_highlight_date: highlights.length > 0 ? Math.max(...highlights.map(h => typeof h.createdAt.toDate === 'function' ? h.createdAt.toDate() : h.createdAt)) : null
+  };
+
+  console.log(updateFields)
+
+  db.collection("userBooks")
+    .doc(user.uid)
+    .collection("metadata")
+    .doc(bookId)
+    .update(updateFields);
+}
+
+export function getBooksMetadataFromFirestore() {
+  const user = firebase.auth().currentUser;
+  if (!user) throw new Error("User not logged in.");
+
+  return db.collection("userBooks")
+    .doc(user.uid)
+    .collection("metadata")
+}
+
 export function updateInitPageNumberInFirestore(bookId, pageNumber) {
   if (pageNumber < 0) pageNumber = 0;
   const user = firebase.auth().currentUser;
@@ -117,19 +154,19 @@ export function updateInitPageNumberInFirestore(bookId, pageNumber) {
 
 export async function removeUserBook(book) {
   const user = firebase.auth().currentUser;
+  const book2 = {...book}
+  if ("app_metadata" in book2) delete book2.app_metadata;
   if (!user) throw new Error("User not logged in.");
   try {
-    db
-      .collection("userBooks")
+    db.collection("userBooks")
       .doc(user.uid)
       .collection("highlights")
       .doc(book.id)
       .delete();
-    db
-      .collection("userBooks")
+    db.collection("userBooks")
       .doc(user.uid)
       .update({
-        books: firebase.firestore.FieldValue.arrayRemove(book),
+        books: firebase.firestore.FieldValue.arrayRemove(book2),
       });
     deleteBook(book.id);
   } catch (error) {
@@ -152,13 +189,14 @@ export async function addUserBook(book) {
       });
   }
   try {
+    await setupHighlights();
+    await db.collection("userBooks").doc(user.uid).collection("metadata").doc(book.id).set({})
     await db
       .collection("userBooks")
       .doc(user.uid)
       .update({
         books: firebase.firestore.FieldValue.arrayUnion(book),
       });
-    await setupHighlights();
   } catch (error) {
     throw error;
   }
