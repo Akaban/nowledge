@@ -3,7 +3,7 @@ import { Card } from "semantic-ui-react";
 import BookListItem from "./BookListItem";
 import { MixpanelConsumer } from "react-mixpanel";
 
-export default function BookList({ books, openConfirm }) {
+export default function BookList({ books }) {
   const booksSorted = books.sort(function (a, b) {
     if (!a.app_metadata) return 1;
     if (!b.app_metadata) return -1;
@@ -24,7 +24,6 @@ export default function BookList({ books, openConfirm }) {
               book={book}
               key={book.id}
               mixpanel={mixpanel}
-              openConfirm={openConfirm}
             />
           ))}
         </Card.Group>

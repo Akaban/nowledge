@@ -1,11 +1,19 @@
 import { toast } from "react-toastify";
 import { deleteBook } from "../backend/book";
+import { promoteToFreePlan } from "../backend/premium";
 import {
   getBookBucketPath,
   getBookPictureBucketPath,
 } from "../common/storage/storageHelper";
 import firebase from "../config/firebase";
 import { setUserBooks, setUserProfileData } from "./firestoreService";
+import { useDispatch } from "react-redux";
+import {
+  APP_LOADED,
+  BLOCK_APP_LOADED,
+  UNBLOCK_APP_LOADED,
+} from "../async/asyncReducer";
+import { store } from "../../index";
 
 export function signInWithEmail(creds, mixpanel) {
   return firebase
@@ -26,6 +34,7 @@ export async function getToken() {
 
 export async function registerInFirebase(creds) {
   try {
+    store.dispatch({ type: BLOCK_APP_LOADED });
     const result = await firebase
       .auth()
       .createUserWithEmailAndPassword(creds.email, creds.password);
@@ -34,6 +43,10 @@ export async function registerInFirebase(creds) {
     });
     await setUserProfileData(result.user);
     await setUserBooks(result.user);
+    const r = await promoteToFreePlan(result.user);
+    console.log(r);
+    store.dispatch({ type: UNBLOCK_APP_LOADED });
+    store.dispatch({ type: APP_LOADED });
   } catch (error) {
     throw error;
   }
@@ -65,10 +78,15 @@ export async function socialLogin() {
   try {
     const result = await firebase.auth().signInWithPopup(provider);
     if (result.additionalUserInfo.isNewUser) {
+      store.dispatch({ type: BLOCK_APP_LOADED });
       await result.user.updateProfile({
         name: result.user.email,
       });
       await setUserProfileData(result.user);
+      await setUserBooks(result.user);
+      await promoteToFreePlan(result.user);
+      store.dispatch({ type: UNBLOCK_APP_LOADED });
+      store.dispatch({ type: APP_LOADED });
     }
   } catch (error) {
     toast.error(error.message);

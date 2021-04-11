@@ -2,6 +2,7 @@ import {combineReducers} from 'redux'
 import authReducer from '../../features/auth/authReducer';
 import testReducer from '../../features/sandbox/testReducer'
 import modalReducer from '../common/modals/modalReducer';
+import confirmReducer from '../common/confirm/confirmReducer';
 import asyncReducer from '../async/asyncReducer';
 import profileReducer from '../../features/profiles/profileReducer';
 import bookReducer from '../../features/books/bookReducer';
@@ -11,6 +12,7 @@ const appReducer = (history) => combineReducers({
     router: connectRouter(history),
     test: testReducer,
     modals: modalReducer,
+    confirm: confirmReducer,
     auth: authReducer,
     async: asyncReducer,
     profile: profileReducer,

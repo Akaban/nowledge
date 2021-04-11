@@ -4,6 +4,8 @@ import { deleteBookFromFirebaseStore } from "./firebaseService";
 
 const db = firebase.firestore();
 
+window.db = db;
+
 export function dataFromSnapshot(snapshot) {
   if (!snapshot.exists) return undefined;
   const data = snapshot.data();
@@ -119,8 +121,6 @@ export async function updateHighlightsMetadataInFirestore(bookId, highlights) {
     last_highlight_page_number: highlights.length > 0 ? Math.max(...highlights.map(h => h.position.pageNumber)) : null,
     last_highlight_date: highlights.length > 0 ? Math.max(...highlights.map(h => typeof h.createdAt.toDate === 'function' ? h.createdAt.toDate() : h.createdAt)) : null
   };
-
-  console.log(updateFields)
 
   db.collection("userBooks")
     .doc(user.uid)

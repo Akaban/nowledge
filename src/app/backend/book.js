@@ -49,7 +49,7 @@ export async function uploadBook(bookId, pdfFile) {
       })
       .catch((error) => {
         const { message } = error.response.data
-        throw new Error("Cannot upload book: " + message)
+        throw new Error(message)
       }));
   });
 }

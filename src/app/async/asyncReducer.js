@@ -5,6 +5,9 @@ export const ASYNC_ACTION_START = "ASYNC_ACTION_START";
 export const ASYNC_ACTION_FINISH = "ASYNC_ACTION_FINISH";
 export const ASYNC_ACTION_ERROR = "ASYNC_ACTION_ERROR";
 export const APP_LOADED = "APP_LOADED";
+export const BLOCK_APP_LOADED = "BLOCK_APP_LOADED";
+export const UNBLOCK_APP_LOADED = "UNBLOCK_APP_LOADED"
+export const ASYNC_ARCHIVE_TASKS = "ASYNC_ARCHIVE_TASKS"
 
 export function asyncGetUniqueId() {
   return uuidv4();
@@ -33,7 +36,9 @@ export function asyncActionError(unique_id, error) {
 
 const initialState = {
   tasks: [],
+  archived_tasks: [],
   initialized: false,
+  no_update_initialized: false,
   error: false,
   loading: false,
 };
@@ -126,8 +131,24 @@ export default function asyncReducer(state = initialState, { type, payload }) {
     case APP_LOADED:
       return {
         ...state,
-        initialized: true,
+        initialized: (state.no_update_initialized ? false : true),
       };
+    case BLOCK_APP_LOADED:
+      return {
+        ...state,
+        no_update_initialized: true,
+      };
+    case UNBLOCK_APP_LOADED:
+      return {
+        ...state,
+        no_update_initialized: false,
+      };
+    case ASYNC_ARCHIVE_TASKS:
+      return {
+        ...state,
+        tasks: [],
+        archived_tasks: [...state.archived_tasks, ...state.tasks]
+      }
     default:
       return state;
   }

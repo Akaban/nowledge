@@ -24,7 +24,6 @@ function Sidebar({
   const history = useHistory();
   const dispatch = useDispatch();
 
-  console.log(book)
   if (!book) return null;
   return (
     <div className="sidebar" style={{ width: "25vw" }}>

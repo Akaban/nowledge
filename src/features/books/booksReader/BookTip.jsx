@@ -4,8 +4,9 @@ import { Button, Form, Header, Label, Segment } from "semantic-ui-react";
 import { ScriptElementKindModifier } from "typescript";
 import MyTextInput from "../../../app/common/form/MyTextInput";
 import GKeepList from "../../../app/common/GKeepList/GKeepList";
-
 import "./style/bookTip.css";
+const _ = require("lodash");
+
 
 export function FormBookTip({onConfirm, content=null, highlight=null}) {
   const [flushInput, setFlushInput] = useState(null)
@@ -20,7 +21,7 @@ export function FormBookTip({onConfirm, content=null, highlight=null}) {
             }}
             validator={() => ({})}
           >
-            {({handleSubmit, setFieldValue, errors}) => {
+            {({handleSubmit, setFieldValue, values, errors}) => {
               return (
                 <div className="tip-container">
                   <h3>{highlight ? "Edit highlight" : "Add highlight"}</h3>
@@ -52,7 +53,9 @@ export function FormBookTip({onConfirm, content=null, highlight=null}) {
                       externalSetState={(s) =>
                         setFieldValue("actionNotes", s.items)
                       } */}
-                    <Button type="submit" positive content="Save" />
+                      {/* activé si dirtyNotes || values.notes !== highlight.comment.notes */}
+                      {/* désactivé si !dirtyNotes && values.notes == highlight.comment.notes */}
+                    <Button type="submit" disabled={highlight && _.isEqual(values.notes, highlight.comment.notes)} positive content="Save" />
                   </div>
                 </Form></div>
               );

@@ -132,10 +132,12 @@ export default function BookReader({ match, mixpanel }) {
   };
 
   const HighlightPopup = ({ comment }) =>
+
+        ((comment.text || (comment.notes && comment.notes.length > 0))) ?
     (
       <div className="Highlight__popup">
 
-        {(comment.text || (comment.notes && comment.notes.length > 0)) && 
+        {
         comment.text
           ? comment.text
           : comment.notes.length === 1 ? <strong>{comment.notes[0].name}</strong> :<ul className="sidebar__notes">{comment.notes.map((n, k) => (
@@ -145,7 +147,7 @@ export default function BookReader({ match, mixpanel }) {
             ))}</ul>
             }
       </div>
-    ) ;
+    ) : null ;
 
   const resetHighlights = () => {
     setBookHighlightState([]);

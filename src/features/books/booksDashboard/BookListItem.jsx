@@ -4,8 +4,10 @@ import { Button, Card } from "semantic-ui-react";
 import { removeUserBook } from "../../../app/firestore/firestoreService";
 import styled from "@emotion/styled/macro";
 import { ProgressBar } from "react-bootstrap";
+import {useDispatch} from "react-redux"
+import {openConfirm} from "../../../app/common/confirm/confirmReducer"
 
-function BookCard({ book, deleteBook, openConfirm, mixpanel }) {
+function BookCard({ book, deleteBook, mixpanel }) {
   const DisplayOver = styled.div({
     height: "100%",
     left: "0",
@@ -59,6 +61,8 @@ function BookCard({ book, deleteBook, openConfirm, mixpanel }) {
 
   const history = useHistory();
   const progress = book.app_metadata ? Math.trunc((book.app_metadata.last_highlight_page_number / book.num_pages)*100) : 0
+
+  const dispatch = useDispatch();
   return (
     <Background>
       <DisplayOver>
@@ -87,16 +91,17 @@ function BookCard({ book, deleteBook, openConfirm, mixpanel }) {
               color="red"
               size="medium"
               style={buttonStyle}
-                    onClick={() => {
+            onClick = {
+              () => {
+                dispatch(openConfirm({
+                  content: "Are you sure that you want to delete this book?",
+                  onConfirm: () => {
                       mixpanel.track("bookDashboard: Click Delete Book");
-                      openConfirm({
-                        content:
-                          "Are you sure that you want to delete this book?",
-                        onConfirm: () => {
-                          deleteBook();
-                        },
-                      });
-                    }}
+                    deleteBook();
+                  }
+                }))
+              }
+            }
             />
           </Buttons>
         </Hover>

@@ -21,8 +21,6 @@ export default function BooksDashboard() {
   const { books } = useSelector((state) => state.books);
   const { loading, error } = useSelector((state) => state.async);
   const { authenticated } = useSelector((state) => state.auth);
-  const [confirm, setConfirm] = useState({});
-  const openConfirm = getOpenConfirm(confirm, setConfirm);
 
   const dispatch = useDispatch();
 
@@ -62,8 +60,7 @@ export default function BooksDashboard() {
 
   return (
     <Container className="main">
-      <BookList books={books} openConfirm={openConfirm} />
-      <Confirm {...confirm} />
+      <BookList books={books} />
     </Container>
   );
 }

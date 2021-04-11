@@ -122,6 +122,16 @@ blockquote.tip-quote p {
   background: white;
   width: 20%;
   cursor: pointer;
+  min-height: 50px;
+}
+
+.grid-highlight-item-less5 {
+  margin: 0 auto 1em;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  width: 50%;
+  cursor: pointer;
 }
 
 .grid-highlight-item-location {
@@ -132,6 +142,11 @@ blockquote.tip-quote p {
 
 .grid-highlight-item-action {
   float: left;
+}
+
+.grid-highlight-less5 {
+  display: flex;
+  justify-content: center;
 }
 
 .visible {
