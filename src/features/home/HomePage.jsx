@@ -12,13 +12,14 @@ import {isMobile} from 'react-device-detect';
 export default function HomePage({ history, location, mixpanel }) {
   const dispatch = useDispatch();
   const { authenticated, prevLocation } = useSelector((state) => state.auth);
+  const { initialized } = useSelector((state) => state.async);
   useEffect(() => {
     if (!prevLocation) {
     const parsed = qs.parse(location.search)
     mixpanel.track("Home Page", {urlParams: parsed})
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  if (authenticated) return <Redirect to="/books" />;
+  if (initialized && authenticated) return <Redirect to="/books" />;
   return (
     <Segment inverted textAlign="center" vertical className="masthead">
       <Container>

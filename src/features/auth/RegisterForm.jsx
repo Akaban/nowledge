@@ -11,7 +11,6 @@ import { registerInFirebase} from '../../app/firestore/firebaseService'
 
 export default function RegisterForm({ mixpanel }) {
     const dispatch = useDispatch();
-    let history = useHistory();
     return (<ModalWrapper size='mini' header='Register to NowLedge'>
     <Formik
         initialValues ={{displayName: '', email: '', password: ''}}
@@ -47,7 +46,7 @@ export default function RegisterForm({ mixpanel }) {
                    fluid
                    size='large'
                    color='teal'
-                   content='login'
+                   content='Register'
                  />
                  {/* <Divider horizontal>Or</Divider>
                  <SocialLogin /> */}

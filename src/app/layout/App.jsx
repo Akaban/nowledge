@@ -20,6 +20,9 @@ import ProfilePage from "../../features/profiles/ProfilePage/ProfilePage";
 import Feedback from "../common/feedback/Feedback";
 import {isMobile} from 'react-device-detect';
 import MobileNotImplemented from "../../features/home/MobileNotImplemented";
+import Stripe from "../../features/sandbox/Stripe";
+import Upgrade from "../../features/upgrade/Upgrade";
+import ConfirmWrapper from "../common/confirm/ConfirmWrapper";
 
 function App({ mixpanel }) {
   const { key } = useLocation();
@@ -30,6 +33,7 @@ function App({ mixpanel }) {
   return (
     <>
       <ModalManager />
+      <ConfirmWrapper />
       <ToastContainer position="bottom-right" hideProgressBar />
       <Route
         exact
@@ -74,6 +78,11 @@ function App({ mixpanel }) {
                   component={ProfilePage}
                   componentProps={{ mixpanel }}
                 />
+                <PrivateRoute
+                  exact
+                  path="/upgrade"
+                  component={Upgrade}
+                  />
                 <Route
                   exact
                   path="/sandbox/search-book"
@@ -84,6 +93,11 @@ function App({ mixpanel }) {
                   path="/sandbox/landingpage"
                   component={LandingPage}
                 />
+                <Route
+                  exact
+                  path="/sandbox/stripe"
+                  component={Stripe}
+                  />
                 <Route exact path="/sandbox" component={Sandbox} />
                 <Route
                   exact

@@ -5,6 +5,7 @@ import SignedInMenu from "./SignedInMenu";
 import { useSelector } from "react-redux";
 import WidgetDropzone from "../../app/common/dropzone/WidgetDropzone";
 import { submitBook } from "../books/booksForm/BookForm";
+import FreeQuota from "./FreeQuota";
 
 export function UploadBookButton({color=null, className=null}) {
     const props = {}
@@ -19,6 +20,9 @@ export function UploadBookButton({color=null, className=null}) {
 
 export default function NavBar({ setFormOpen, mixpanel }) {
   const { authenticated } = useSelector((state) => state.auth);
+  const { userPlan } = useSelector((state) => state.profile)
+
+  const isFreeUser = userPlan ? userPlan.plan === "free" : false
 
   return (
     <Menu inverted fixed="top">
@@ -40,6 +44,10 @@ export default function NavBar({ setFormOpen, mixpanel }) {
             <Menu.Item>
               <UploadBookButton />
             </Menu.Item>
+            {authenticated && isFreeUser &&
+            <Menu.Item>
+              <FreeQuota />
+            </Menu.Item>}
           </>
         )}
         {authenticated ? <SignedInMenu mixpanel={mixpanel} /> : null}

@@ -1,11 +1,18 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Button, Header, Segment } from 'semantic-ui-react'
+import { ASYNC_ARCHIVE_TASKS } from '../../async/asyncReducer'
 
 export default function ErrorComponent({ mixpanel }) {
     const {error} = useSelector(state => state.async)
     const {prevLocation, authenticated} = useSelector(state => state.auth)
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      dispatch(ASYNC_ARCHIVE_TASKS)
+    }, [dispatch])
 
   useEffect(() => {
     mixpanel.track("Error", {error, prevLocation});
