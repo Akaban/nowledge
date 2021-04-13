@@ -48,6 +48,5 @@ export default function FreeQuota() {
           {books_count} / {max_books} books
         </strong>
       </div>
-    </>
   );
 }

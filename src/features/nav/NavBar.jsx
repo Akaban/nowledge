@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import WidgetDropzone from "../../app/common/dropzone/WidgetDropzone";
 import { submitBook } from "../books/booksForm/BookForm";
 import FreeQuota from "./FreeQuota";
+import { useHistory } from "react-router-dom"
 
 export function UploadBookButton({color=null, className=null}) {
     const props = {}
@@ -23,6 +24,8 @@ export default function NavBar({ setFormOpen, mixpanel }) {
   const { userPlan } = useSelector((state) => state.profile)
 
   const isFreeUser = userPlan ? userPlan.plan === "free" : false
+
+  const history = useHistory()
 
   return (
     <Menu inverted fixed="top">
@@ -45,9 +48,15 @@ export default function NavBar({ setFormOpen, mixpanel }) {
               <UploadBookButton />
             </Menu.Item>
             {authenticated && isFreeUser &&
+            <>
             <Menu.Item>
               <FreeQuota />
-            </Menu.Item>}
+            </Menu.Item>
+            <Menu.Item>
+              <Button color="green" onClick={() => {mixpanel.track("Upgrade button clicked"); history.push("/upgrade")}} content="Upgrade"/>
+            </Menu.Item>
+            </>
+            }
           </>
         )}
         {authenticated ? <SignedInMenu mixpanel={mixpanel} /> : null}
