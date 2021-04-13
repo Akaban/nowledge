@@ -24,6 +24,7 @@ export async function getPremiumInfo() {
   })}
 
   export async function promoteToFreePlan(user) {
+  console.log("promoting user to free plan")
   const API_ENDPOINT = `${API_URL}/promote_to_free_trial`;
   return user.getIdToken(true).then(async function (idToken) {
     return (axios
