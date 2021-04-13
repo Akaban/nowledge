@@ -61,7 +61,6 @@ export function loadAppData(user) {
   userPlanRef.onSnapshot((snapshot) => {
     const data = dataFromSnapshot(snapshot);
     dispatch(listentoCurrentUserPlan(data));
-    dispatch(listentoCurrentHighlightCount(data.highlight_count));
   });
   getPremiumInfo().then((data) => dispatch(listentoPremiumInfo(data)));
 }
