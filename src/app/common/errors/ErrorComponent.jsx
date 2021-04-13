@@ -11,7 +11,7 @@ export default function ErrorComponent({ mixpanel }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-      dispatch(ASYNC_ARCHIVE_TASKS)
+      dispatch({type: ASYNC_ARCHIVE_TASKS})
     }, [dispatch])
 
   useEffect(() => {
