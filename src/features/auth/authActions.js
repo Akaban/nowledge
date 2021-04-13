@@ -14,6 +14,8 @@ import {
 } from "../profiles/profileActions";
 import { getUserData } from "./authHelpers";
 import { getHighlightCount, getPremiumInfo } from "../../app/backend/premium";
+import { store } from "../../index";
+import { useSelector } from "react-redux";
 
 export function signInUser(user) {
   return {
@@ -26,8 +28,8 @@ export function verifyAuth(mixpanel) {
   return function (dispatch) {
     return firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
+        const { no_update_initialized } = store.getState().async
         dispatch(signInUser(user));
-        const profileRef = getUserProfile(user.uid);
         mixpanel.identify(user.uid);
         mixpanel.track("Logged In");
         const userData = getUserData(user);
@@ -35,17 +37,10 @@ export function verifyAuth(mixpanel) {
           $email: userData.email,
           providerId: userData.providerId,
         });
-        profileRef.onSnapshot((snapshot) => {
-          dispatch(listentoCurrentUserProfile(dataFromSnapshot(snapshot)));
-        });
-        const userPlanRef = getUserPlan(user.uid);
-        userPlanRef.onSnapshot((snapshot) => {
-          const data = dataFromSnapshot(snapshot);
-          dispatch(listentoCurrentUserPlan(data));
-          dispatch(listentoCurrentHighlightCount(data.highlight_count))
-        });
-        getPremiumInfo().then(data => dispatch(listentoPremiumInfo(data)));
-        dispatch({ type: APP_LOADED });
+        if (!no_update_initialized) {
+          loadAppData(user);
+          dispatch({ type: APP_LOADED });
+        }
       } else {
         dispatch(signOutUser());
         // dispatch({type: 'USER_LOGOUT_RESET_STORE'})
@@ -53,6 +48,22 @@ export function verifyAuth(mixpanel) {
       }
     });
   };
+}
+
+export function loadAppData(user) {
+  const dispatch = (x) => store.dispatch(x);
+  const profileRef = getUserProfile(user.uid);
+
+  profileRef.onSnapshot((snapshot) => {
+    dispatch(listentoCurrentUserProfile(dataFromSnapshot(snapshot)));
+  });
+  const userPlanRef = getUserPlan(user.uid);
+  userPlanRef.onSnapshot((snapshot) => {
+    const data = dataFromSnapshot(snapshot);
+    dispatch(listentoCurrentUserPlan(data));
+    dispatch(listentoCurrentHighlightCount(data.highlight_count));
+  });
+  getPremiumInfo().then((data) => dispatch(listentoPremiumInfo(data)));
 }
 
 export function signOutUser(payload) {

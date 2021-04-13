@@ -14,6 +14,8 @@ import {
   UNBLOCK_APP_LOADED,
 } from "../async/asyncReducer";
 import { store } from "../../index";
+import { loadAppData } from "../../features/auth/authActions";
+import { checkBackendHealth } from "../backend/backend";
 
 export function signInWithEmail(creds, mixpanel) {
   return firebase
@@ -34,17 +36,24 @@ export async function getToken() {
 
 export async function registerInFirebase(creds) {
   try {
+    await checkBackendHealth();
     store.dispatch({ type: BLOCK_APP_LOADED });
     const result = await firebase
       .auth()
       .createUserWithEmailAndPassword(creds.email, creds.password);
+    console.log("registered", result)
+    console.log("now initialize user")
     await result.user.updateProfile({
       name: creds.name,
     });
+    console.log("setuserprofiledata")
     await setUserProfileData(result.user);
-    await setUserBooks(result.user);
+    console.log("promote to free plan")
     const r = await promoteToFreePlan(result.user);
     console.log(r);
+    console.log("set user books")
+    await setUserBooks(result.user);
+    loadAppData(result.user);
     store.dispatch({ type: UNBLOCK_APP_LOADED });
     store.dispatch({ type: APP_LOADED });
   } catch (error) {

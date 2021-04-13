@@ -174,6 +174,7 @@ class AddItemInput extends React.Component {
     const {setDirty} = this.props
     const { value } = e.target;
     if (value && setDirty) setDirty(true)
+    if (value === "" && setDirty) setDirty(false)
     if (value && e.key === "Enter") {
       e.preventDefault();
       if (!e.shiftKey) {

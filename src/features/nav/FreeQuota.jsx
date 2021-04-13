@@ -14,7 +14,6 @@ import { listenToBooks } from "../books/bookActions";
 export default function FreeQuota() {
   const books = useSelector((state) => state.books);
   const { authenticated } = useSelector((state) => state.auth);
-  const { highlightCount } = useSelector((state) => state.profile)
 
   const dispatch = useDispatch();
 
@@ -35,19 +34,10 @@ export default function FreeQuota() {
   });
 
   if (!books) return null;
-  const max_books = 3;
-  const books_count = books.length;
+  const books_count = books.books ? books.books.length : 0;
+  const max_books = 1;
 
   return (
-    <>
-      <div style={{ float: "left" }}>
-        <ProgressBar
-          striped
-          variant={highlightCount >= 30 ? "danger" : "warning"}
-          now={Math.round((highlightCount / 30) * 100)}
-        />
-        <strong>{highlightCount} / 30 highlights</strong>
-      </div>
       <div style={{ float: "left", marginLeft: "10px" }}>
         <ProgressBar
           striped
@@ -58,6 +48,5 @@ export default function FreeQuota() {
           {books_count} / {max_books} books
         </strong>
       </div>
-    </>
   );
 }
