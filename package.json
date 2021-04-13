@@ -42,7 +42,7 @@
     "react-mixpanel": "^1.0.5",
     "react-overlays": "^4.1.1",
     "react-pdf-highlighter": "file:tgz_dependencies/react-pdf-highlighter-3.4.0.tgz",
-    "react-pricing-table": "*",
+    "react-pricing-table": "file:tgz_dependencies/react-pricing-table-0.3.0.tgz",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
