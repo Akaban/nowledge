@@ -29,7 +29,6 @@ export function verifyAuth(mixpanel) {
     return firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         const { no_update_initialized } = store.getState().async
-        dispatch(signInUser(user));
         mixpanel.identify(user.uid);
         mixpanel.track("Logged In");
         const userData = getUserData(user);
@@ -39,6 +38,7 @@ export function verifyAuth(mixpanel) {
         });
         if (!no_update_initialized) {
           loadAppData(user);
+          dispatch(signInUser(user));
           dispatch({ type: APP_LOADED });
         }
       } else {
