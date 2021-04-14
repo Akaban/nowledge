@@ -31,5 +31,4 @@ export async function checkBackendHealth(user) {
       throw new Error(
         "Sorry but an unexpected error happened, we're investigating the problem and will fix it ASAP!"
       );
-    });
-}
+    });}

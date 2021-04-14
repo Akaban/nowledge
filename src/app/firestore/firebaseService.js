@@ -14,7 +14,7 @@ import {
   UNBLOCK_APP_LOADED,
 } from "../async/asyncReducer";
 import { store } from "../../index";
-import { loadAppData } from "../../features/auth/authActions";
+import { loadAppData, signInUser } from "../../features/auth/authActions";
 import { checkBackendHealth } from "../backend/backend";
 
 export function signInWithEmail(creds, mixpanel) {
@@ -41,21 +41,22 @@ export async function registerInFirebase(creds) {
     const result = await firebase
       .auth()
       .createUserWithEmailAndPassword(creds.email, creds.password);
-    console.log("registered", result)
-    console.log("now initialize user")
+    console.log("registered", result);
+    console.log("now initialize user");
     await result.user.updateProfile({
       name: creds.name,
     });
-    console.log("setuserprofiledata")
+    console.log("setuserprofiledata");
     await setUserProfileData(result.user);
-    console.log("promote to free plan")
+    console.log("promote to free plan");
     const r = await promoteToFreePlan(result.user);
     console.log(r);
-    console.log("set user books")
+    console.log("set user books");
     await setUserBooks(result.user);
     loadAppData(result.user);
     store.dispatch({ type: UNBLOCK_APP_LOADED });
     store.dispatch({ type: APP_LOADED });
+    store.dispatch(signInUser(result.user))
   } catch (error) {
     throw error;
   }
@@ -85,18 +86,21 @@ export function uploadBookDataToFirebaseStore(bookId, bookPdfFile) {
 export async function socialLogin() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
+    await checkBackendHealth();
+    store.dispatch({ type: BLOCK_APP_LOADED });
     const result = await firebase.auth().signInWithPopup(provider);
     if (result.additionalUserInfo.isNewUser) {
-      store.dispatch({ type: BLOCK_APP_LOADED });
+      await promoteToFreePlan(result.user);
       await result.user.updateProfile({
         name: result.user.email,
       });
       await setUserProfileData(result.user);
       await setUserBooks(result.user);
-      await promoteToFreePlan(result.user);
-      store.dispatch({ type: UNBLOCK_APP_LOADED });
-      store.dispatch({ type: APP_LOADED });
     }
+    await loadAppData(result.user);
+    store.dispatch(signInUser(result.user))
+    store.dispatch({ type: UNBLOCK_APP_LOADED });
+    store.dispatch({ type: APP_LOADED });
   } catch (error) {
     toast.error(error.message);
   }
