@@ -44,7 +44,8 @@ export async function registerInFirebase(creds) {
     console.log("registered", result);
     console.log("now initialize user");
     await result.user.updateProfile({
-      name: creds.name,
+      displayName: creds.name,
+      providerType: "password"
     });
     console.log("setuserprofiledata");
     await setUserProfileData(result.user);
@@ -93,6 +94,7 @@ export async function socialLogin() {
       await promoteToFreePlan(result.user);
       await result.user.updateProfile({
         name: result.user.email,
+        providerType: "social_login"
       });
       await setUserProfileData(result.user);
       await setUserBooks(result.user);
