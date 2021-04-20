@@ -22,6 +22,7 @@ export async function createCheckoutSession(priceId) {
     return (axios(config)
       .then(response => {return response.data})
       .catch((error) => {
+        console.error(error);
         throw error;
       }));
   });
