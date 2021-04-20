@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Route } from "react-router-dom";
 import UnauthModal from "../../features/auth/UnauthModal";
+import { Redirect } from "react-router-dom";
 
 export default function PrivateRoute({
   component: Component,
@@ -14,7 +15,7 @@ export default function PrivateRoute({
     <Route
       {...rest}
       render={(props) =>
-        authenticated ? <Component {...props} {...componentProps} /> : <UnauthModal {...props} />
+        authenticated ? <Component {...props} {...componentProps} /> : <Redirect to="/" />
       }
     />
   );
