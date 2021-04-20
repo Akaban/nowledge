@@ -6,7 +6,7 @@ import 'firebase/storage'
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-    authDomain: "nowledge.xyz",
+    authDomain: "nowledge-c01c4.firebaseapp.com",
     projectId: "nowledge-c01c4",
     storageBucket: "nowledge-c01c4.appspot.com",
     messagingSenderId: "747575118986",
