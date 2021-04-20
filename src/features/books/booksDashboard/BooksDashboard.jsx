@@ -16,6 +16,7 @@ import { getFirestoreCollection } from "../../../app/hooks/useFirestoreCollectio
 import { Confirm } from "semantic-ui-react";
 import { getOpenConfirm } from "../../../app/common/confirm/confirm";
 import { UploadBookButton } from "../../nav/NavBar";
+import firebase from "../../../app/config/firebase";
 
 export default function BooksDashboard() {
   const { books } = useSelector((state) => state.books);
