@@ -1,7 +1,9 @@
 import React from "react";
-import { Card } from "semantic-ui-react";
+import { Card, Header } from "semantic-ui-react";
 import BookListItem from "./BookListItem";
 import { MixpanelConsumer } from "react-mixpanel";
+
+const _ = require("lodash")
 
 export default function BookList({ books }) {
   const booksSorted = books.sort(function (a, b) {
@@ -15,18 +17,37 @@ export default function BookList({ books }) {
     if (!keyB) return -1;
     return keyA < keyB ? 1 : -1;
   });
+
+  const [reading, rest] = _.partition(books, b => Boolean(b.app_metadata.last_highlight_date))
+
   return (
     <MixpanelConsumer>
       {(mixpanel) => (
+        <>
+        {reading.length > 0 &&
+        <div style={{"marginBottom": "85px"}}>
+        <Header content="Reading" size="huge"/>
         <Card.Group itemsPerRow={5}>
-          {booksSorted.map((book) => (
+          {reading.map((book) => (
             <BookListItem
               book={book}
               key={book.id}
               mixpanel={mixpanel}
             />
+
+          ))}
+        </Card.Group></div>}
+        <Card.Group itemsPerRow={5}>
+          {rest.map((book) => (
+            <BookListItem
+              book={book}
+              key={book.id}
+              mixpanel={mixpanel}
+            />
+
           ))}
         </Card.Group>
+        </>
       )}
     </MixpanelConsumer>
   );
