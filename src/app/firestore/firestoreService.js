@@ -50,6 +50,9 @@ export function setUserProfileData(user) {
   if (!user) throw new Error("User not logged in.");
   return db.collection("users").doc(user.uid).set({
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    displayName: user.displayName,
+    email: user.email,
+    providerType: user.providerType
   });
 }
 

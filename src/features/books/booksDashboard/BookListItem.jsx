@@ -6,6 +6,8 @@ import styled from "@emotion/styled/macro";
 import { ProgressBar } from "react-bootstrap";
 import {useDispatch} from "react-redux"
 import {openConfirm} from "../../../app/common/confirm/confirmReducer"
+import { checkBackendHealth } from "../../../app/backend/backend";
+import { toast } from "react-toastify";
 
 function BookCard({ book, deleteBook, mixpanel }) {
   const DisplayOver = styled.div({
@@ -16,7 +18,6 @@ function BookCard({ book, deleteBook, mixpanel }) {
     width: "100%",
     zIndex: 2,
     transition: "background-color 350ms ease",
-    backgroundColor: "transparent",
     padding: "20px 20px 0 20px",
     boxSizing: "border-box",
   });
@@ -70,7 +71,7 @@ function BookCard({ book, deleteBook, mixpanel }) {
           <Buttons>
             <Button
               content="Read"
-              positive
+              color="blue"
               size="medium"
               style={buttonStyle}
               onClick={
@@ -79,7 +80,7 @@ function BookCard({ book, deleteBook, mixpanel }) {
             />
             <Button
               content="Highlights"
-              color="teal"
+              color="facebook"
               size="medium"
               style={buttonStyle}
               onClick={
@@ -88,15 +89,15 @@ function BookCard({ book, deleteBook, mixpanel }) {
             />
             <Button
               content="Delete"
-              color="red"
+              color="orange"
               size="medium"
               style={buttonStyle}
             onClick = {
               () => {
                 dispatch(openConfirm({
-                  content: "Are you sure that you want to delete this book?",
+                  content: "Are you sure that you want to delete this book? Every highlights associated will be deleted as well.",
                   onConfirm: () => {
-                      mixpanel.track("bookDashboard: Click Delete Book");
+                   mixpanel.track("bookDashboard: Click Delete Book");
                     deleteBook();
                   }
                 }))
@@ -118,10 +119,16 @@ export default function BookListItem({ book, mixpanel, openConfirm }) {
 
   const [hidden, setHidden] = useState(false);
 
-  function handleDeleteBook() {
+  async function handleDeleteBook() {
+    try {
+    await checkBackendHealth();
     console.log(`Deleting book with id = ${book.id}`);
     setHidden(true);
     removeUserBook(book);
+    }
+    catch (error) {
+      toast.error(error.message)
+    }
   }
   if (hidden) return null;
   return <BookCard book={book} deleteBook={handleDeleteBook} openConfirm={openConfirm} mixpanel={mixpanel} />;

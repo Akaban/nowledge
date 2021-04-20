@@ -1,10 +1,5 @@
 import * as R from "ramda";
-import { reduceEachTrailingCommentRange } from "typescript";
-import { incrementHighlightCount, decrementHighlightCount } from "../../backend/premium";
 import { updateHighlightsInFirestore, updateHighlightsMetadataInFirestore } from "../../firestore/firestoreService";
-import { store } from "../../../index"
-import { listentoCurrentHighlightCount } from "../../../features/profiles/profileActions";
-import { incrementHighlightCount_local, decrementHighlightCount_local } from "../../../features/profiles/profileActions"
 
 const getNextId = () => String(Math.random()).slice(2);
 
@@ -12,9 +7,6 @@ export async function deleteHighlight(highlights, bookId, highlightId) {
   const new_highlights = highlights.filter((e) => e.id !== highlightId);
   await updateHighlightsInFirestore(bookId, new_highlights);
   await updateHighlightsMetadataInFirestore(bookId, new_highlights);
-  store.dispatch(decrementHighlightCount_local());
-  const {highlight_count} = await decrementHighlightCount();
-  store.dispatch(listentoCurrentHighlightCount(highlight_count))
 
 }
 
@@ -22,9 +14,6 @@ export async function addHighlight(highlights, highlight, bookId) {
   const new_highlights = [{ ...highlight, id: getNextId() }, ...highlights];
   await updateHighlightsInFirestore(bookId, new_highlights);
   await updateHighlightsMetadataInFirestore(bookId, new_highlights)
-  store.dispatch(incrementHighlightCount_local());
-  const {highlight_count} = await incrementHighlightCount();
-  store.dispatch(listentoCurrentHighlightCount(highlight_count))
 }
 
 export async function sortHighlights(highlights, bookId) {

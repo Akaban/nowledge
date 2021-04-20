@@ -13,9 +13,11 @@ import { uploadBook } from "../../../app/backend/book";
 import { getPremiumInfo } from "../../../app/backend/premium";
 import { store } from "../../../index"
 import { listentoPremiumInfo } from "../../profiles/profileActions";
+import { checkBackendHealth } from "../../../app/backend/backend";
 
 export async function submitBook(bookPdf) {
   try {
+    await checkBackendHealth();
     console.log("submitBook");
     const bookId = cuid();
     const { thumbnail_url, book_metadata } = await uploadBook(bookId, bookPdf);

@@ -37,7 +37,7 @@ export default function ProfilePage({ match }) {
     <Container>
     <Grid>
       <Grid.Column width={16}>
-        <ProfileContent profile={selectedUserProfile} userPlan={userPlan} />
+        <ProfileContent profile={selectedUserProfile} />
       </Grid.Column>
     </Grid></Container>
   );

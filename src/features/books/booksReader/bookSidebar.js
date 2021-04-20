@@ -6,6 +6,8 @@ import { useHistory } from "react-router-dom";
 import { Button, Icon } from "semantic-ui-react";
 import { openModal } from "../../../app/common/modals/modalReducer";
 
+const _ = require("lodash")
+
 const updateHash = (highlight) => {
   document.location.hash = `highlight-${highlight.id}`;
 };
@@ -37,23 +39,25 @@ function Sidebar({
         </p>
       </div>
       <center>
-          <>
-            <Button
-              onClick={() => {
-                mixpanel.track("Book Reader: Click Manage Highlights");
-                history.push(`/books/highlights/${book.id}`);
-              }}
-              color="red"
-              content="Manage my highlights"
-            />
-            <Button
-              onClick={() => {
-                mixpanel.track("Book Reader: Top of the book");
-                scrollToPageNumber(1)
-              }}
-              color="grey"
-              content="Scroll to top"
-            />
+        <div style={{ paddingBottom: "50px" }}>
+          <Button
+            style={{ float: "left" }}
+            onClick={() => {
+              mixpanel.track("Book Reader: Click Manage Highlights");
+              history.push(`/books/highlights/${book.id}`);
+            }}
+            color="facebook"
+            content="Manage my highlights"
+          />
+          <Button
+            style={{ float: "left" }}
+            onClick={() => {
+              mixpanel.track("Book Reader: Top of the book");
+              scrollToPageNumber(1);
+            }}
+            color="grey"
+            content="Scroll to top"
+          />
           {/* <Button
               onClick={() => {
                 if (fullScreenMode) {
@@ -68,21 +72,15 @@ function Sidebar({
               color="teal"
               content={fullScreenMode ? "Exit fullscreen": "fullscreen"}
             /> */}
-          </>
-        
+        </div>
       </center>
       <ul className="sidebar__highlights">
         {highlights.map((highlight, index) => (
-          <li
-            key={index}
-            className="sidebar__highlight"
-          >
+          <li key={index} className="sidebar__highlight">
             <div
-            onClick={
-                () => {
-                    updateHash(highlight);
-                  }
-                } 
+              onClick={() => {
+                updateHash(highlight);
+              }}
             >
               {(Boolean(highlight.comment.text) ||
                 Boolean(highlight.comment.notes)) &&
@@ -135,47 +133,47 @@ function Sidebar({
             <div className="highlight__location">
               Page {highlight.position.pageNumber}
               <br />
-                <>
-                  <Icon
-                    name="edit"
-                    color="green"
-                    link
-                    onClick={() => {
-                      dispatch(
-                        openModal({
-                          modalType: "BookTipModal",
-                          modalProps: {
-                            highlight,
-                            onConfirm: (comment) =>
-                              updateHighlight(highlight.id, book.id, {
-                                comment,
-                              }),
-                          },
-                        })
-                      );
-                    }}
-                  />
-                  <Icon
-                    name="delete"
-                    color="red"
-                    link
-                    onClick={() => {
-                      openConfirm({
-                        content:
-                          "Are you sure that you want to delete this highlight?",
-                        onConfirm: () => {
-                          deleteHighlight(highlight.id);
+              <>
+                <Icon
+                  name="edit"
+                  color="green"
+                  link
+                  onClick={() => {
+                    dispatch(
+                      openModal({
+                        modalType: "BookTipModal",
+                        modalProps: {
+                          highlight,
+                          onConfirm: (comment) =>
+                            updateHighlight(highlight.id, book.id, {
+                              comment,
+                            }),
                         },
-                      });
-                    }}
-                  />
-                </>
-              
+                      })
+                    );
+                  }}
+                />
+                <Icon
+                  name="delete"
+                  color="red"
+                  link
+                  onClick={() => {
+                    openConfirm({
+                      content:
+                        "Are you sure that you want to delete this highlight?",
+                      onConfirm: () => {
+                        deleteHighlight(highlight.id);
+                      },
+                    });
+                  }}
+                />
+              </>
             </div>
           </li>
         ))}
       </ul>
     </div>
-  );}
+  );
+}
 
 export default Sidebar;

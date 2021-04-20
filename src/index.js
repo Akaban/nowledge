@@ -15,6 +15,7 @@ import "semantic-ui-css/components/loader.min.css";
 import "semantic-ui-css/components/menu.min.css";
 import "semantic-ui-css/components/modal.css";
 import "semantic-ui-css/components/reveal.min.css";
+import "semantic-ui-css/components/checkbox.min.css";
 import "semantic-ui-css/components/statistic.min.css";
 import "semantic-ui-css/components/segment.min.css";
 import "semantic-ui-css/components/header.min.css";

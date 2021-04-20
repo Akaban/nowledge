@@ -7,14 +7,6 @@ export default function Faq() {
     title: "Frequently Asked Questions",
     rows: [
       {
-        title: "What does early access mean?",
-        content: `We are releasing NowLedge as a early/pilot version before it has all of its features, we built the foundation on which we can lay upon and then build much more features.
-        By buying the early access feature you will be part of the adventure of NowLedge and your feedback will highly account for the future of the app!
-        But you will still get every features as the end because we will release the next updates of the app for free :)
-        Of course the price is discounted!
-        `,
-      },
-      {
         title: "What is NowLedge aiming at?",
         content:
           `The goal of NowLedge is to build a set of features that will enable the user to leverage the maximum information out of a book, therefore every single one feature that we will release will be aimed at that sole and unique objective.
@@ -22,16 +14,38 @@ export default function Faq() {
           `,
       },
       {
-        title: "Can I download my PDF back with the annotations included?",
+        title: "What does early access mean?",
+        content: `We are releasing NowLedge as a early/pilot version before it has all of its features, we built the foundation on which we can lay upon and then build much more features.
+        By becoming a customer now you will be part of the adventure of NowLedge and your feedback will highly account for the future of the app!
+        But you will still get every features as the end because we will release the next updates as soon as it's available.
+        `,
+      },
+      {
+        title: "Can I export my highlights?",
         content: `This is something that we are currently working on, the answer is therefore yes it will be possible at some point!`,
       },
       {
+        title: "I would really love to have X feature on NowLedge, is that possible?",
+        content: `Yes! NowLedge is still in early stages and a lot more features are coming, if you think that a given feature would be nice to have with NowLedge feel free to give us a feedback with the feedback box on the bottom left part of the window and we will be happy to do our best to answer it!`,
+      },
+      {
         title: "What limit do I have with the premium plan?",
-        content: `The premium plan allow unlimited amount of highlights so you will never have to care about this, you will have 500MB cloud storage
-        that will allow you to upload 50 books. A book can weight up to a generous size of 50MB if you have big books especially those containing images.
-        If you need more space we can always find a way around it, don't hesitate to contact bryce@nowledge.xyz.
+        content: `The premium plan allow unlimited amount of highlights so you will never have to care about this, you will also have unlimited number of books. A book can weight up to 50MB. The maximum storage space is 3GB for now but if you need more space feel free to contact us.`,
+      },
+      {
+        title: "Can I use NowLedge with documents that are not books?",
+        content: `Yes, but as of now NowLedge is mostly focused on books. You can still upload your non-book PDF and use it with NowLedge but the application is not optimized for that right now.
+        We're planning to integrate all of the non-books documents differently and in a more optimized fashion. Stay updated!
         `,
-      }
+      },
+      {
+        title: "Which document format can I use with NowLedge?",
+        content: `As of now, only PDF format is supported. We're thinking about adding an option for the epub format as well. If you have other formats you'd like to use with NowLedge let us know we would be happy to think about it as well!`,
+      },
+      {
+        title: "What about my Kindle/Kobo/(insert reader brand here)? Can I use NowLedge with them?",
+        content: `Not really because this is 2 different things, NowLedge is likely a Kindle replacement for those that don't have a reader and prefer to read and take highlights on desktop. You need the PDF file of a book in order to use it on NowLedge, hence you would need to extract the book from the kindle first before using it. (Not easy)`,
+      },
     ],
   };
 
@@ -50,7 +64,7 @@ export default function Faq() {
   };
 
   return (
-    <div>
+    <div style={{"max-width": "45vw", "margin": "0 auto"}}>
       <FaqComponent data={data} styles={styles} config={config} />
     </div>
   );
