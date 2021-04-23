@@ -27,7 +27,8 @@ function Note({
   deleteHighlight,
   updateHighlight,
   book,
-  className
+  className,
+  gridSizer
 }) {
   const gridHighlightItemRef = useRef(null);
 
@@ -58,7 +59,7 @@ function Note({
     (Boolean(highlight.comment.notes) && highlight.comment.notes.length > 0);
 
   return (
-    <div className={className} ref={gridHighlightItemRef}>
+    <div className={className} style={{width: gridSizer}} ref={gridHighlightItemRef}>
       <div className="grid-highlight-item-actions">
         <>
           <Icon
@@ -203,6 +204,9 @@ export default function BookHighlights({ match }) {
 
   window.masonry = masonryRef.current;
 
+  const gridSizer = "25%";
+  const gutterSizer = "1%"
+
   const highlightsSorted = highlights.sort(function (a, b) {
     const keyA = a.position.pageNumber;
     const keyB = b.position.pageNumber;
@@ -228,8 +232,8 @@ export default function BookHighlights({ match }) {
           // options={{gutter: 10}}
           // options={masonryOptions}
         >
-          <div className="grid-sizer"></div>
-          <div className="gutter-sizer"></div>
+          <div className="grid-sizer" style={{width: gridSizer}}></div>
+          <div className="gutter-sizer" style={{width: gutterSizer}} ></div>
           {highlightsSorted.map((highlight, index) => (
             <Note
               key={index}
@@ -238,6 +242,7 @@ export default function BookHighlights({ match }) {
               deleteHighlight={deleteHighlight}
               updateHighlight={updateHighlight}
               book={book}
+              gridSizer={gridSizer}
               className="grid-highlight-item"
             />
           ))}

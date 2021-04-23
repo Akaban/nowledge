@@ -46,14 +46,16 @@ export function getHighlightsCollectionFromFirestore() {
   return db.collection("userBooks").doc(user.uid).collection("highlights");
 }
 
-export function setUserProfileData(user) {
-  if (!user) throw new Error("User not logged in.");
-  return db.collection("users").doc(user.uid).set({
+export function setUserProfileData(user, providerType) {
+  if (!user) throw new Error("User not logged in.")
+  const tkt = {
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     displayName: user.displayName,
     email: user.email,
-    providerType: user.providerType
-  });
+    providerType: providerType
+  };
+  console.log(tkt)
+  return db.collection("users").doc(user.uid).set(tkt);
 }
 
 export function setUserBooks(user) {

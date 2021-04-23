@@ -44,11 +44,10 @@ export async function registerInFirebase(creds) {
     console.log("registered", result);
     console.log("now initialize user");
     await result.user.updateProfile({
-      displayName: creds.name,
-      providerType: "password"
+      displayName: creds.name
     });
     console.log("setuserprofiledata");
-    await setUserProfileData(result.user);
+    await setUserProfileData(result.user, "password");
     console.log("promote to free plan");
     const r = await promoteToFreePlan(result.user);
     console.log(r);
@@ -94,9 +93,8 @@ export async function socialLogin() {
       await promoteToFreePlan(result.user);
       await result.user.updateProfile({
         name: result.user.email,
-        providerType: "social_login"
       });
-      await setUserProfileData(result.user);
+      await setUserProfileData(result.user, "social_login");
       await setUserBooks(result.user);
     }
     await loadAppData(result.user);
@@ -104,6 +102,7 @@ export async function socialLogin() {
     store.dispatch({ type: UNBLOCK_APP_LOADED });
     store.dispatch({ type: APP_LOADED });
   } catch (error) {
+    console.log(error.message)
     toast.error(error.message);
   }
 }
