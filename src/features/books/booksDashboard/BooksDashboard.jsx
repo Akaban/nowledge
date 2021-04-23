@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BookList from "./BookList";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -24,6 +24,10 @@ export default function BooksDashboard() {
   const { authenticated } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+  const tawkToPropertyId = "60820f225eb20e09cf35b923";
+  const tawkToKey = "1f3u0m8k4";
+
+  window.currentUser = firebase.auth().currentUser;
 
   useFirestoreDoc({
     query: () => getBooksFromFirestore(),
@@ -31,14 +35,14 @@ export default function BooksDashboard() {
       getFirestoreCollection({
         query: () => getBooksMetadataFromFirestore(),
         data: (metadata) => {
-          const mergedBooks = mergeBooksMetadata(books.books, metadata)
-          dispatch(listenToBooks({books:mergedBooks}))
-        }}
-      )
+          const mergedBooks = mergeBooksMetadata(books.books, metadata);
+          dispatch(listenToBooks({ books: mergedBooks }));
+        },
+      });
     },
     deps: [dispatch],
     shouldExecute: authenticated,
-    name: "getBooksFromFirestore_BookDashboard"
+    name: "getBooksFromFirestore_BookDashboard",
   });
   if (!authenticated) return <Redirect to="/" />;
   if (!books) return <LoadingComponent content="Loading..." />;
@@ -48,13 +52,16 @@ export default function BooksDashboard() {
     return (
       <div className="nobook">
         <div>
-        <Icon size="massive" name="book" color="blue" />
-        <Icon size="massive" name="question" color="grey" /><br/>
-</div>
-<div>
-        <Header size="huge" content="Looks like you don't have a book."/>
-        <center><p>Try to add one with this button.</p></center>
-        <UploadBookButton color="blue" className="upload-button-empty"/>
+          <Icon size="massive" name="book" color="blue" />
+          <Icon size="massive" name="question" color="grey" />
+          <br />
+        </div>
+        <div>
+          <Header size="huge" content="Looks like you don't have a book." />
+          <center>
+            <p>Try to add one with this button.</p>
+          </center>
+          <UploadBookButton color="blue" className="upload-button-empty" />
         </div>
       </div>
     );

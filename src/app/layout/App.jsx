@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, useLocation, Switch, Redirect } from "react-router-dom";
 import { Container, Header } from "semantic-ui-react";
 import BooksDashboard from "../../features/books/booksDashboard/BooksDashboard";
@@ -28,7 +28,24 @@ function App({ mixpanel }) {
   const { key } = useLocation();
   const { initialized } = useSelector((state) => state.async);
 
+
+  let location = useLocation();
+  useEffect(() => {
+    if (window.Tawk_API && window.Tawk_API.hideWidget) {
+      const currentPath = new URL(window.location.href).pathname
+      console.log(window.Tawk_API)
+      console.log(typeof window.Tawk_API.hideWidget)
+      if (currentPath !== "/books" || isMobile) {
+        window.Tawk_API.hideWidget();
+      }
+      else {
+        window.Tawk_API.showWidget();
+      }
+    }
+  }, [location])
+
   if (!isMobile && !initialized) return <LoadingComponent content="Loading app..." />;
+
 
   return (
     <>
@@ -89,17 +106,6 @@ function App({ mixpanel }) {
                   path="/sandbox/search-book"
                   component={BookSearchWidget}
                 />
-                <Route
-                  exact
-                  path="/sandbox/landingpage"
-                  component={LandingPage}
-                />
-                <Route
-                  exact
-                  path="/sandbox/stripe"
-                  component={Stripe}
-                  />
-                <Route exact path="/sandbox" component={Sandbox} />
                 <Route
                   exact
                   path="/error"

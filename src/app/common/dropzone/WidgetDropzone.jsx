@@ -37,7 +37,7 @@ export default function WidgetDropzone({ onSuccessfulLoad, children }) {
     },
     [onSuccessfulLoad]
   );
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 
   return (
     <div

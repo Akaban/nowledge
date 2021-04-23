@@ -33,6 +33,10 @@ export default function SignedInMenu({ mixpanel }) {
     }
   }
 
+  function openTawkChat() {
+    window.Tawk_API.popup();
+  }
+
   return (
     <Menu.Item position="right">
       {/* <Image avatar spaced='right' src={currentUserProfile.photoURL || '/assets/user.png'} /> */}
@@ -44,6 +48,7 @@ export default function SignedInMenu({ mixpanel }) {
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => {mixpanel.track("Click Menu Profile") ; history.push("/profile")}}><Icon name="user"/>My profile</Dropdown.Item>
           <Dropdown.Item onClick={handleSignOut}><Icon name="power off"/>Sign out</Dropdown.Item>
+          {/* <Dropdown.Item onClick={openTawkChat}><Icon name="chat"/>Click to Chat</Dropdown.Item> */}
         </Dropdown.Menu>
       </Dropdown>
     </Menu.Item>
