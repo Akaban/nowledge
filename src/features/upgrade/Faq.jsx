@@ -7,15 +7,8 @@ export default function Faq() {
     title: "Frequently Asked Questions",
     rows: [
       {
-        title: "What is NowLedge aiming at?",
-        content:
-          `The goal of NowLedge is to build a set of features that will enable the user to leverage the maximum information out of a book, therefore every single one feature that we will release will be aimed at that sole and unique objective.
-          There is a lot of amazing books out there but we still don't really have a product aimed at extracting the information out of them, NowLedge wants to achieve that.
-          `,
-      },
-      {
         title: "What does early access mean?",
-        content: `We are releasing NowLedge as a early/pilot version before it has all of its features, we built the foundation on which we can lay upon and then build much more features.
+        content: `We are releasing NowLedge as a early version before it has all of its features, we built the foundation on which we can lay upon and then build much more features.
         By becoming a customer now you will be part of the adventure of NowLedge and your feedback will highly account for the future of the app!
         But you will still get every features as the end because we will release the next updates as soon as it's available.
         `,
@@ -64,7 +57,7 @@ export default function Faq() {
   };
 
   return (
-    <div style={{"max-width": "45vw", "margin": "0 auto"}}>
+    <div style={{"maxWidth": "45vw", "margin": "0 auto"}}>
       <FaqComponent data={data} styles={styles} config={config} />
     </div>
   );

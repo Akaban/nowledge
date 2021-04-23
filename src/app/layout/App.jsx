@@ -82,6 +82,7 @@ function App({ mixpanel }) {
                   exact
                   path="/upgrade"
                   component={Upgrade}
+                  componentProps={{ mixpanel }}
                   />
                 <Route
                   exact
