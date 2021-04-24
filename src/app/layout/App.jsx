@@ -35,10 +35,13 @@ function App({ mixpanel }) {
       const currentPath = new URL(window.location.href).pathname
       console.log(window.Tawk_API)
       console.log(typeof window.Tawk_API.hideWidget)
+      console.log("currentPath ", currentPath)
       if (currentPath !== "/books" || isMobile) {
+        console.log("hiding widget")
         window.Tawk_API.hideWidget();
       }
       else {
+        console.log("showing widget")
         window.Tawk_API.showWidget();
       }
     }
