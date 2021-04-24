@@ -85,6 +85,7 @@ blockquote:after {
 blockquote.tip-quote {
   background: #f9f9f9;
   border-left: 10px solid #ccc;
+  font-size: 1.3em;
   /* margin: 1.5em 10px; */
   padding: 0.5em 10px;
   margin-top: 20px;
@@ -94,7 +95,7 @@ blockquote.tip-quote {
 blockquote.tip-quote:before {
   color: #ccc;
   content: open-quote;
-  font-size: 4em;
+  font-size: 6em;
   line-height: 0.1em;
   margin-right: 0.25em;
   vertical-align: -0.4em;

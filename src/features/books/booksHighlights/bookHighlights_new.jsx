@@ -97,7 +97,7 @@ function Note({
         {hasNotes &&
           (highlight.comment.text ? (
             <ul className="sidebar__notes_single">
-              <li>
+              <li style={{fontSize: "1.1em"}}>
                 <strong>{highlight.comment.text}</strong>
               </li>
             </ul>
@@ -105,14 +105,14 @@ function Note({
             highlight.comment.notes.length > 1 ? (
               <ul className="sidebar__notes">
                 {highlight.comment.notes.map((n, k) => (
-                  <li key={k}>
+                  <li key={k} style={{fontSize: "1.1em"}}>
                     <strong>{n.name}</strong>
                   </li>
                 ))}
               </ul>
             ) : highlight.comment.notes.length === 1 ? (
               <ul className="sidebar__notes_single">
-                <li>
+                <li style={{fontSize: "1.1em"}}>
                   <strong>{highlight.comment.notes[0].name}</strong>
                 </li>
               </ul>
