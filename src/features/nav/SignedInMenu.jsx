@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Icon, Menu } from "semantic-ui-react";
@@ -33,9 +32,6 @@ export default function SignedInMenu({ mixpanel }) {
     }
   }
 
-  function openTawkChat() {
-    window.Tawk_API.popup();
-  }
 
   return (
     <Menu.Item position="right">

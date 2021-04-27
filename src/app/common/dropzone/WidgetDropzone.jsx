@@ -1,12 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
-import { Header, Icon, Loader } from "semantic-ui-react";
 
 const MAX_SIZE = 100000000;
 
 export default function WidgetDropzone({ onSuccessfulLoad, children }) {
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [setUploadedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const dropzoneStyles = {
@@ -35,7 +34,7 @@ export default function WidgetDropzone({ onSuccessfulLoad, children }) {
       await onSuccessfulLoad(file)
       setIsLoading(false)
     },
-    [onSuccessfulLoad]
+    [onSuccessfulLoad, setUploadedFile]
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 

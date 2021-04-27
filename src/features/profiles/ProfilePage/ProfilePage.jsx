@@ -8,7 +8,7 @@ import LoadingComponent from "../../../app/layout/LoadingComponents";
 import ProfileContent from "./ProfileContent";
 
 export default function ProfilePage({ match }) {
-  const { selectedUserProfile, userPlan } = useSelector((state) => state.profile);
+  const { selectedUserProfile } = useSelector((state) => state.profile);
   const { currentUser } = useSelector((state) => state.auth);
   const { loading, error } = useSelector((state) => state.async);
 

@@ -10,16 +10,14 @@ import {
 import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
 import { listenToBooks } from "../bookActions";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
-import { Confirm, Icon } from "semantic-ui-react";
+import { Icon } from "semantic-ui-react";
 import { getHighlightsFunctionsFromState } from "../../../app/common/highlights/highlights";
 import { openConfirm } from "../../../app/common/confirm/confirmReducer"
-import styled from "@emotion/styled/macro";
 import "../booksReader/style/App.css";
 import "./hover.scss";
 import { getFirestoreCollection } from "../../../app/hooks/useFirestoreCollection";
 import { mergeBooksMetadata } from "../../../app/common/data/book";
 import Masonry from "react-masonry-component";
-import { faPercentage } from "@fortawesome/free-solid-svg-icons";
 import { openModal } from "../../../app/common/modals/modalReducer";
 import {isMobile} from 'react-device-detect';
 
@@ -144,7 +142,7 @@ function Note({
 
 export default function BookHighlights({ match }) {
   const { books } = useSelector((state) => state.books);
-  const { loading, error } = useSelector((state) => state.async);
+  const { error } = useSelector((state) => state.async);
   const dispatch = useDispatch();
 
   const [bookHighlightState, setBookHighlightState] = useState(null);
@@ -178,7 +176,8 @@ export default function BookHighlights({ match }) {
 
   useEffect(() => {
     if (masonryRef.current) {
-      masonryRef.current.layout();
+      console.log("useEffect: masonry.layout")
+      setTimeout(() => masonryRef.current.layout(), 500);
     }
   })
 
@@ -248,7 +247,6 @@ export default function BookHighlights({ match }) {
               className="grid-highlight-item"
             />
           ))}
-          {masonryRef.current && masonryRef.current.layout() && null}
         </Masonry>
       ) : (
         <div className="grid-highlights-less5">

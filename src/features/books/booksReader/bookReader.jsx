@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   PdfLoader,
   PdfHighlighter,
-  Tip,
   Highlight,
   Popup,
   AreaHighlight,
@@ -21,11 +20,8 @@ import {
   getBooksFromFirestore,
   getBooksMetadataFromFirestore,
   getHighlightsFromFirestore,
-  updateInitPageNumberInFirestore,
 } from "../../../app/firestore/firestoreService";
-import useFirestoreDoc, {
-  useFirestoreDocOnce,
-} from "../../../app/hooks/useFirestoreDoc";
+import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
 import { listenToBooks } from "../bookActions";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
 import { getHighlightsFunctionsFromState } from "../../../app/common/highlights/highlights";
@@ -51,11 +47,9 @@ export default function BookReader({ match, mixpanel, location }) {
 
   const [bookUrlState, setBookUrlState] = useState(null);
   const [bookHighlightState, setBookHighlightState] = useState([]);
-  const [bookMiscState, setBookMiscState] = useState({});
+  // const [bookMiscState, setBookMiscState] = useState({});
 
   const [confirm, setConfirm] = useState({});
-
-  const [fullScreenMode, setFullScreenMode] = useState(false);
 
   const [scrollToFunRef, setScrollToFunRef] = useState({
     fn: (x) => x,
@@ -86,9 +80,9 @@ export default function BookReader({ match, mixpanel, location }) {
   useFirestoreDoc({
     query: () => getHighlightsFromFirestore(match.params.id),
     data: (data) => {
-      const { highlights, ...rest } = data;
+      const { highlights } = data;
       setBookHighlightState(highlights);
-      setBookMiscState(rest);
+      // setBookMiscState(rest);
     },
     deps: [match.params.id],
     shouldExecute: authenticated,

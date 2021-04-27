@@ -19,7 +19,7 @@ export default function BookList({ books }) {
     return keyA < keyB ? 1 : -1;
   });
 
-  const [reading, rest] = _.partition(books, b => Boolean(b.app_metadata.last_highlight_date))
+  const [reading, rest] = _.partition(booksSorted, b => Boolean(b.app_metadata.last_highlight_date))
 
   return (
     <MixpanelConsumer>

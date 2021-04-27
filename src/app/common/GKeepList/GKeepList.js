@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react"
 import { Icon } from "semantic-ui-react";
 import { isReactDevMode } from "../util/util";
@@ -185,7 +184,6 @@ class AddItemInput extends React.Component {
     }
   }
   render() {
-    const { handleKeyDown } = this.props;
     return (
       <div id="add-item-input">
         <Icon className="plus"/>
@@ -223,7 +221,7 @@ class Item extends React.Component {
     }
   }
   getTop() {
-    const { meta, id, index, height, isCompleted } = this.props;
+    const { meta, index, isCompleted } = this.props;
 
     const prevHeight = isCompleted
         ? _.sumBy(meta.completed.items.slice(0, index), "height")
@@ -242,12 +240,10 @@ class Item extends React.Component {
       name,
       id,
       height,
-      index,
       isCompleted,
       toggleItem,
       deleteItem,
       editItem,
-      isSimpleList
     } = this.props;
     const { isEditing } = this.state;
     let classes = isCompleted ? "item completed" : "item",
@@ -320,7 +316,7 @@ class ItemNameInput extends React.Component {
     this.props.editItem(this.props.id, value);
   }
   render() {
-    const { name, height } = this.props;
+    const { name } = this.props;
     return (
       <div className="item-name-input">
         <textarea

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import BookList from "./BookList";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import BookListItemPlaceholder from "./BookListItemPlaceholder";
 import {
   getBooksFromFirestore,
   getBooksMetadataFromFirestore,
@@ -11,23 +10,20 @@ import { listenToBooks } from "../bookActions";
 import useFirestoreDoc from "../../../app/hooks/useFirestoreDoc";
 import { mergeBooksMetadata } from "../../../app/common/data/book";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
-import { Button, Container, Header, Icon, Segment } from "semantic-ui-react";
+import { Container, Header, Icon } from "semantic-ui-react";
 import { getFirestoreCollection } from "../../../app/hooks/useFirestoreCollection";
-import { Confirm } from "semantic-ui-react";
-import { getOpenConfirm } from "../../../app/common/confirm/confirm";
 import { UploadBookButton } from "../../nav/NavBar";
-import firebase from "../../../app/config/firebase";
 
 export default function BooksDashboard() {
   const { books } = useSelector((state) => state.books);
-  const { loading, error } = useSelector((state) => state.async);
+  const { error } = useSelector((state) => state.async);
   const { authenticated } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
-  const tawkToPropertyId = "60820f225eb20e09cf35b923";
-  const tawkToKey = "1f3u0m8k4";
+  // const tawkToPropertyId = "60820f225eb20e09cf35b923";
+  // const tawkToKey = "1f3u0m8k4";
 
-  window.currentUser = firebase.auth().currentUser;
+  // window.currentUser = firebase.auth().currentUser;
 
   useFirestoreDoc({
     query: () => getBooksFromFirestore(),

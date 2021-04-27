@@ -1,12 +1,10 @@
 // @flow
 
-import { React, useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Button, Icon } from "semantic-ui-react";
 import { openModal } from "../../../app/common/modals/modalReducer";
-
-const _ = require("lodash")
 
 const updateHash = (highlight) => {
   document.location.hash = `highlight-${highlight.id}`;

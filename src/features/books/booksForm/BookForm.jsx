@@ -54,7 +54,7 @@ export default function BookForm({ match, history, mixpanel }) {
             if (!bookPdf) throw new Error("You did not provide a book file.");
 
             const bookId = cuid();
-            const { thumbnail_url, book_checksum } = await uploadBook(
+            const { thumbnail_url } = await uploadBook(
               bookId,
               bookPdf
             );

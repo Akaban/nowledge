@@ -1,13 +1,12 @@
 import { Formik } from "formik";
-import React, { Component, useState } from "react";
-import { Button, Form, Header, Label, Segment } from "semantic-ui-react";
-import { ScriptElementKindModifier } from "typescript";
-import MyTextInput from "../../../app/common/form/MyTextInput";
+import React, { useState } from "react";
+import { Button, Form, Header, Label } from "semantic-ui-react";
 import GKeepList from "../../../app/common/GKeepList/GKeepList";
 import "./style/bookTip.css";
 const _ = require("lodash");
 
 export function FormBookTip({ onConfirm, content = null, highlight = null }) {
+  // eslint-disable-next-line no-unused-vars
   const [flushInput, setFlushInput] = useState(null);
   const [dirtyNotes, setDirtyNotes] = useState(false);
   return (

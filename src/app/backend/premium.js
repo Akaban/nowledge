@@ -2,7 +2,6 @@
 import axios from "axios";
 import { API_URL } from "./config";
 import firebase from "../config/firebase";
-import { store } from "../../index"
 
 export async function getPremiumInfo() {
   const API_ENDPOINT = `${API_URL}/get_premium_info`;

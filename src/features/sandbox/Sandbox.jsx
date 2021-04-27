@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "semantic-ui-react";
 import { openModal } from "../../app/common/modals/modalReducer";
-import { useFirestoreCollectionOnce } from "../../app/hooks/useFirestoreCollection";
-import { getBooksMetadataFromFirestore } from "../../app/firestore/firestoreService"
 import { callBackendTest } from "./backend";
 import { decrement, increment } from "./testReducer";
 import GKeepList from "../../app/common/GKeepList/GKeepList";
@@ -13,9 +11,6 @@ export default function Sandbox() {
   const [target, setTarget] = useState(null);
   const data = useSelector((state) => state.test.data);
   const { loading } = useSelector((state) => state.async);
-
-  const initCoucou = "<ul><li/></ul>"
-  const [coucou, setCoucou] = useState(initCoucou)
 
   callBackendTest();
 

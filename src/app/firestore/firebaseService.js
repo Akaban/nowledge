@@ -1,13 +1,7 @@
 import { toast } from "react-toastify";
-import { deleteBook } from "../backend/book";
 import { promoteToFreePlan } from "../backend/premium";
-import {
-  getBookBucketPath,
-  getBookPictureBucketPath,
-} from "../common/storage/storageHelper";
 import firebase from "../config/firebase";
 import { setUserBooks, setUserProfileData } from "./firestoreService";
-import { useDispatch } from "react-redux";
 import {
   APP_LOADED,
   BLOCK_APP_LOADED,

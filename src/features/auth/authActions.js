@@ -7,15 +7,13 @@ import {
   getUserProfile,
 } from "../../app/firestore/firestoreService";
 import {
-  listentoCurrentHighlightCount,
   listentoCurrentUserPlan,
   listentoCurrentUserProfile,
   listentoPremiumInfo,
 } from "../profiles/profileActions";
 import { getUserData } from "./authHelpers";
-import { getHighlightCount, getPremiumInfo } from "../../app/backend/premium";
+import { getPremiumInfo } from "../../app/backend/premium";
 import { store } from "../../index";
-import { useSelector } from "react-redux";
 
 export function signInUser(user) {
   return {

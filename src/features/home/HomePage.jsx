@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../app/common/modals/modalReducer";
-import { Button, Container, Image, Segment, Header, Divider } from "semantic-ui-react";
+import { Button, Container, Image, Segment, Header } from "semantic-ui-react";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import * as qs from 'query-string';
-import SocialLogin from "../auth/SocialLogin";
 import { socialLogin } from "../../app/firestore/firebaseService";
 import {isMobile} from 'react-device-detect';
 

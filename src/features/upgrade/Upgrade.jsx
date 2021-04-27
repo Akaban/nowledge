@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
-import { Checkbox, Container, Header, Icon, Table } from "semantic-ui-react";
+import { Checkbox, Container, Header } from "semantic-ui-react";
 import { useSelector } from "react-redux"
 import { Redirect } from "react-router-dom"
 import { PricingTable, PricingSlot, PricingDetail } from "react-pricing-table";

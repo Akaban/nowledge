@@ -1,10 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Redirect } from "react-router-dom";
-import { Container, Grid, Header, Tab } from "semantic-ui-react";
-import { format } from "date-fns";
-import ProfileForm from "./ProfileForm.oldjsx";
-import useAsyncEffect from "../../../app/hooks/useAsyncEffect";
-import { getPremiumInfo } from "../../../app/backend/premium";
+import { Grid, Header, Tab } from "semantic-ui-react";
 import { useSelector, useDispatch } from "react-redux";
 import LoadingComponent from "../../../app/layout/LoadingComponents";
 import { ProgressBar } from "react-bootstrap";
@@ -23,7 +19,7 @@ export default function AboutTab({ profile }) {
   const { userPlan } = useSelector((state) => state.profile);
 
 
-  const { error, loading } = useSelector((state) => state.async);
+  const { error } = useSelector((state) => state.async);
   useFirestoreDoc({
     query: () => getUserPlan(current_user_id),
     data: (plan) => dispatch(listentoCurrentUserPlan(plan)),

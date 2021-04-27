@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { Route, useLocation, Switch, Redirect } from "react-router-dom";
-import { Container, Header } from "semantic-ui-react";
 import BooksDashboard from "../../features/books/booksDashboard/BooksDashboard";
 import HomePage from "../../features/home/HomePage";
-import LandingPage from "../../features/home/LandingPage";
 import NavBar from "../../features/nav/NavBar";
 import ModalManager from "../common/modals/ModalManager";
 import { ToastContainer } from "react-toastify";
@@ -13,14 +11,12 @@ import LoadingComponent from "./LoadingComponents";
 import BookReader from "../../features/books/booksReader/bookReader";
 import BookForm from "../../features/books/booksForm/BookForm";
 import BookSearchWidget from "../../features/books/booksForm/BookSearchWidget";
-import Sandbox from "../../features/sandbox/Sandbox";
 import PrivateRoute from "./PrivateRoute";
 import BookHighlights from "../../features/books/booksHighlights/bookHighlights_new";
 import ProfilePage from "../../features/profiles/ProfilePage/ProfilePage";
 import Feedback from "../common/feedback/Feedback";
 import {isMobile} from 'react-device-detect';
 import MobileNotImplemented from "../../features/home/MobileNotImplemented";
-import Stripe from "../../features/sandbox/Stripe";
 import Upgrade from "../../features/upgrade/Upgrade";
 import ConfirmWrapper from "../common/confirm/ConfirmWrapper";
 

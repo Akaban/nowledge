@@ -1,7 +1,6 @@
 import { Form, Formik} from 'formik'
 import React from 'react'
 import ModalWrapper from '../../app/common/modals/ModalWrapper'
-import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 import MyTextInput from '../../app/common/form/MyTextInput'
 import { Button, Label } from 'semantic-ui-react'

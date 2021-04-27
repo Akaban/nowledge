@@ -1,6 +1,5 @@
 import { deleteBook } from "../backend/book";
 import firebase from "../config/firebase";
-import { deleteBookFromFirebaseStore } from "./firebaseService";
 
 const db = firebase.firestore();
 
