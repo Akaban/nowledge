@@ -196,7 +196,7 @@ export default function BookHighlights({ match }) {
     return <LoadingComponent content="Loading..." />;
   if (error) return <Redirect to="/error" />;
   const book = books.filter((b) => b.id === match.params.id)[0];
-  if (bookHighlightState.length === 0) return <Redirect to={`/books/${book.id}`}/>;
+  if (bookHighlightState.length === 0) return <Redirect to={{pathname: `/books/${book.id}`, state: {redirected: true}}}/>;
 
   const { updateHighlight, deleteHighlight } = getHighlightsFunctionsFromState(
     bookHighlightState

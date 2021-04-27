@@ -37,10 +37,13 @@ import BookTip from "./BookTip";
 import { openModal } from "../../../app/common/modals/modalReducer";
 import { getFirestoreCollection } from "../../../app/hooks/useFirestoreCollection";
 import { mergeBooksMetadata } from "../../../app/common/data/book";
+import MobileNotImplemented from "../../home/MobileNotImplemented";
+import { isMobile } from "react-device-detect";
+import { toast } from "react-toastify";
 
 setPdfWorker(PdfWorkerCdn);
 
-export default function BookReader({ match, mixpanel }) {
+export default function BookReader({ match, mixpanel, location }) {
   const { books } = useSelector((state) => state.books);
   const { error, loading } = useSelector((state) => state.async);
   const { authenticated } = useSelector((state) => state.auth);
@@ -63,21 +66,21 @@ export default function BookReader({ match, mixpanel }) {
     funs: {},
     initialized: false,
   });
-  
+
   useFirestoreDoc({
     query: () => getBooksFromFirestore(),
     data: (books) => {
       getFirestoreCollection({
         query: () => getBooksMetadataFromFirestore(),
         data: (metadata) => {
-          const mergedBooks = mergeBooksMetadata(books.books, metadata)
-          dispatch(listenToBooks({books:mergedBooks}))
-        }}
-      )
+          const mergedBooks = mergeBooksMetadata(books.books, metadata);
+          dispatch(listenToBooks({ books: mergedBooks }));
+        },
+      });
     },
     deps: [dispatch],
     shouldExecute: authenticated,
-    name: "getBooksFromFirestore_BookDashboard"
+    name: "getBooksFromFirestore_BookDashboard",
   });
 
   useFirestoreDoc({
@@ -119,8 +122,15 @@ export default function BookReader({ match, mixpanel }) {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false)
   );
 
-  const book = books ? books.find((b) => b.id === match.params.id) : null;
+  useEffect(() => {
+    if (location.state && location.state.redirected)
+      toast.info(
+        "Redirecting onto reader because you don't have highlights for this book yet."
+      );
+  }, [location.state]);
 
+  const book = books ? books.find((b) => b.id === match.params.id) : null;
+  if (isMobile) return <MobileNotImplemented />;
   if (loading && (!bookHighlightState || !book || !bookUrlState) && !error)
     return <LoadingComponent content="Loading..." />;
   if (error) return <Redirect to="/error" />;
@@ -132,22 +142,23 @@ export default function BookReader({ match, mixpanel }) {
   };
 
   const HighlightPopup = ({ comment }) =>
-
-        ((comment.text || (comment.notes && comment.notes.length > 0))) ?
-    (
+    comment.text || (comment.notes && comment.notes.length > 0) ? (
       <div className="Highlight__popup">
-
-        {
-        comment.text
-          ? comment.text
-          : comment.notes.length === 1 ? <strong>{comment.notes[0].name}</strong> :<ul className="sidebar__notes">{comment.notes.map((n, k) => (
+        {comment.text ? (
+          comment.text
+        ) : comment.notes.length === 1 ? (
+          <strong>{comment.notes[0].name}</strong>
+        ) : (
+          <ul className="sidebar__notes">
+            {comment.notes.map((n, k) => (
               <li key={k}>
                 <strong>{n.name}</strong>
               </li>
-            ))}</ul>
-            }
+            ))}
+          </ul>
+        )}
       </div>
-    ) : null ;
+    ) : null;
 
   const resetHighlights = () => {
     setBookHighlightState([]);
@@ -165,10 +176,15 @@ export default function BookReader({ match, mixpanel }) {
   const url = bookUrlState;
   const highlights = bookHighlightState;
 
-  const initPageNumber = highlights.length ? Math.max(...highlights.map(h => h.position.pageNumber)) - 1 : null
+  const initPageNumber = highlights.length
+    ? Math.max(...highlights.map((h) => h.position.pageNumber)) - 1
+    : null;
 
   return (
-    <div className="bookReader" style={{ display: "flex", height: "100vh", width: "100vw" }}>
+    <div
+      className="bookReader"
+      style={{ display: "flex", height: "100vh", width: "100vw" }}
+    >
       <Sidebar
         highlights={highlights}
         resetHighlights={resetHighlights}
