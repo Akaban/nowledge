@@ -4,13 +4,14 @@ import FeedBack from "react-feedback-popup";
 import { useSelector } from "react-redux";
 import { sendFeedback } from "../../backend/feedback";
 import { toast } from "react-toastify";
+import { isMobile } from "react-device-detect";
 
 export default function Feedback(){
   const { authenticated } = useSelector((state) => state.auth);
   const { pathname, search, hash } = useLocation();
   if (!authenticated) return null;
   const extraData = {location: {pathname, search, hash}}
-  if (pathname.match("/books/((?!highlights)[A-Za-z0-9]+)")) // Ne pas afficher feedback dans le reader
+  if (pathname.match("/books/((?!highlights)[A-Za-z0-9]+)") || isMobile) // Ne pas afficher feedback dans le reader
     return null;
     return (
             <FeedBack

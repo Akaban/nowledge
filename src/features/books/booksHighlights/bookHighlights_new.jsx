@@ -21,6 +21,7 @@ import { mergeBooksMetadata } from "../../../app/common/data/book";
 import Masonry from "react-masonry-component";
 import { faPercentage } from "@fortawesome/free-solid-svg-icons";
 import { openModal } from "../../../app/common/modals/modalReducer";
+import {isMobile} from 'react-device-detect';
 
 function Note({
   highlight,
@@ -121,13 +122,14 @@ function Note({
         {hasNotes && <hr />}
         {highlight.content.text ? (
           <blockquote className="tip-quote">
-            {highlight.content.text.slice(0, 360)}
+            {highlight.content.text.slice(0, 360) + (highlight.content.text.length > 360 ? "..." : "")}
           </blockquote>
         ) : null}
       </div>
       <div className="grid-highlight-item-location">
         Page {highlight.position.pageNumber}
       </div>
+      {!isMobile && 
       <a
         style={{ display: "table-cell" }}
         href={`/books/${book.id}#highlight-${highlight.id}`}
@@ -135,7 +137,7 @@ function Note({
         rel="noopener noreferrer"
       >
         Go to highlight in book
-      </a>
+      </a>}
     </div>
   );
 }
@@ -218,7 +220,7 @@ export default function BookHighlights({ match }) {
   return (
     <>
       {/* <NoteContainer> */}
-      {bookHighlightState.length > 5 ? (
+      {bookHighlightState.length > 5 && (!isMobile) ? (
         <Masonry
           className="grid-highlights" // default ''
           ref={c => masonryRef.current = masonryRef.current || c.masonry}

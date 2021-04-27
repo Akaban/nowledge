@@ -36,7 +36,7 @@ function App({ mixpanel }) {
       console.log(window.Tawk_API)
       console.log(typeof window.Tawk_API.hideWidget)
       console.log("currentPath ", currentPath)
-      if (currentPath !== "/books" || isMobile) {
+      if (!(["/books/", "/books"].includes(currentPath)) || isMobile) {
         console.log("hiding widget")
         window.Tawk_API.hideWidget();
       }
@@ -54,7 +54,7 @@ function App({ mixpanel }) {
     <>
       <ModalManager />
       <ConfirmWrapper />
-      <ToastContainer position="bottom-right" hideProgressBar />
+      <ToastContainer position="top-right" hideProgressBar />
       <Route
         exact
         path="/"
@@ -64,7 +64,7 @@ function App({ mixpanel }) {
         path={"/(.+)"}
         render={() => {
 
-          if (isMobile) return <MobileNotImplemented/>
+          if (false) return <MobileNotImplemented/>
           else {
           return (
           <>

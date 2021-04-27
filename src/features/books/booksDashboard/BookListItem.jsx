@@ -4,10 +4,11 @@ import { Button, Card } from "semantic-ui-react";
 import { removeUserBook } from "../../../app/firestore/firestoreService";
 import styled from "@emotion/styled/macro";
 import { ProgressBar } from "react-bootstrap";
-import {useDispatch} from "react-redux"
-import {openConfirm} from "../../../app/common/confirm/confirmReducer"
+import { useDispatch } from "react-redux";
+import { openConfirm } from "../../../app/common/confirm/confirmReducer";
 import { checkBackendHealth } from "../../../app/backend/backend";
 import { toast } from "react-toastify";
+import { isMobile } from "react-device-detect";
 
 function BookCard({ book, deleteBook, mixpanel }) {
   const DisplayOver = styled.div({
@@ -21,8 +22,7 @@ function BookCard({ book, deleteBook, mixpanel }) {
     padding: "20px 20px 0 20px",
     boxSizing: "border-box",
   });
-  const Progress = styled.div({
-  })
+  const Progress = styled.div({});
   const Hover = styled.div({
     opacity: 0,
     transition: "opacity 350ms ease",
@@ -58,10 +58,14 @@ function BookCard({ book, deleteBook, mixpanel }) {
     },
   });
 
-  const buttonStyle={width: "100%", marginBottom: "15px"}
+  const buttonStyle = { width: "100%", marginBottom: "15px" };
 
   const history = useHistory();
-  const progress = book.app_metadata ? Math.trunc((book.app_metadata.last_highlight_page_number / book.num_pages)*100) : 0
+  const progress = book.app_metadata
+    ? Math.trunc(
+        (book.app_metadata.last_highlight_page_number / book.num_pages) * 100
+      )
+    : 0;
 
   const dispatch = useDispatch();
   return (
@@ -74,62 +78,90 @@ function BookCard({ book, deleteBook, mixpanel }) {
               color="blue"
               size="medium"
               style={buttonStyle}
-              onClick={
-                () => {mixpanel.track("bookDashboard: Click Read Book") ; history.push(`/books/${book.id}`)}
-              }
+              onClick={() => {
+                mixpanel.track("bookDashboard: Click Read Book");
+                history.push(`/books/${book.id}`);
+              }}
             />
             <Button
               content="Highlights"
               color="facebook"
               size="medium"
               style={buttonStyle}
-              onClick={
-                () => {mixpanel.track("bookDashboard: Click Highlights") ; history.push(`/books/highlights/${book.id}`)}
-              }
+              onClick={() => {
+                mixpanel.track("bookDashboard: Click Highlights");
+                history.push(`/books/highlights/${book.id}`);
+              }}
             />
             <Button
               content="Delete"
               color="orange"
               size="medium"
               style={buttonStyle}
-            onClick = {
-              () => {
-                dispatch(openConfirm({
-                  content: "Are you sure that you want to delete this book? Every highlights associated will be deleted as well.",
-                  onConfirm: () => {
-                   mixpanel.track("bookDashboard: Click Delete Book");
-                    deleteBook();
-                  }
-                }))
-              }
-            }
+              onClick={() => {
+                dispatch(
+                  openConfirm({
+                    content:
+                      "Are you sure that you want to delete this book? Every highlights associated will be deleted as well.",
+                    onConfirm: () => {
+                      mixpanel.track("bookDashboard: Click Delete Book");
+                      deleteBook();
+                    },
+                  })
+                );
+              }}
             />
           </Buttons>
         </Hover>
-        {progress > 0 &&
-        <Progress>
-        <ProgressBar variant="success" now={progress} />
-</Progress>}
+        {progress > 0 && (
+          <Progress>
+            <ProgressBar variant="success" now={progress} />
+          </Progress>
+        )}
       </DisplayOver>
     </Background>
   );
 }
 
-export default function BookListItem({ book, mixpanel, openConfirm }) {
-
+export default function BookListItem({
+  book,
+  mixpanel,
+  openConfirm,
+  noHighlights = false,
+}) {
   const [hidden, setHidden] = useState(false);
+
+  const history = useHistory();
 
   async function handleDeleteBook() {
     try {
-    await checkBackendHealth();
-    console.log(`Deleting book with id = ${book.id}`);
-    setHidden(true);
-    removeUserBook(book);
-    }
-    catch (error) {
-      toast.error(error.message)
+      await checkBackendHealth();
+      console.log(`Deleting book with id = ${book.id}`);
+      setHidden(true);
+      removeUserBook(book);
+    } catch (error) {
+      toast.error(error.message);
     }
   }
   if (hidden) return null;
-  return <BookCard book={book} deleteBook={handleDeleteBook} openConfirm={openConfirm} mixpanel={mixpanel} />;
+  if (isMobile) {
+    return (
+      <Card
+        onClick={
+          !noHighlights
+            ? () => history.push(`/books/highlights/${book.id}`)
+            : () => toast.info("This book has no highlights yet, add highlights from a desktop to read it from mobile!")
+        }
+        image={book.bookPhotoUrl}
+      />
+    );
+  }
+  return (
+    <BookCard
+      book={book}
+      deleteBook={handleDeleteBook}
+      openConfirm={openConfirm}
+      mixpanel={mixpanel}
+    />
+  );
 }

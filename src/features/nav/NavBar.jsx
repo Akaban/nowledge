@@ -7,6 +7,7 @@ import WidgetDropzone from "../../app/common/dropzone/WidgetDropzone";
 import { submitBook } from "../books/booksForm/BookForm";
 import FreeQuota from "./FreeQuota";
 import { useHistory } from "react-router-dom"
+import { isMobile } from "react-device-detect";
 
 export function UploadBookButton({color=null, className=null}) {
     const props = {}
@@ -26,6 +27,19 @@ export default function NavBar({ setFormOpen, mixpanel }) {
   const isFreeUser = userPlan ? userPlan.plan === "free" : false
 
   const history = useHistory()
+
+  if (isMobile) return (
+    
+    <Menu inverted fixed="top">
+      <Container>
+        <Menu.Item header as={Link} to="/books">
+          <img src="/assets/logo.png" alt="logo" style={{ marginRight: 15 }} />
+          NowLedge
+        </Menu.Item>
+        {authenticated ? <SignedInMenu mixpanel={mixpanel} /> : null}
+        </Container>
+        </Menu>
+  )
 
   return (
     <Menu inverted fixed="top">

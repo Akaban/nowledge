@@ -4,9 +4,9 @@ import { Header, Icon } from "semantic-ui-react";
 export default function MobileNotImplemented() {
   return (
     <>
-      <Header content="Sorry but this app is not yet implemented for mobile :(" />
+      <Header content="Sorry but this is not yet implemented for mobile :(" />
       <p>
-        We are working to make this app available for mobile but right now it is
+        We are working to make this functionality available for mobile but right now it is
         only available on desktop.
         <br />
         <br />

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { Checkbox, Container, Header, Icon, Table } from "semantic-ui-react";
-
+import { useSelector } from "react-redux"
+import { Redirect } from "react-router-dom"
 import { PricingTable, PricingSlot, PricingDetail } from "react-pricing-table";
 import getStripe from "../../app/common/stripe/getStripe";
 import { createCheckoutSession } from "../../app/backend/stripe";
@@ -29,7 +30,10 @@ export default function Upgrade({ mixpanel }) {
         .then(mixpanel.track("Upgrade: Conversion", {type}));
     });
   }
+
+  const { userPlan } = useSelector((state) => state.profile);
   const [billAnnualy, setAnnualyBilling] = useState(true);
+  if (userPlan && userPlan.plan === 'basic') return <Redirect to="/books"/> 
   return (
     <Container>
       <Header as="h1" textAlign="center" content="Upgrade Your Account" />

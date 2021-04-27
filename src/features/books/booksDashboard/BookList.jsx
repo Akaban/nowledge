@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Header } from "semantic-ui-react";
 import BookListItem from "./BookListItem";
 import { MixpanelConsumer } from "react-mixpanel";
+import { isMobile } from "react-device-detect";
 
 const _ = require("lodash")
 
@@ -27,7 +28,7 @@ export default function BookList({ books }) {
         {reading.length > 0 &&
         <div style={{"marginBottom": "85px"}}>
         <Header content="Reading" size="huge"/>
-        <Card.Group itemsPerRow={5}>
+        <Card.Group itemsPerRow={isMobile ? 2 : 5}>
           {reading.map((book) => (
             <BookListItem
               book={book}
@@ -37,12 +38,13 @@ export default function BookList({ books }) {
 
           ))}
         </Card.Group></div>}
-        <Card.Group itemsPerRow={5}>
+        <Card.Group itemsPerRow={isMobile ? 2 : 5}>
           {rest.map((book) => (
             <BookListItem
               book={book}
               key={book.id}
               mixpanel={mixpanel}
+              noHighlights
             />
 
           ))}
