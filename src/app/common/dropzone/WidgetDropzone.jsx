@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 const MAX_SIZE = 100000000;
 
 export default function WidgetDropzone({ onSuccessfulLoad, children }) {
-  const [setUploadedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const dropzoneStyles = {
@@ -16,7 +15,6 @@ export default function WidgetDropzone({ onSuccessfulLoad, children }) {
   };
   const onDrop = useCallback(
     async (acceptedFiles) => {
-      setUploadedFile(null);
       const file = acceptedFiles[0];
 
       if (file.type !== "application/pdf") {
@@ -30,11 +28,10 @@ export default function WidgetDropzone({ onSuccessfulLoad, children }) {
       }
 
       setIsLoading(true)
-      setUploadedFile(file);
       await onSuccessfulLoad(file)
       setIsLoading(false)
     },
-    [onSuccessfulLoad, setUploadedFile]
+    [onSuccessfulLoad]
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 
