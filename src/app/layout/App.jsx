@@ -19,6 +19,7 @@ import {isMobile} from 'react-device-detect';
 import MobileNotImplemented from "../../features/home/MobileNotImplemented";
 import Upgrade from "../../features/upgrade/Upgrade";
 import ConfirmWrapper from "../common/confirm/ConfirmWrapper";
+import Thanks from "../../features/pages/Thanks";
 
 function App({ mixpanel }) {
   const { key } = useLocation();
@@ -105,6 +106,11 @@ function App({ mixpanel }) {
                   path="/sandbox/search-book"
                   component={BookSearchWidget}
                 />
+                <Route
+                  exact
+                  path="/thanks"
+                  component={Thanks}
+                  />
                 <Route
                   exact
                   path="/error"

@@ -46,7 +46,8 @@
           check = true;
       })(navigator.userAgent || navigator.vendor || window.opera);
       return check;})
-    Tawk_API.onLoad = function () {
+    const onLoad = function () {
+      console.log("onLoad")
       const currentPath = new URL(window.location.href).pathname;
       console.log("currentPath ", currentPath);
       const whiteList=["/books", "/books/"]
@@ -54,6 +55,9 @@
         window.Tawk_API.hideWidget();
       }
     };
+    Tawk_API.onLoad(onLoad)
+    window.setInterval(onLoad, 3000)
+
     (function () {
       var s1 = document.createElement("script"),
         s0 = document.getElementsByTagName("script")[0];
