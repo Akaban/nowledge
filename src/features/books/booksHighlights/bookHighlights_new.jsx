@@ -20,6 +20,7 @@ import { mergeBooksMetadata } from "../../../app/common/data/book";
 import Masonry from "react-masonry-component";
 import { openModal } from "../../../app/common/modals/modalReducer";
 import {isMobile} from 'react-device-detect';
+import PrintProvider, { Print, NoPrint } from 'react-easy-print';
 
 function Note({
   highlight,
@@ -60,7 +61,7 @@ function Note({
   return (
     <div className={className} style={{width: gridSizer}} ref={gridHighlightItemRef}>
       <div className="grid-highlight-item-actions">
-        <>
+        <NoPrint>
           <Icon
             className={isHover ? "visible" : "invisible"}
             name="delete"
@@ -75,10 +76,10 @@ function Note({
               }
             }
           />
-        </>
+        </NoPrint>
       </div>
       <div
-        onClick={() => {
+        onClick={isMobile ? (() => {}) : (() => {
           dispatch(
             openModal({
               modalType: "BookTipModal",
@@ -91,7 +92,7 @@ function Note({
               },
             })
           );
-        }}
+        })}
       >
         {hasNotes &&
           (highlight.comment.text ? (
@@ -127,6 +128,7 @@ function Note({
       <div className="grid-highlight-item-location">
         Page {highlight.position.pageNumber}
       </div>
+      <NoPrint>
       {!isMobile && 
       <a
         style={{ display: "table-cell" }}
@@ -136,6 +138,7 @@ function Note({
       >
         Go to highlight in book
       </a>}
+      </NoPrint>
     </div>
   );
 }
@@ -176,6 +179,7 @@ export default function BookHighlights({ match }) {
 
   useEffect(() => {
     if (masonryRef.current) {
+      window.masonry = masonryRef.current
       console.log("useEffect: masonry.layout")
       setTimeout(() => masonryRef.current.layout(), 500);
     }
@@ -203,8 +207,6 @@ export default function BookHighlights({ match }) {
 
   const highlights = bookHighlightState;
 
-  window.masonry = masonryRef.current;
-
   const gridSizer = "25%";
   const gutterSizer = "1%"
 
@@ -217,7 +219,7 @@ export default function BookHighlights({ match }) {
   });
 
   return (
-    <>
+    <PrintProvider>
       {/* <NoteContainer> */}
       {bookHighlightState.length > 5 && (!isMobile) ? (
         <Masonry
@@ -263,6 +265,6 @@ export default function BookHighlights({ match }) {
           ))}
         </div>
       )}
-    </>
+    </PrintProvider>
   );
 }
