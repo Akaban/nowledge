@@ -13,6 +13,7 @@ import LoadingComponent from "../../../app/layout/LoadingComponents";
 import { Container, Header, Icon } from "semantic-ui-react";
 import { getFirestoreCollection } from "../../../app/hooks/useFirestoreCollection";
 import { UploadBookButton } from "../../nav/NavBar";
+import { isMobile } from "react-device-detect";
 
 export default function BooksDashboard() {
   const { books } = useSelector((state) => state.books);
@@ -44,7 +45,26 @@ export default function BooksDashboard() {
   if (!books) return <LoadingComponent content="Loading..." />;
   if (error) return <Redirect to="/error" />;
 
-  if (books.length === 0)
+  if (books.length === 0) {
+    if (isMobile) {
+      return (
+        <>
+        <div style={{marginBottom: "50px"}}>
+          <Icon size="massive" name="book" color="blue" />
+          <Icon size="massive" name="question" color="grey" />
+          <br />
+        </div>
+        <div>
+          <Header size="large" content="Looks like you don't have any book :)" />
+          <center>
+            <p style={{fontSize: "17px"}}><b>Come back on a desktop to add a book and highlights.</b></p>
+            <p style={{fontSize: "17px"}}><b>On mobile you can only read highlights, not add them.</b></p>
+          </center>
+        </div></>
+      );
+    }
+    else {
+
     return (
       <div className="nobook">
         <div>
@@ -53,7 +73,7 @@ export default function BooksDashboard() {
           <br />
         </div>
         <div>
-          <Header size="huge" content="Looks like you don't have a book." />
+          <Header size="huge" content="Looks like you don't have any book." />
           <center>
             <p>Try to add one with this button.</p>
           </center>
@@ -61,6 +81,8 @@ export default function BooksDashboard() {
         </div>
       </div>
     );
+    }
+  }
 
   return (
     <Container className="main">
