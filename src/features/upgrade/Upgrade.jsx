@@ -7,17 +7,14 @@ import getStripe from "../../app/common/stripe/getStripe";
 import { createCheckoutSession } from "../../app/backend/stripe";
 import FaqComponent from "./Faq";
 import { isReactDevMode } from "../../app/common/util/util";
+import { toast } from "react-toastify";
 
-const ANNUAL_PRICE_ID = isReactDevMode()
-  ? "price_1IiKwfEzo05dH8EvC5vY99qH"
-  : "price_1IiHYYEzo05dH8EvPwo7iPSA";
-const MONTHLY_PRICE_ID = isReactDevMode()
-  ? "price_1IiKwfEzo05dH8EvoWXr3WbF"
-  : "price_1IiHYYEzo05dH8EvZURLvGs8";
+const STRIPE_PRICE_ID = isReactDevMode() ? "price_1Ile00Ezo05dH8Ev4uaFXfzF" : "price_1IldrwEzo05dH8EvkTdeB1pl"
 
 export default function Upgrade({ mixpanel }) {
-  function createCheckout(type) {
-    const priceId = type === "ANNUAL" ? ANNUAL_PRICE_ID : MONTHLY_PRICE_ID
+  function createCheckout() {
+    try {
+    const priceId = STRIPE_PRICE_ID
     // You'll have to define PRICE_ID as a price ID before this code
     const stripe = getStripe();
     createCheckoutSession(priceId).then(function (data) {
@@ -26,12 +23,17 @@ export default function Upgrade({ mixpanel }) {
         .redirectToCheckout({
           sessionId: data.sessionId,
         })
-        .then(mixpanel.track("Upgrade: Conversion", {type}));
+        .then((result) => mixpanel.track("Upgrade: Conversion"));
     });
+  }
+  catch (error) {
+    toast.error("Sorry but an unexpected error happened, we're investigating the problem and will fix it ASAP!")
+    throw error;
+  }
   }
 
   const { userPlan } = useSelector((state) => state.profile);
-  const [billAnnualy, setAnnualyBilling] = useState(true);
+  const [stripeLoading, setStripeLoading] = useState(false)
   if (userPlan && userPlan.plan === 'basic') return <Redirect to="/books"/> 
   return (
     <Container>
@@ -40,26 +42,20 @@ export default function Upgrade({ mixpanel }) {
         <PricingSlot
           highlighted
           onClick={(evt) =>{
+            try {
+            setStripeLoading(true)
             mixpanel.track("Upgrade: Click Upgrade")
-            createCheckout(billAnnualy ? "ANNUAL" : "MONTHLY")
+            createCheckout() }
+            catch (error) {
+              setStripeLoading(false)
+            }
           }}
-          buttonText="UPGRADE NOW"
+          buttonText={stripeLoading ? "Loading checkout..." : "UPGRADE NOW"}
           title="PREMIUM PLAN EARLY ACCESS"
           priceText={
-            billAnnualy
-              ? "$1.95/Month (billed annualy)"
-              : "$2.95/Month (billed monthly)"
+              "$1.95/Month (billed annualy)"
           }
         >
-          <PricingDetail>
-            Monthly{" "}
-            <Checkbox
-              toggle
-              checked={billAnnualy}
-              onChange={(evt, data) => setAnnualyBilling(data.checked)}
-            />{" "}
-            Annualy
-          </PricingDetail>
           <PricingDetail>
             {" "}
             <b>Unlimited</b> highlights

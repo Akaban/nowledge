@@ -8,6 +8,7 @@ import { submitBook } from "../books/booksForm/BookForm";
 import FreeQuota from "./FreeQuota";
 import { useHistory } from "react-router-dom"
 import { isMobile } from "react-device-detect";
+import PrintProvider, { Print, NoPrint } from 'react-easy-print';
 
 export function UploadBookButton({color=null, className=null}) {
     const props = {}
@@ -42,6 +43,8 @@ export default function NavBar({ setFormOpen, mixpanel }) {
   )
 
   return (
+    <PrintProvider>
+      <NoPrint>
     <Menu inverted fixed="top">
       <Container>
         <Menu.Item header as={Link} to="/books">
@@ -76,5 +79,7 @@ export default function NavBar({ setFormOpen, mixpanel }) {
         {authenticated ? <SignedInMenu mixpanel={mixpanel} /> : null}
       </Container>
     </Menu>
+    </NoPrint>
+    </PrintProvider>
   );
 }
