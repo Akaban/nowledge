@@ -105,7 +105,9 @@ blockquote.tip-quote p {
 }
 
 .grid-highlights {
-  margin: 0 auto;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 90%;
 }
 
 /* .gutter-sizer {
