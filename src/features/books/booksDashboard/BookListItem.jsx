@@ -10,6 +10,8 @@ import { checkBackendHealth } from "../../../app/backend/backend";
 import { toast } from "react-toastify";
 import { isMobile } from "react-device-detect";
 
+import firebase from "../../../app/config/firebase";
+
 function BookCard({ book, deleteBook, mixpanel }) {
   const DisplayOver = styled.div({
     height: "100%",
@@ -68,6 +70,9 @@ function BookCard({ book, deleteBook, mixpanel }) {
     : 0;
 
   const dispatch = useDispatch();
+
+  const user_id = firebase.auth().currentUser.uid
+
   return (
     <Background>
       <DisplayOver>
@@ -80,7 +85,7 @@ function BookCard({ book, deleteBook, mixpanel }) {
               style={buttonStyle}
               onClick={() => {
                 mixpanel.track("bookDashboard: Click Read Book");
-                history.push(`/books/${book.id}`);
+                window.location = `https://backend.nowledge.xyz/api/v1/display_book/${user_id}/${book.id}}`
               }}
             />
             <Button
