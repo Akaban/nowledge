@@ -91,7 +91,7 @@ export default function BookReader({ match, mixpanel, location }) {
 
   useAsyncEffect({
     fetch: () => getBookDownloadURL(match.params.id),
-    after: setBookUrlState,
+    after: window.location.replace,
     deps: [match.params.id],
     name: "getBookDownloadURL",
   });
