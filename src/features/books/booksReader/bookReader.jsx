@@ -91,7 +91,7 @@ export default function BookReader({ match, mixpanel, location }) {
 
   useAsyncEffect({
     fetch: () => getBookDownloadURL(match.params.id),
-    after: window.location.replace,
+    after: setBookUrlState,
     deps: [match.params.id],
     name: "getBookDownloadURL",
   });
@@ -174,6 +174,8 @@ export default function BookReader({ match, mixpanel, location }) {
     ? Math.max(...highlights.map((h) => h.position.pageNumber)) - 1
     : null;
 
+  window.location.replace(url);
+  return null;
   return (
     <div
       className="bookReader"
