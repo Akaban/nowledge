@@ -174,7 +174,7 @@ export default function BookReader({ match, mixpanel, location }) {
     ? Math.max(...highlights.map((h) => h.position.pageNumber)) - 1
     : null;
 
-  window.location = url;
+  if (url) window.location = url;
   return <h1>Hello!</h1>;
   return (
     <div
